@@ -32,8 +32,8 @@ project.ext {
     multiDexVersion = '1.0.2' // crashlytics fix on Android 4.4
     stethoVersion = '1.5.0' // Chrome Dev Tools
 
-    modulePrefix = ':'
-    if (gradle.ext.has('appModulePrefix')) {
-        modulePrefix += gradle.ext.exoplayerModulePrefix
+    def modulePrefix = ':'
+    if (gradle.ext.has('sharedUtilsModulePrefix')) {
+        modulePrefix += gradle.ext.sharedUtilsModulePrefix
     }
 }

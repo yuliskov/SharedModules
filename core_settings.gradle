@@ -1,0 +1,8 @@
+def rootDir = gradle.ext.sharedUtilsRoot
+def modulePrefix = ':'
+if (gradle.ext.has('sharedUtilsModulePrefix')) {
+    modulePrefix += gradle.ext.sharedUtilsModulePrefix
+}
+
+include modulePrefix + 'sharedutils'
+project(modulePrefix + 'sharedutils').projectDir = new File(rootDir, 'sharedutils')
