@@ -1,7 +1,7 @@
 package com.liskovsoft.sharedutils.mylogger;
 
 import android.content.Context;
-import com.liskovsoft.smartyoutubetv.common.R;
+import com.liskovsoft.sharedutils.R;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;

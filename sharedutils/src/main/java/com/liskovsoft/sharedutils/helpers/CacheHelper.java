@@ -1,7 +1,7 @@
 package com.liskovsoft.sharedutils.helpers;
 
 import android.content.Context;
-import com.liskovsoft.smartyoutubetv.common.BuildConfig;
+import com.liskovsoft.sharedutils.BuildConfig;
 
 import java.io.File;
 import java.io.FileInputStream;

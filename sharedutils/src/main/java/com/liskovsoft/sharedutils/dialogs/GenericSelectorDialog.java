@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
-import com.liskovsoft.smartyoutubetv.common.R;
+import com.liskovsoft.sharedutils.R;
 import com.liskovsoft.sharedutils.dialogs.GenericSelectorDialog.DialogSourceBase.DialogItem;
 import com.liskovsoft.sharedutils.dialogs.GenericSelectorDialog.DialogSourceBase.MultiDialogItem;
 import com.liskovsoft.sharedutils.dialogs.GenericSelectorDialog.DialogSourceBase.SingleDialogItem;
@@ -23,6 +23,7 @@ public abstract class GenericSelectorDialog implements OnClickListener {
     private final Context mActivity;
     protected AlertDialog mAlertDialog;
     private final DialogSourceBase mDialogSource;
+    private final int mThemeResId;
     private ArrayList<CheckedTextView> mDialogItems;
     protected static final int SINGLE_CHOICE = 0;
     protected static final int MULTI_CHOICE = 1;
@@ -88,9 +89,10 @@ public abstract class GenericSelectorDialog implements OnClickListener {
     public interface MultiDialogSource extends DialogSourceBase {
     }
 
-    public GenericSelectorDialog(Context activity, DialogSourceBase dialogSource) {
+    public GenericSelectorDialog(Context activity, DialogSourceBase dialogSource, int themeResId) {
         mActivity = activity;
         mDialogSource = dialogSource;
+        mThemeResId = themeResId;
     }
 
     public void run() {
@@ -98,7 +100,7 @@ public abstract class GenericSelectorDialog implements OnClickListener {
     }
 
     private void showDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, R.style.AppDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, mThemeResId);
         View title = createCustomTitle(builder.getContext());
         mAlertDialog = builder.setCustomTitle(title).setView(buildView(builder.getContext())).create();
         mAlertDialog.show();
