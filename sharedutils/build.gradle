@@ -40,7 +40,7 @@ dependencies {
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
 
-    implementation 'com.android.support:appcompat-v7:' + appCompatVersion
+    implementation 'com.android.support:appcompat-v7:' + supportLibraryVersion
 
     implementation 'com.squareup.okhttp3:okhttp:' + okhttpVersion
 

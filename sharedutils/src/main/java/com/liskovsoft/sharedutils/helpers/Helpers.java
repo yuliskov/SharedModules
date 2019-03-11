@@ -128,7 +128,7 @@ public final class Helpers {
             return null;
         }
 
-        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+        Scanner s = new Scanner(inputStream, "UTF-8").useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
         return result;
     }

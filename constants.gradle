@@ -1,8 +1,4 @@
 project.ext {
-    // App version and version code.
-    releaseVersion = '0.0.1'
-    releaseVersionCode = 1
-
     // Important: App specifies a minSdkVersion of 17 because various
     // components provided by the library may be of use on older devices.
     // However, please note that the core media playback functionality provided
@@ -13,7 +9,7 @@ project.ext {
 
     buildToolsVersion = '28.0.3'
     testSupportLibraryVersion = '0.5'
-    supportLibraryVersion = '27.1.1'
+    supportLibraryVersion = '28.0.0'
     dexmakerVersion = '1.2'
     mockitoVersion = '1.9.5'
     junitVersion = '4.12'
@@ -23,17 +19,15 @@ project.ext {
     checkerframeworkVersion = '2.5.0'
     testRunnerVersion = '1.0.2'
     exoplayerVersion = '2.9.5'
-    appCompatVersion = '28.0.0'
     espressoVersion = '3.1.0'
     retrofitVersion = '2.5.0'
     gsonVersion = '2.8.2'
+    jsonPathVersion = '2.4.0'
     ottoVersion = '1.3.8'
     okhttpVersion = '3.9.1'
     multiDexVersion = '1.0.2' // crashlytics fix on Android 4.4
     stethoVersion = '1.5.0' // Chrome Dev Tools
-
-    def modulePrefix = ':'
-    if (gradle.ext.has('sharedUtilsModulePrefix')) {
-        modulePrefix += gradle.ext.sharedUtilsModulePrefix
-    }
+    glideVersion = '3.8.0'
+    rxAndroidVersion = '2.1.1'
+    rxJavaVersion = '2.2.7'
 }
