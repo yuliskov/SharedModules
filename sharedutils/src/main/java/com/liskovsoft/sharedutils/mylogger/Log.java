@@ -48,10 +48,10 @@ public class Log {
         sLogger.flush();
     }
 
-    public static void init(Context context, int logType) {
+    public static void init(Context context, int logType, String customLabel) {
         switch (logType) {
             case LOG_TYPE_FILE:
-                sLogger = new FileLogger(context);
+                sLogger = new FileLogger(context, customLabel);
                 break;
             case LOG_TYPE_SYSTEM:
                 sLogger = new SystemLogger();

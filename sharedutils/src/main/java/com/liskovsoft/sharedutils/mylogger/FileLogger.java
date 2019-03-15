@@ -18,10 +18,12 @@ import java.util.Locale;
 
 class FileLogger extends MyLogger {
     private final Context mContext;
+    private final String mCustomLabel;
     private BufferedWriter mWriter;
 
-    public FileLogger(Context context) {
+    public FileLogger(Context context, String customLabel) {
         mContext = context;
+        mCustomLabel = customLabel;
 
         MessageHelpers.showLongMessage(
                 mContext,
@@ -88,13 +90,13 @@ class FileLogger extends MyLogger {
 
     private void writeLogHeader() {
         String time = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US).format(new Date());
-        String version = AppInfoHelpers.getAppVersion(mContext);
+        String version = String.format("%s (%s)", AppInfoHelpers.getAppVersionNum(mContext), mCustomLabel);
         String deviceName = Helpers.getDeviceName();
         append("---------------------------------------");
         append("----------- STARTING LOG --------------");
         append("-------- " +    time     + " ----------");
         append("------- "  +   version   +   " --------");
-        append("------- "  +  deviceName +   " --------");
+        append("--------- " + deviceName + " ----------");
         append("---------------------------------------");
     }
 
