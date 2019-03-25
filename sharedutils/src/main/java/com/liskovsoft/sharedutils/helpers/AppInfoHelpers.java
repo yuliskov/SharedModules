@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ProviderInfo;
 
 public class AppInfoHelpers {
     public static String getAppVersion(Context context) {
@@ -65,5 +66,25 @@ public class AppInfoHelpers {
         }
 
         return null;
+    }
+
+    public static ActivityInfo getActivityInfo(Context ctx, ComponentName componentName) {
+        ActivityInfo ai = null;
+        try {
+            ai = ctx.getPackageManager().getActivityInfo(componentName, PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return ai;
+    }
+
+    public static ProviderInfo getProviderInfo(Context ctx, ComponentName componentName) {
+        ProviderInfo ai = null;
+        try {
+            ai = ctx.getPackageManager().getProviderInfo(componentName, PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return ai;
     }
 }
