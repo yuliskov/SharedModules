@@ -19,11 +19,13 @@ import java.util.Locale;
 class FileLogger extends MyLogger {
     private final Context mContext;
     private final String mCustomLabel;
+    private final MyLogger mFallbackLogger;
     private BufferedWriter mWriter;
 
     public FileLogger(Context context, String customLabel) {
         mContext = context;
         mCustomLabel = customLabel;
+        mFallbackLogger = new SystemLogger();
 
         MessageHelpers.showLongMessage(
                 mContext,
@@ -33,21 +35,25 @@ class FileLogger extends MyLogger {
     @Override
     public void d(String tag, String msg) {
         append(String.format("DEBUG: %s: %s", tag, msg));
+        mFallbackLogger.d(tag, msg);
     }
 
     @Override
     public void i(String tag, String msg) {
         append(String.format("INFO: %s: %s", tag, msg));
+        mFallbackLogger.i(tag, msg);
     }
 
     @Override
     public void w(String tag, String msg) {
         append(String.format("WARN: %s: %s", tag, msg));
+        mFallbackLogger.w(tag, msg);
     }
 
     @Override
     public void e(String tag, String msg) {
         append(String.format("ERROR: %s: %s", tag, msg));
+        mFallbackLogger.e(tag, msg);
     }
 
     private void append(String text) {
@@ -141,5 +147,10 @@ class FileLogger extends MyLogger {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public int getLogType() {
+        return Log.LOG_TYPE_FILE;
     }
 }

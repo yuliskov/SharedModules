@@ -22,4 +22,9 @@ class SystemLogger extends MyLogger {
     public void e(String tag, String msg) {
         Log.e(tag, msg);
     }
+
+    @Override
+    public int getLogType() {
+        return com.liskovsoft.sharedutils.mylogger.Log.LOG_TYPE_SYSTEM;
+    }
 }

@@ -49,6 +49,10 @@ public class Log {
     }
 
     public static void init(Context context, int logType, String customLabel) {
+        if (sLogger.getLogType() == logType) {
+            return;
+        }
+
         switch (logType) {
             case LOG_TYPE_FILE:
                 sLogger = new FileLogger(context, customLabel);
