@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ProviderInfo;
@@ -86,5 +87,34 @@ public class AppInfoHelpers {
             e.printStackTrace();
         }
         return ai;
+    }
+
+    public static ActivityInfo[] getActivityList(Context context) {
+        PackageManager pm = context.getPackageManager();
+
+        ActivityInfo[] list = null;
+
+        try {
+            PackageInfo info = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+            list = info.activities;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public static boolean isActivityExists(Context context, String actName) {
+        ActivityInfo[] list = getActivityList(context);
+
+        if (list != null) {
+            for (ActivityInfo activityInfo : list) {
+                if (activityInfo.name.contains(actName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
