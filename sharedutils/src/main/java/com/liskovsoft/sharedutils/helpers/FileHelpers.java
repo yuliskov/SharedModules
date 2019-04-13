@@ -22,12 +22,12 @@ public class FileHelpers {
         // NOTE: Android 6.0 fix
         File cacheDir = context.getExternalCacheDir();
 
-        if (!PermissionManager.hasStoragePermissions(context)) {
-            MessageHelpers.showMessage(context, "Storage permission not granted!");
-            return null;
-        }
+        //if (!PermissionManager.hasStoragePermissions(context)) {
+        //    MessageHelpers.showMessage(context, "Storage permission not granted!");
+        //    return null;
+        //}
 
-        if (cacheDir == null) { // no storage, try to use internal one
+        if (cacheDir == null || !cacheDir.canWrite()) { // no storage, try to use internal one
             cacheDir = context.getCacheDir();
         }
 
@@ -86,8 +86,8 @@ public class FileHelpers {
         FileOutputStream fos = null;
 
         try {
-            destination.getParentFile().mkdirs();
-            destination.createNewFile();
+            destination.getParentFile().mkdirs(); // create dirs tree
+            destination.createNewFile(); // create empty file
 
             fos = new FileOutputStream(destination);
 
