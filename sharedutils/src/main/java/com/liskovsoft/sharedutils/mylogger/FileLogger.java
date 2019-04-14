@@ -98,12 +98,12 @@ class FileLogger extends MyLogger {
         String time = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US).format(new Date());
         String version = String.format("%s (%s)", AppInfoHelpers.getAppVersionNum(mContext), mCustomLabel);
         String deviceName = Helpers.getDeviceName();
-        append("---------------------------------------");
-        append("----------- STARTING LOG --------------");
-        append("-------- " +    time     + " ----------");
-        append("------- "  +   version   +   " --------");
-        append("--------- " + deviceName + " ----------");
-        append("---------------------------------------");
+        append("----------------------------------------------------");
+        append("----------- STARTING LOG");
+        append("----------- " +     time);
+        append("----------- " +     version);
+        append("----------- " +     deviceName);
+        append("----------------------------------------------------");
     }
 
     private void writeLogcatHeader() {
