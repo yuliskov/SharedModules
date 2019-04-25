@@ -2,6 +2,7 @@ package com.liskovsoft.sharedutils.helpers;
 
 import android.content.Context;
 import com.liskovsoft.sharedutils.BuildConfig;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +12,9 @@ import java.util.Collection;
 
 public class CacheHelper {
     private static final String PREFIX = CacheHelper.class.getSimpleName();
+    private static final String TAG = CacheHelper.class.getSimpleName();
     private static boolean sCleanupDone;
+    static boolean isUpgrade = false;
 
     public static InputStream getFile(Context context, String id) {
         // don't use cache while in debug mode
@@ -102,6 +105,10 @@ public class CacheHelper {
             if (hasActualVersion) {
                 continue;
             }
+
+            isUpgrade = true;
+
+            Log.d(TAG, "Removing file... " + file.getAbsolutePath());
 
             file.delete();
         }

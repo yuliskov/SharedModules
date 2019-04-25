@@ -8,8 +8,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ProviderInfo;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class AppInfoHelpers {
+    private static final String TAG = AppInfoHelpers.class.getSimpleName();
+
     public static String getAppVersion(Context context) {
         return formatAppVersion(getAppVersionNum(context), getActivityLabel(context));
     }
@@ -116,5 +119,10 @@ public class AppInfoHelpers {
         }
 
         return false;
+    }
+
+    public static boolean isAppJustInstalled() {
+        Log.d(TAG, "Is app just installed: " + CacheHelper.isUpgrade);
+        return CacheHelper.isUpgrade;
     }
 }
