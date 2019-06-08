@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:' + supportLibraryVersion
 
     implementation 'com.squareup.okhttp3:okhttp:' + okhttpVersion
+    implementation 'com.itkacher.okhttpprofiler:okhttpprofiler:' + okhttpProfilerVersion
 
     implementation 'com.google.code.gson:gson:' + gsonVersion
 

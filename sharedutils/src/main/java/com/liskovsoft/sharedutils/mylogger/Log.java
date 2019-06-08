@@ -62,4 +62,12 @@ public class Log {
                 break;
         }
     }
+
+    public static int getLogType() {
+        if (sLogger != null) {
+            return sLogger.getLogType();
+        }
+
+        return LOG_TYPE_SYSTEM;
+    }
 }

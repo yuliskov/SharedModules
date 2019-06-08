@@ -1,6 +1,8 @@
 package com.liskovsoft.sharedutils.okhttp;
 
-import android.util.Log;
+import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor;
+import com.liskovsoft.sharedutils.BuildConfig;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionSpec;
 import okhttp3.Cookie;
@@ -36,6 +38,11 @@ public class OkHttpHelpers {
     public static Response doGetOkHttpRequest(String url, Map<String, String> headers) {
         if (mClient == null) {
             mClient = createOkHttpClient();
+        }
+
+        if (headers == null) {
+            Log.d(TAG, "Headers are null... doing regular request...");
+            return doGetOkHttpRequest(url, mClient);
         }
 
         return doGetOkHttpRequest(url, mClient, headers);
@@ -125,18 +132,24 @@ public class OkHttpHelpers {
     }
 
     private static OkHttpClient createOkHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .cookieJar(new CookieJar() {
-                    @Override
-                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-                    }
+        // DO NOT WORKING!!!
+        //builder.cookieJar(new CookieJar() {
+        //    @Override
+        //    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+        //
+        //    }
+        //
+        //    @Override
+        //    public List<Cookie> loadForRequest(HttpUrl url) {
+        //        return MyCookieLoader.loadCookie(url);
+        //    }
+        //});
 
-                    @Override
-                    public List<Cookie> loadForRequest(HttpUrl url) {
-                        return MyCookieLoader.loadCookie(url);
-                    }
-                });
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(new OkHttpProfilerInterceptor());
+        }
 
         return setupBuilder(builder).build();
     }
