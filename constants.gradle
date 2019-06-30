@@ -32,4 +32,5 @@ project.ext {
     glideVersion = '3.8.0'
     rxAndroidVersion = '2.1.1'
     rxJavaVersion = '2.2.7'
+    diskLruCacheVersion = '2.0.2'
 }

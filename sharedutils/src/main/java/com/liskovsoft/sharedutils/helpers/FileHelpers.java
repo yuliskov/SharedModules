@@ -12,9 +12,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 public class FileHelpers {
@@ -107,6 +109,19 @@ public class FileHelpers {
         }
     }
 
+    public static String toString(InputStream content) {
+        if (content == null) {
+            return null;
+        }
+
+        Scanner s = new Scanner(content, "UTF-8").useDelimiter("\\A");
+        String result = s.hasNext() ? s.next() : "";
+
+        s.close();
+
+        return result;
+    }
+
     public static InputStream toStream(String content) {
         if (content == null) {
             return null;
@@ -117,8 +132,9 @@ public class FileHelpers {
 
     public static void closeStream(Closeable fos) {
         try {
-            if (fos != null)
+            if (fos != null) {
                 fos.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,5 +157,21 @@ public class FileHelpers {
         }
 
         return getFileUri(context, filePath.getAbsolutePath());
+    }
+
+    public static InputStream appendStream(InputStream first, InputStream second) {
+        if (first == null && second == null) {
+            return null;
+        }
+
+        if (first == null) {
+            return second;
+        }
+
+        if (second == null) {
+            return first;
+        }
+
+        return new SequenceInputStream(first, second);
     }
 }

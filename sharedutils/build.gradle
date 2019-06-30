@@ -49,4 +49,5 @@ dependencies {
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
+    implementation 'com.jakewharton:disklrucache:' + diskLruCacheVersion
 }

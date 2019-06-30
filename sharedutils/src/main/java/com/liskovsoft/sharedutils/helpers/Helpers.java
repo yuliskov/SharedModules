@@ -15,6 +15,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
@@ -73,19 +74,7 @@ public final class Helpers {
     }
 
     public static InputStream appendStream(InputStream first, InputStream second) {
-        if (first == null && second == null) {
-            return null;
-        }
-
-        if (first == null) {
-            return second;
-        }
-
-        if (second == null) {
-            return first;
-        }
-
-        return new SequenceInputStream(first, second);
+        return FileHelpers.appendStream(first, second);
     }
 
     public static String encodeURI(byte[] data) {
@@ -125,14 +114,12 @@ public final class Helpers {
         return String.format("%s: %s", ex.getClass().getCanonicalName(), ex.getMessage());
     }
 
-    public static String toString(InputStream inputStream) {
-        if (inputStream == null) {
-            return null;
-        }
+    public static String toString(InputStream content) {
+        return FileHelpers.toString(content);
+    }
 
-        Scanner s = new Scanner(inputStream, "UTF-8").useDelimiter("\\A");
-        String result = s.hasNext() ? s.next() : "";
-        return result;
+    public static InputStream toStream(String content) {
+        return FileHelpers.toStream(content);
     }
 
     public static void postOnUiThread(Runnable runnable) {
@@ -423,5 +410,26 @@ public final class Helpers {
         }
 
         return result;
+    }
+
+    public static boolean isEmpty(Intent intent) {
+        if (intent == null) {
+            return true;
+        }
+
+        if (intent.getExtras() == null) {
+            return true;
+        }
+
+        return intent.getExtras().isEmpty();
+    }
+
+    public static void mergeIntents(Intent mainIntent, Intent newIntent) {
+        Bundle extras = mainIntent.getExtras();
+
+        if (extras != null) {
+            extras.putAll(newIntent.getExtras());
+            mainIntent.putExtras(extras);
+        }
     }
 }

@@ -9,8 +9,10 @@ import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.TlsVersion;
 
@@ -48,6 +50,14 @@ public class OkHttpHelpers {
         return doGetOkHttpRequest(url, mClient, headers);
     }
 
+    public static Response doPostOkHttpRequest(String url, Map<String, String> headers, String postBody, String contentType) {
+        if (mClient == null) {
+            mClient = createOkHttpClient();
+        }
+
+        return doPostOkHttpRequest(url, mClient, headers, postBody, contentType);
+    }
+
     public static Response doGetOkHttpRequest(String url) {
         if (mClient == null) {
             mClient = createOkHttpClient();
@@ -67,6 +77,16 @@ public class OkHttpHelpers {
     public static Response doOkHttpRequest(String url, OkHttpClient client) {
         Request okHttpRequest = new Request.Builder()
                 .url(url)
+                .build();
+
+        return doOkHttpRequest(client, okHttpRequest);
+    }
+
+    private static Response doPostOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers, String body, String contentType) {
+        Request okHttpRequest = new Request.Builder()
+                .url(url)
+                .headers(Headers.of(headers))
+                .post(RequestBody.create(MediaType.parse(contentType), body))
                 .build();
 
         return doOkHttpRequest(client, okHttpRequest);
@@ -117,7 +137,7 @@ public class OkHttpHelpers {
 
                 break; // no exception is thrown - job is done
             } catch (Exception ex) {
-                Log.e(TAG, ex.getMessage(), ex); // network error, just return null
+                Log.e(TAG, ex.getMessage()); // network error, just return null
                 okHttpResponse = null;
                 lastEx = ex;
             }
@@ -125,7 +145,7 @@ public class OkHttpHelpers {
 
         if (lastEx != null && okHttpResponse == null) { // request failed
             lastEx.printStackTrace();
-            // MessageHelpers.showLongMessage(sContext, TAG, lastEx.getMessage());
+            Log.e(TAG, lastEx.getMessage());
         }
 
         return okHttpResponse;

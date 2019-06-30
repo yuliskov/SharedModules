@@ -8,17 +8,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ProviderInfo;
+import androidx.core.content.pm.PackageInfoCompat;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class AppInfoHelpers {
     private static final String TAG = AppInfoHelpers.class.getSimpleName();
 
     public static String getAppVersion(Context context) {
-        return formatAppVersion(getAppVersionNum(context), getActivityLabel(context));
+        return formatAppVersion(getAppVersionName(context), getActivityLabel(context));
     }
 
     public static String getAppVersionRobust(Context context, String launchActivityName) {
-        return formatAppVersion(getAppVersionNum(context), getActivityLabelRobust(context, launchActivityName));
+        return formatAppVersion(getAppVersionName(context), getActivityLabelRobust(context, launchActivityName));
     }
 
     private static String formatAppVersion(String version, String label) {
@@ -29,19 +30,35 @@ public class AppInfoHelpers {
         return getActivityLabel(context, launchActivityName);
     }
 
-    public static String getAppVersionNum(Context context) {
-        String versionName = null;
+    public static int getAppVersionCode(Context context) {
+        PackageInfo packageInfo = createPackageInfo(context);
+        if (packageInfo != null) {
+            return (int) PackageInfoCompat.getLongVersionCode(packageInfo);
+        }
 
+        return 0;
+    }
+
+    public static String getAppVersionName(Context context) {
+        PackageInfo packageInfo = createPackageInfo(context);
+        if (packageInfo != null) {
+            return packageInfo.versionName;
+        }
+
+        return null;
+    }
+
+    private static PackageInfo createPackageInfo(Context context) {
         try {
-            versionName = context
+            return context
                     .getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0)
-                    .versionName;
+                    .getPackageInfo(context.getPackageName(), 0);
         } catch (NameNotFoundException e) {
+            Log.d(TAG, e);
             e.printStackTrace();
         }
 
-        return versionName;
+        return null;
     }
 
     public static String getActivityLabel(Context context) {
@@ -119,10 +136,5 @@ public class AppInfoHelpers {
         }
 
         return false;
-    }
-
-    public static boolean isAppJustInstalled() {
-        Log.d(TAG, "Is app just installed: " + CacheHelper.isUpgrade);
-        return CacheHelper.isUpgrade;
     }
 }
