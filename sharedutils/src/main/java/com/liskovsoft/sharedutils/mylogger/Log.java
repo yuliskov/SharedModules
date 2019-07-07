@@ -21,7 +21,9 @@ public class Log {
     }
 
     public static void e(String tag, Object msg) {
-        sLogger.e(tag, msg.toString());
+        if (msg != null) {
+            sLogger.e(tag, msg.toString());
+        }
     }
 
     public static void i(String tag, Object msg, Throwable ex) {
@@ -30,7 +32,9 @@ public class Log {
 
 
     public static void e(String tag, Object msg, Throwable ex) {
-        e(tag, msg + " " + ex.getMessage());
+        if (msg != null && ex != null) {
+            e(tag, msg + " " + ex.getMessage());
+        }
     }
 
     public static void d(String tag, Object msg, Throwable ex) {
