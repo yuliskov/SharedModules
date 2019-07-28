@@ -382,7 +382,7 @@ public final class Helpers {
 
     // NOTE: as of Oreo you must also add the REQUEST_INSTALL_PACKAGES permission to your manifest. Otherwise it just silently fails
     public static void installPackage(Context context, String packagePath) {
-        if (packagePath == null) {
+        if (packagePath == null || context == null) {
             return;
         }
 
