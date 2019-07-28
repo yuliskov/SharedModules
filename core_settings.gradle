@@ -1,4 +1,5 @@
 def rootDir = gradle.ext.sharedUtilsRoot
 
-include ':sharedutils'
+include ':sharedutils', ':sharedtests'
 project(':sharedutils').projectDir = new File(rootDir, 'sharedutils')
+project(':sharedtests').projectDir = new File(rootDir, 'sharedtests')
