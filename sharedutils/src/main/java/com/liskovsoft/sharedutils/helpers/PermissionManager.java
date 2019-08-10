@@ -21,7 +21,8 @@ public class PermissionManager {
     /**
      * Checks if the app has permission to write to device storage<br/>
      * If the app does not has permission then the user will be prompted to grant permissions<br/>
-     * NOTE: runs async
+     * Required for the {@link Context#getExternalCacheDir()}<br/>
+     * NOTE: runs async<br/>
      *
      * @param activity to apply permissions to
      */
@@ -50,7 +51,7 @@ public class PermissionManager {
      * @param activity to apply permissions to
      * @return whether permission already granted
      */
-    public static boolean hasStoragePermissions(Context activity) {
+    private static boolean hasStoragePermissions(Context activity) {
         if (Build.VERSION.SDK_INT >= 23) {
             // Check if we have write permission
             return hasPermissions(activity, PERMISSIONS_STORAGE);

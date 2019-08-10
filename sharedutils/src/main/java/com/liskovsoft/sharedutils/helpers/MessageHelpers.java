@@ -1,5 +1,6 @@
 package com.liskovsoft.sharedutils.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -79,5 +80,15 @@ public class MessageHelpers {
      */
     public static void showMessage(Context ctx, int resId) {
         showMessage(ctx, ctx.getResources().getString(resId));
+    }
+
+    public static void showLongMessageEndPause(Context context, int resId) {
+        showLongMessage(context, resId);
+
+        try {
+            Thread.sleep(5_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

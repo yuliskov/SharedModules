@@ -3,15 +3,19 @@ package com.liskovsoft.sharedutils.helpers;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build.VERSION;
+import android.os.Environment;
 import androidx.core.content.FileProvider;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -20,6 +24,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class FileHelpers {
+    private static final String TAG = FileHelpers.class.getSimpleName();
+
     public static File getCacheDir(Context context) {
         // NOTE: Android 6.0 fix
         File cacheDir = context.getExternalCacheDir();
@@ -61,26 +67,62 @@ public class FileHelpers {
     public static void deleteCache(Context context) {
         try {
             File dir = context.getCacheDir();
-            deleteDir(dir);
+            delete(dir);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
+    public static boolean delete(File sourceLocation) {
+        if (sourceLocation != null && sourceLocation.isDirectory()) {
+            String[] children = sourceLocation.list();
             for (String child : children) {
-                boolean success = deleteDir(new File(dir, child));
+                boolean success = delete(new File(sourceLocation, child));
                 if (!success) {
                     return false;
                 }
             }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
+            return sourceLocation.delete();
+        } else if(sourceLocation!= null && sourceLocation.isFile()) {
+            return sourceLocation.delete();
         } else {
             return false;
+        }
+    }
+
+    public static void copy(File sourceLocation, File targetLocation) {
+        if (sourceLocation.isDirectory()) {
+            copyDirectory(sourceLocation, targetLocation);
+        } else {
+            try {
+                copyFile(sourceLocation, targetLocation);
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to copy: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void copyDirectory(File source, File target) {
+        if (!target.exists()) {
+            target.mkdirs();
+        }
+
+        for (String f : source.list()) {
+            copy(new File(source, f), new File(target, f));
+        }
+    }
+
+    private static void copyFile(File source, File target) throws IOException {
+        try (
+                InputStream in = new FileInputStream(source);
+                OutputStream out = new FileOutputStream(target)
+        ) {
+            byte[] buf = new byte[1024];
+            int length;
+            while ((length = in.read(buf)) > 0) {
+                out.write(buf, 0, length);
+            }
         }
     }
 
@@ -173,5 +215,21 @@ public class FileHelpers {
         }
 
         return new SequenceInputStream(first, second);
+    }
+
+    /**
+     * Can read and write the media
+     */
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+    /**
+     * Can at least read the media
+     */
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        return isExternalStorageWritable() || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 }

@@ -20,7 +20,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import com.google.gson.Gson;
@@ -431,5 +433,54 @@ public final class Helpers {
             extras.putAll(newIntent.getExtras());
             mainIntent.putExtras(extras);
         }
+    }
+
+    public static void bringToBackOld(View child) {
+        ViewGroup parent = (ViewGroup) child.getParent();
+        if (parent != null && parent.indexOfChild(child) != 0) {
+            parent.removeView(child);
+            parent.addView(child, 0);
+        }
+    }
+
+    /**
+     * Not working!!!
+     */
+    public static void bringToBack(View myCurrentView) {
+        ViewGroup myViewGroup = ((ViewGroup) myCurrentView.getParent());
+        int index = myViewGroup.indexOfChild(myCurrentView);
+        for(int i = 0; i < index; i++) {
+            myViewGroup.bringChildToFront(myViewGroup.getChildAt(i));
+        }
+    }
+
+    public static KeyEvent newEvent(KeyEvent event, int keyCode) {
+        return new KeyEvent(
+                event.getDownTime(),
+                event.getEventTime(),
+                event.getAction(),
+                keyCode,
+                event.getRepeatCount(),
+                event.getMetaState(),
+                event.getDeviceId(),
+                event.getScanCode(),
+                event.getFlags(),
+                event.getSource());
+    }
+
+    public static void enableScreensaver(Activity context) {
+        if (context == null) {
+            return;
+        }
+
+        context.getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    public static void disableScreensaver(Activity context) {
+        if (context == null) {
+            return;
+        }
+
+        context.getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

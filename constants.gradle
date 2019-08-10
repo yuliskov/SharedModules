@@ -25,7 +25,7 @@ project.ext {
     gsonVersion = '2.8.2'
     jsonPathVersion = '2.4.0'
     ottoVersion = '1.3.8'
-    okhttpVersion = '3.9.1'
+    okhttpVersion = '3.12.0'
     okhttpProfilerVersion = '1.0.5'
     multiDexVersion = '1.0.2' // crashlytics fix on Android 4.4
     stethoVersion = '1.5.0' // Chrome Dev Tools

@@ -59,6 +59,12 @@ public class AssetPropertyParser2 implements ConfigParser {
     }
 
     @Override
+    public boolean getBoolean(String key) {
+        String val = get(key);
+        return val != null && Boolean.parseBoolean(val);
+    }
+
+    @Override
     public String[] getArray(String key) {
         if (mProperties == null) {
             return null;

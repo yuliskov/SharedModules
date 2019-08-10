@@ -16,7 +16,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.TlsVersion;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -152,26 +158,7 @@ public class OkHttpHelpers {
     }
 
     private static OkHttpClient createOkHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        // DO NOT WORKING!!!
-        //builder.cookieJar(new CookieJar() {
-        //    @Override
-        //    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-        //
-        //    }
-        //
-        //    @Override
-        //    public List<Cookie> loadForRequest(HttpUrl url) {
-        //        return MyCookieLoader.loadCookie(url);
-        //    }
-        //});
-
-        if (BuildConfig.DEBUG) {
-            builder.addInterceptor(new OkHttpProfilerInterceptor());
-        }
-
-        return setupBuilder(builder).build();
+        return createSafeOkHttpClient();
     }
 
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
@@ -218,5 +205,64 @@ public class OkHttpHelpers {
         }
 
         return builder;
+    }
+
+    /**
+     * Accept only trustworthy certificates
+     */
+    private static OkHttpClient createSafeOkHttpClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        // Outputs to logcat tons of info
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(new OkHttpProfilerInterceptor());
+        }
+
+        return setupBuilder(builder).build();
+    }
+
+    /**
+     * Accept all certificates (even outdated ones)
+     */
+    private static OkHttpClient createUnsafeOkHttpClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+            builder.hostnameVerifier((hostname, session) -> true);
+
+            // Outputs to logcat tons of info
+            if (BuildConfig.DEBUG) {
+                builder.addInterceptor(new OkHttpProfilerInterceptor());
+            }
+
+            OkHttpClient okHttpClient = setupBuilder(builder).build();
+            return okHttpClient;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

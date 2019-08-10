@@ -40,6 +40,8 @@ dependencies {
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
 
+    testImplementation project(path: ':sharedtests')
+
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
 
     implementation 'com.squareup.okhttp3:okhttp:' + okhttpVersion
