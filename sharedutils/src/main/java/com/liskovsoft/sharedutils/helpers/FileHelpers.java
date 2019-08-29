@@ -108,7 +108,14 @@ public class FileHelpers {
             target.mkdirs();
         }
 
-        for (String f : source.list()) {
+        String[] list = source.list();
+
+        if (list == null) {
+            Log.w(TAG, "Seems that read permissions not granted for file: " + source.getAbsolutePath());
+            return;
+        }
+
+        for (String f : list) {
             copy(new File(source, f), new File(target, f));
         }
     }

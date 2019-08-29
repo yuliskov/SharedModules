@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ProviderInfo;
+import android.content.res.Resources.NotFoundException;
 import androidx.core.content.pm.PackageInfoCompat;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -82,7 +83,7 @@ public class AppInfoHelpers {
         try {
             ActivityInfo info = pm.getActivityInfo(name, 0);
             return context.getResources().getString(info.labelRes);
-        } catch (NameNotFoundException e) {
+        } catch (NameNotFoundException | NotFoundException e) {
             e.printStackTrace();
         }
 

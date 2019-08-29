@@ -1,5 +1,6 @@
 package com.liskovsoft.sharedutils.helpers;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -284,10 +285,21 @@ public final class Helpers {
 
         if (VERSION.SDK_INT >= 21) {
             // Android TV user likely have mics
-            isLeanback = pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+            isLeanback = isAndroidTV(context);
         }
 
         return isMicAvail || isLeanback;
+    }
+
+    public static boolean isAndroidTV(Context context) {
+        PackageManager pm = context.getPackageManager();
+
+        if (VERSION.SDK_INT <= 21) {
+            return false;
+        }
+
+        return (pm.hasSystemFeature(PackageManager.FEATURE_TELEVISION)
+                || pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK));
     }
 
     public static boolean matchAll(String input, String... regex) {
@@ -392,7 +404,7 @@ public final class Helpers {
         Uri file = FileHelpers.getFileUri(context, packagePath);
         intent.setDataAndType(file, "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION); // without this flag android returned a intent error!
-        context.startActivity(intent);
+        context.getApplicationContext().startActivity(intent);
     }
 
     public static List<ApplicationInfo> getInstalledPackages(Context context) {

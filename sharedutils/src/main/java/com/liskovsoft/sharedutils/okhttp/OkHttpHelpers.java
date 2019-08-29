@@ -158,7 +158,16 @@ public class OkHttpHelpers {
     }
 
     private static OkHttpClient createOkHttpClient() {
-        return createSafeOkHttpClient();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        // Outputs to logcat tons of info
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(new OkHttpProfilerInterceptor());
+        }
+
+        //configureToIgnoreCertificate(builder);
+
+        return setupBuilder(builder).build();
     }
 
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
@@ -207,34 +216,22 @@ public class OkHttpHelpers {
         return builder;
     }
 
-    /**
-     * Accept only trustworthy certificates
-     */
-    private static OkHttpClient createSafeOkHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        // Outputs to logcat tons of info
-        if (BuildConfig.DEBUG) {
-            builder.addInterceptor(new OkHttpProfilerInterceptor());
-        }
-
-        return setupBuilder(builder).build();
-    }
-
-    /**
-     * Accept all certificates (even outdated ones)
-     */
-    private static OkHttpClient createUnsafeOkHttpClient() {
+    //Setting testMode configuration. If set as testMode, the connection will skip certification check
+    private static void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
+        Log.w(TAG, "Ignore Ssl Certificate");
         try {
+
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[] {
                     new X509TrustManager() {
                         @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
+                                throws CertificateException {
                         }
 
                         @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
+                                throws CertificateException {
                         }
 
                         @Override
@@ -250,19 +247,15 @@ public class OkHttpHelpers {
             // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-            builder.hostnameVerifier((hostname, session) -> true);
-
-            // Outputs to logcat tons of info
-            if (BuildConfig.DEBUG) {
-                builder.addInterceptor(new OkHttpProfilerInterceptor());
-            }
-
-            OkHttpClient okHttpClient = setupBuilder(builder).build();
-            return okHttpClient;
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Log.w(TAG, "Exception while configuring IgnoreSslCertificate: " + e, e);
         }
     }
 }
