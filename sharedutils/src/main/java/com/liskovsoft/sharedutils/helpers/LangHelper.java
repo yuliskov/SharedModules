@@ -102,4 +102,16 @@ public class LangHelper {
         String country = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
         return new Locale(lang, country);
     }
+
+    public static String getDefaultLocale() {
+        Locale defaultLocale = Locale.getDefault();
+        String lang = defaultLocale.getLanguage();
+        String country = defaultLocale.getCountry();
+
+        if (country == null || country.isEmpty()) {
+            return String.format("%s", lang);
+        }
+
+        return String.format("%s_%S", lang, country);
+    }
 }

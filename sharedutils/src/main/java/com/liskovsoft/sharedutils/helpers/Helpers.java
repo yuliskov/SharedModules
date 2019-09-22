@@ -98,6 +98,12 @@ public final class Helpers {
         return String.format("%s (%s)", Build.MODEL, Build.PRODUCT);
     }
 
+    public static boolean isGenymotion() {
+        String deviceName = getDeviceName();
+
+        return deviceName.contains("(vbox86p)");
+    }
+
     public static boolean deviceMatch(String[] devicesToProcess) {
         String thisDeviceName = Helpers.getDeviceName();
         for (String deviceName : devicesToProcess) {
