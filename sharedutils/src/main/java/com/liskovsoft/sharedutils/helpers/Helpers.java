@@ -289,7 +289,8 @@ public final class Helpers {
 
         boolean isLeanback = false;
 
-        if (VERSION.SDK_INT >= 21) {
+        // mic isn't accessible on the fire tv devices
+        if (VERSION.SDK_INT >= 21 && !isAmazonFireTVDevice()) {
             // Android TV user likely have mics
             isLeanback = isAndroidTV(context);
         }
@@ -500,5 +501,24 @@ public final class Helpers {
         }
 
         context.getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    /**
+     * Utility method to check if device is Amazon Fire TV device
+     * @return {@code true} true if device is Amazon Fire TV device.
+     */
+    public static boolean isAmazonFireTVDevice() {
+        String deviceName = Build.MODEL;
+        String manufacturerName = Build.MANUFACTURER;
+        return (deviceName.startsWith("AFT")
+                && "Amazon".equalsIgnoreCase(manufacturerName));
+    }
+
+    public static boolean isActivityExists(Intent intent, Context context) {
+        if (intent == null || context == null) {
+            return false;
+        }
+
+        return intent.resolveActivityInfo(context.getPackageManager(), PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) != null;
     }
 }
