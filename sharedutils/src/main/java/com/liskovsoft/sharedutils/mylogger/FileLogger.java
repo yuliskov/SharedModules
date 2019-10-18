@@ -30,7 +30,7 @@ class FileLogger extends MyLogger {
         mCustomLabel = customLabel;
         mFallbackLogger = new SystemLogger();
 
-        startWatchDog();
+        //startWatchDog();
 
         MessageHelpers.showLongMessage(
                 mContext,
