@@ -1,8 +1,12 @@
-package com.liskovsoft.sharedutils.helpers;
+package com.liskovsoft.sharedutils.locale;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
+import android.os.LocaleList;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -89,6 +93,11 @@ public class LangHelper {
         Locale.setDefault(locale);
         Configuration config = context.getResources().getConfiguration();
         config.locale = locale;
+
+        if (VERSION.SDK_INT >= VERSION_CODES.N) {
+            config.setLocales(new LocaleList(locale));
+        }
+
         context.getResources()
                 .updateConfiguration(
                         config,
@@ -96,7 +105,11 @@ public class LangHelper {
                 );
     }
 
-    private static Locale parseLangCode(String langCode) {
+    public static Locale parseLangCode(String langCode) {
+        if (langCode == null) {
+            return null;
+        }
+
         StringTokenizer tokenizer = new StringTokenizer(langCode, "_");
         String lang = tokenizer.nextToken();
         String country = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";

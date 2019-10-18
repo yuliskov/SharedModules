@@ -1,6 +1,7 @@
 package com.liskovsoft.sharedutils.mylogger;
 
 import android.content.Context;
+import android.os.Handler;
 import com.liskovsoft.sharedutils.R;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
@@ -21,11 +22,15 @@ class FileLogger extends MyLogger {
     private final String mCustomLabel;
     private final MyLogger mFallbackLogger;
     private BufferedWriter mWriter;
+    private Handler mHandler;
+    private static final long FLUSH_TIME_MS = 1_000;
 
     public FileLogger(Context context, String customLabel) {
         mContext = context;
         mCustomLabel = customLabel;
         mFallbackLogger = new SystemLogger();
+
+        startWatchDog();
 
         MessageHelpers.showLongMessage(
                 mContext,
@@ -152,5 +157,13 @@ class FileLogger extends MyLogger {
     @Override
     public int getLogType() {
         return Log.LOG_TYPE_FILE;
+    }
+
+    private void startWatchDog() {
+        if (mHandler == null) {
+            mHandler = new Handler();
+        }
+
+        mHandler.postDelayed(() -> {this.flush(); startWatchDog();}, FLUSH_TIME_MS);
     }
 }

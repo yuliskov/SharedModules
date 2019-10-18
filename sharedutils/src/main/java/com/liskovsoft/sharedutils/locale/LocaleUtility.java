@@ -1,4 +1,4 @@
-package com.liskovsoft.sharedutils.helpers;
+package com.liskovsoft.sharedutils.locale;
 
 import android.content.Context;
 import android.os.Build;

@@ -1,7 +1,7 @@
 package com.liskovsoft.sharedutils.helpers;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -33,7 +33,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.SequenceInputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
@@ -46,12 +45,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Helpers {
     private static HashMap<String, List<String>> sCache = new HashMap<>();
+    public static final int REMOVE_PACKAGE_CODE = 521;
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
@@ -290,12 +289,16 @@ public final class Helpers {
         boolean isLeanback = false;
 
         // mic isn't accessible on the fire tv devices
-        if (VERSION.SDK_INT >= 21 && !isAmazonFireTVDevice()) {
+        if (VERSION.SDK_INT >= 21) {
             // Android TV user likely have mics
             isLeanback = isAndroidTV(context);
         }
 
         return isMicAvail || isLeanback;
+    }
+
+    public static boolean isAndroidTVLauncher(Context context) {
+        return isPackageExists(context, "com.google.android.leanbacklauncher");
     }
 
     public static boolean isAndroidTV(Context context) {
@@ -386,19 +389,28 @@ public final class Helpers {
     }
 
     public static boolean isPackageExists(Context context, String pkgName) {
-        for (ApplicationInfo info : getInstalledPackages(context)) {
-            if (pkgName.equals(info.packageName)) {
-                return true;
-            }
+        PackageManager manager = context.getPackageManager();
+        PackageInfo packageInfo = null;
+
+        try {
+            packageInfo = manager.getPackageInfo(pkgName, PackageManager.GET_META_DATA);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
         }
 
-        return false;
+        return packageInfo != null;
     }
 
     public static void removePackage(Context context, String pkgName) {
         Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
         intent.setData(Uri.parse("package:" + pkgName));
         context.startActivity(intent);
+    }
+
+    public static void removePackageAndGetResult(Activity context, String pkgName) {
+        Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
+        intent.setData(Uri.parse("package:" + pkgName));
+        context.startActivityForResult(intent, REMOVE_PACKAGE_CODE);
     }
 
     // NOTE: as of Oreo you must also add the REQUEST_INSTALL_PACKAGES permission to your manifest. Otherwise it just silently fails
@@ -520,5 +532,28 @@ public final class Helpers {
         }
 
         return intent.resolveActivityInfo(context.getPackageManager(), PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) != null;
+    }
+
+    /**
+     * Get a MemoryInfo object for the device's current memory status.
+     */
+    public static ActivityManager.MemoryInfo getAvailableMemory(Context ctx) {
+        ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+        activityManager.getMemoryInfo(memoryInfo);
+        return memoryInfo;
+    }
+
+    /**
+     * Check that the app could be easily uninstalled without root.
+     */
+    public static boolean isUserApp(PackageInfo info) {
+        if (info != null && info.applicationInfo != null) {
+            ApplicationInfo ai = info.applicationInfo;
+            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+            return (ai.flags & mask) == 0;
+        }
+
+        return false;
     }
 }
