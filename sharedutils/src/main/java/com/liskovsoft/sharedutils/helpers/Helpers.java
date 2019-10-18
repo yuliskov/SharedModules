@@ -291,7 +291,7 @@ public final class Helpers {
         // mic isn't accessible on the fire tv devices
         if (VERSION.SDK_INT >= 21) {
             // Android TV user likely have mics
-            isLeanback = isAndroidTV(context);
+            isLeanback = isAndroidTV(context) || isAmazonFireTVDevice();
         }
 
         return isMicAvail || isLeanback;
