@@ -16,5 +16,7 @@ public class HelpersTest {
         assertTrue("Values is equal", Helpers.nearlyEqual(60.004f, 59.96f, 0.1f));
         assertFalse("Values not equal", Helpers.nearlyEqual(59.96f, 24.554f, 1f));
         assertFalse("Values not equal", Helpers.nearlyEqual(24.554f, 59.96f, 1f));
+        assertTrue("Values is equal", Helpers.nearlyEqual(59.96f, 24.554f, 36f));
+        assertTrue("Values is equal", Helpers.nearlyEqual(24.554f, 59.96f, 36f));
     }
 }
