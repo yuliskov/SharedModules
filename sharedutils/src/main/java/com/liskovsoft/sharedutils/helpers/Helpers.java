@@ -88,11 +88,6 @@ public final class Helpers {
         }
     }
 
-    public static boolean floatEquals(float num1, float num2) {
-        float epsilon = 0.1f;
-        return Math.abs(num1 - num2) < epsilon;
-    }
-
     public static String getDeviceName() {
         return String.format("%s (%s)", Build.MODEL, Build.PRODUCT);
     }
@@ -555,5 +550,11 @@ public final class Helpers {
         }
 
         return false;
+    }
+
+    public static boolean nearlyEqual(float a, float b, float epsilon) {
+        final float diff = Math.abs(a - b);
+
+        return diff < epsilon;
     }
 }

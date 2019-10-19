@@ -12,6 +12,16 @@ class SharedPreferencesBase {
         mPrefs = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
     }
 
+    protected void putLong(String key, long val) {
+        mPrefs.edit()
+                .putLong(key, val)
+                .apply();
+    }
+
+    protected long getLong(String key, long defVal) {
+        return mPrefs.getLong(key, defVal);
+    }
+
     protected void putInt(String key, int val) {
         mPrefs.edit()
                 .putInt(key, val)
