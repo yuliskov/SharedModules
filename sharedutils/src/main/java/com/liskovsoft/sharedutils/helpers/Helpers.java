@@ -555,6 +555,6 @@ public final class Helpers {
     public static boolean nearlyEqual(float a, float b, float epsilon) {
         final float diff = Math.abs(a - b);
 
-        return diff < epsilon;
+        return diff <= epsilon;
     }
 }
