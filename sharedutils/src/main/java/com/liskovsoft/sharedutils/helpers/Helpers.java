@@ -296,6 +296,10 @@ public final class Helpers {
         return isPackageExists(context, "com.google.android.leanbacklauncher");
     }
 
+    public static boolean isATVChannelsSupported(Context context) {
+        return isAndroidTVLauncher(context) && VERSION.SDK_INT >= 26;
+    }
+
     public static boolean isAndroidTV(Context context) {
         PackageManager pm = context.getPackageManager();
 
