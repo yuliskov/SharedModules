@@ -293,7 +293,7 @@ public final class Helpers {
     }
 
     public static boolean isAndroidTVLauncher(Context context) {
-        return isPackageExists(context, "com.google.android.leanbacklauncher");
+        return context.getPackageManager().hasSystemFeature("android.software.leanback");
     }
 
     public static boolean isATVChannelsSupported(Context context) {
