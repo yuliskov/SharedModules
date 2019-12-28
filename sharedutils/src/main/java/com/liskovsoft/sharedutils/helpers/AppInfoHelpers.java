@@ -80,11 +80,15 @@ public class AppInfoHelpers {
     private static String getActivityLabel(Context context, ComponentName name) {
         PackageManager pm = context.getPackageManager();
 
+        ActivityInfo info = null;
+
         try {
-            ActivityInfo info = pm.getActivityInfo(name, 0);
+            info = pm.getActivityInfo(name, 0);
             return context.getResources().getString(info.labelRes);
         } catch (NameNotFoundException | NotFoundException e) {
-            e.printStackTrace();
+            if (info != null) {
+                return Helpers.getSimpleClassName(info.name); // label not found, return simple class name
+            }
         }
 
         return null;

@@ -92,6 +92,12 @@ public final class Helpers {
         return String.format("%s (%s)", Build.MODEL, Build.PRODUCT);
     }
 
+    public static String getAndroidVersion() {
+        String release = Build.VERSION.RELEASE;
+        int sdkVersion = Build.VERSION.SDK_INT;
+        return "Android SDK: " + sdkVersion + " (" + release +")";
+    }
+
     public static boolean isGenymotion() {
         String deviceName = getDeviceName();
 
@@ -281,23 +287,26 @@ public final class Helpers {
 
         boolean isMicAvail = pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE);
 
-        boolean isLeanback = false;
+        //boolean isLeanback = false;
+        //
+        //if (VERSION.SDK_INT >= 21) {
+        //    // Android TV user likely have mics
+        //    isLeanback = isAndroidTV(context) || isAmazonFireTVDevice();
+        //}
 
-        // mic isn't accessible on the fire tv devices
-        if (VERSION.SDK_INT >= 21) {
-            // Android TV user likely have mics
-            isLeanback = isAndroidTV(context) || isAmazonFireTVDevice();
-        }
-
-        return isMicAvail || isLeanback;
+        return isMicAvail || VERSION.SDK_INT >= 21;
     }
 
     public static boolean isAndroidTVLauncher(Context context) {
-        return context.getPackageManager().hasSystemFeature("android.software.leanback");
+        return isPackageExists(context, "com.google.android.leanbacklauncher");
+    }
+
+    public static boolean isAndroidTVRecommendations(Context context) {
+        return isPackageExists(context, "com.google.android.leanbacklauncher.recommendations");
     }
 
     public static boolean isATVChannelsSupported(Context context) {
-        return isAndroidTVLauncher(context) && VERSION.SDK_INT >= 26;
+        return VERSION.SDK_INT >= 26 && isAndroidTVLauncher(context);
     }
 
     public static boolean isAndroidTV(Context context) {
@@ -394,7 +403,7 @@ public final class Helpers {
         try {
             packageInfo = manager.getPackageInfo(pkgName, PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            // NOP
         }
 
         return packageInfo != null;
@@ -484,18 +493,18 @@ public final class Helpers {
         }
     }
 
-    public static KeyEvent newEvent(KeyEvent event, int keyCode) {
+    public static KeyEvent newEvent(KeyEvent origin, int newKeyCode) {
         return new KeyEvent(
-                event.getDownTime(),
-                event.getEventTime(),
-                event.getAction(),
-                keyCode,
-                event.getRepeatCount(),
-                event.getMetaState(),
-                event.getDeviceId(),
-                event.getScanCode(),
-                event.getFlags(),
-                event.getSource());
+                origin.getDownTime(),
+                origin.getEventTime(),
+                origin.getAction(),
+                newKeyCode,
+                origin.getRepeatCount(),
+                origin.getMetaState(),
+                origin.getDeviceId(),
+                origin.getScanCode(),
+                origin.getFlags(),
+                origin.getSource());
     }
 
     public static void enableScreensaver(Activity context) {
@@ -565,5 +574,13 @@ public final class Helpers {
     public static boolean floatEquals(float num1, float num2) {
         float epsilon = 0.1f;
         return Math.abs(num1 - num2) < epsilon;
+    }
+
+    public static String getSimpleClassName(String name) {
+        if (name == null) {
+            return null;
+        }
+
+        return name.substring(name.lastIndexOf('.') + 1);
     }
 }
