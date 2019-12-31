@@ -26,6 +26,10 @@ import java.util.Set;
 public class FileHelpers {
     private static final String TAG = FileHelpers.class.getSimpleName();
 
+    public static File getDownloadDir(Context context) {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    }
+
     public static File getCacheDir(Context context) {
         // NOTE: Android 6.0 fix
         File cacheDir = context.getExternalCacheDir();

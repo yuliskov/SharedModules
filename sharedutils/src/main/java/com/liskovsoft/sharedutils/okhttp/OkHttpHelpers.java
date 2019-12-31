@@ -160,7 +160,7 @@ public class OkHttpHelpers {
         return okHttpResponse;
     }
 
-    private static OkHttpClient createOkHttpClient() {
+    public static OkHttpClient createOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         // Outputs to logcat tons of info

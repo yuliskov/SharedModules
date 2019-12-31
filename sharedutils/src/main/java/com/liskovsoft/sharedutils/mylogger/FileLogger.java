@@ -1,8 +1,6 @@
 package com.liskovsoft.sharedutils.mylogger;
 
 import android.content.Context;
-import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Handler;
 import com.liskovsoft.sharedutils.R;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
