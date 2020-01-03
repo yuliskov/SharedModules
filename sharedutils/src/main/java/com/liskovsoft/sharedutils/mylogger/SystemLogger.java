@@ -24,7 +24,7 @@ class SystemLogger extends MyLogger {
     }
 
     @Override
-    public int getLogType() {
+    public String getLogType() {
         return com.liskovsoft.sharedutils.mylogger.Log.LOG_TYPE_SYSTEM;
     }
 }

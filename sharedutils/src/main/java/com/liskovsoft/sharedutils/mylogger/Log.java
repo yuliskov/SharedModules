@@ -3,8 +3,8 @@ package com.liskovsoft.sharedutils.mylogger;
 import android.content.Context;
 
 public class Log {
-    public static final int LOG_TYPE_FILE = 0;
-    public static final int LOG_TYPE_SYSTEM = 1;
+    public static final String LOG_TYPE_FILE = "log_type_file";
+    public static final String LOG_TYPE_SYSTEM = "log_type_system";
 
     private static MyLogger sLogger = new SystemLogger();
 
@@ -52,8 +52,8 @@ public class Log {
         sLogger.flush();
     }
 
-    public static void init(Context context, int logType, String customLabel) {
-        if (sLogger.getLogType() == logType) {
+    public static void init(Context context, String logType, String customLabel) {
+        if (sLogger.getLogType().equals(logType)) {
             return;
         }
 
@@ -67,7 +67,7 @@ public class Log {
         }
     }
 
-    public static int getLogType() {
+    public static String getLogType() {
         if (sLogger != null) {
             return sLogger.getLogType();
         }

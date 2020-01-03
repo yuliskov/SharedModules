@@ -67,7 +67,7 @@ class FileLogger extends MyLogger {
             BufferedWriter buf = getWriter();
             buf.append(text);
             buf.newLine();
-        } catch (IOException | NullPointerException e) {
+        } catch (Exception e) {
             MessageHelpers.showMessage(mContext, "Can't initialize log file " + e.getMessage());
             e.printStackTrace();
         }
@@ -77,9 +77,7 @@ class FileLogger extends MyLogger {
         if (mWriter == null) {
             File logFile = getLogFile(mContext);
 
-            if (!logFile.exists()) {
-                logFile.createNewFile();
-            }
+            FileHelpers.ensureFileExists(logFile);
 
             //BufferedWriter for performance, true to set append to file flag
             mWriter = new BufferedWriter(new FileWriter(logFile, false));
@@ -96,7 +94,7 @@ class FileLogger extends MyLogger {
     }
 
     private static File getLogFile(Context context) {
-        return new File(FileHelpers.getCacheDir(context), "log.txt");
+        return new File(FileHelpers.getBackupDir(context), "log.txt");
     }
 
     private void writeLogHeader() {
@@ -155,7 +153,7 @@ class FileLogger extends MyLogger {
     }
 
     @Override
-    public int getLogType() {
+    public String getLogType() {
         return Log.LOG_TYPE_FILE;
     }
 

@@ -46,6 +46,10 @@ public class FileHelpers {
         return cacheDir;
     }
 
+    public static File getBackupDir(Context context) {
+        return new File(Environment.getExternalStorageDirectory(), String.format("data/%s", context.getPackageName()));
+    }
+
     public static Collection<File> listFileTree(File dir) {
         Set<File> fileTree = new HashSet<>();
 
@@ -242,5 +246,26 @@ public class FileHelpers {
     public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         return isExternalStorageWritable() || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
+    }
+
+    public static void ensureFileExists(File file) {
+        if (file == null) {
+            return;
+        }
+
+        try {
+            if (!file.exists()) {
+                if (file.isDirectory()) {
+                    file.mkdirs();
+                } else {
+                    file.getParentFile().mkdirs();
+                }
+
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            Log.d(TAG, "ensureFileExists: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

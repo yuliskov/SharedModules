@@ -7,5 +7,5 @@ abstract class MyLogger {
     public void e(String tag, String msg) {}
     public void flush() {}
 
-    public abstract int getLogType();
+    public abstract String getLogType();
 }
