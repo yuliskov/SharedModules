@@ -28,6 +28,7 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -92,6 +93,10 @@ public class OkHttpHelpers {
     }
 
     private static Response doPostOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers, String body, String contentType) {
+        if (headers == null) {
+            headers = new HashMap<>();
+        }
+
         Request okHttpRequest = new Request.Builder()
                 .url(url)
                 .headers(Headers.of(headers))
@@ -299,5 +304,13 @@ public class OkHttpHelpers {
         } catch (Exception e) {
             Log.w(TAG, "Exception while configuring IgnoreSslCertificate: " + e, e);
         }
+    }
+
+    public static OkHttpClient getOkHttpClient() {
+        if (mClient == null) {
+            mClient = createOkHttpClient();
+        }
+
+        return mClient;
     }
 }

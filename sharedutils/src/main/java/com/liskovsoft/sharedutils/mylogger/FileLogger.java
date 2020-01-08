@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,7 +31,7 @@ class FileLogger extends MyLogger {
         mCustomLabel = customLabel;
         mFallbackLogger = new SystemLogger();
 
-        //startWatchDog();
+        PermissionHelpers.verifyStoragePermissions(context);
 
         MessageHelpers.showLongMessage(
                 mContext,
@@ -63,18 +64,21 @@ class FileLogger extends MyLogger {
 
     private void append(String text) {
         try {
-            //BufferedWriter for performance, true to set append to file flag
             BufferedWriter buf = getWriter();
             buf.append(text);
             buf.newLine();
         } catch (Exception e) {
-            MessageHelpers.showMessage(mContext, "Can't initialize log file " + e.getMessage());
+            //MessageHelpers.showMessage(mContext, "Can't initialize log file " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private BufferedWriter getWriter() throws IOException {
         if (mWriter == null) {
+            if (!PermissionHelpers.hasStoragePermissions(mContext)) {
+                throw new IOException("No write permissions");
+            }
+
             File logFile = getLogFile(mContext);
 
             FileHelpers.ensureFileExists(logFile);

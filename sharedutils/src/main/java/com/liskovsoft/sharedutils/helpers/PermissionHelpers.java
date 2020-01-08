@@ -9,7 +9,7 @@ import android.os.Build;
 import androidx.core.app.ActivityCompat;
 
 @TargetApi(16)
-public class PermissionManager {
+public class PermissionHelpers {
     // Storage Permissions
     public static final int REQUEST_EXTERNAL_STORAGE = 112;
 
@@ -26,9 +26,9 @@ public class PermissionManager {
      *
      * @param activity to apply permissions to
      */
-    public static void verifyStoragePermissions(Activity activity) {
-        if (!hasStoragePermissions(activity)) {
-            requestStoragePermissions(activity);
+    public static void verifyStoragePermissions(Context activity) {
+        if (!hasStoragePermissions(activity) && activity instanceof Activity) {
+            requestStoragePermissions((Activity) activity);
         }
     }
 
@@ -51,7 +51,7 @@ public class PermissionManager {
      * @param activity to apply permissions to
      * @return whether permission already granted
      */
-    private static boolean hasStoragePermissions(Context activity) {
+    public static boolean hasStoragePermissions(Context activity) {
         if (Build.VERSION.SDK_INT >= 23) {
             // Check if we have write permission
             return hasPermissions(activity, PERMISSIONS_STORAGE);

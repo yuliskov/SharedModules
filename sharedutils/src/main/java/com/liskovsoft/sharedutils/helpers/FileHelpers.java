@@ -34,7 +34,7 @@ public class FileHelpers {
         // NOTE: Android 6.0 fix
         File cacheDir = context.getExternalCacheDir();
 
-        //if (!PermissionManager.hasStoragePermissions(context)) {
+        //if (!PermissionHelpers.hasStoragePermissions(context)) {
         //    MessageHelpers.showMessage(context, "Storage permission not granted!");
         //    return null;
         //}
