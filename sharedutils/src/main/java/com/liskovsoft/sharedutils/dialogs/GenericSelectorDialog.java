@@ -53,6 +53,10 @@ public abstract class GenericSelectorDialog implements OnClickListener {
             public void setChecked(boolean checked) {
                 mChecked = checked;
             }
+
+            public boolean doRender() {
+                return true;
+            }
         }
 
         class SingleDialogItem extends DialogItem {
@@ -158,6 +162,7 @@ public abstract class GenericSelectorDialog implements OnClickListener {
             }
 
             view.setChecked(item.getChecked());
+            view.setVisibility(item.doRender() ? View.VISIBLE : View.GONE);
         }
     }
 

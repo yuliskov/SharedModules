@@ -512,7 +512,7 @@ public final class Helpers {
             return;
         }
 
-        context.getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        context.runOnUiThread(() -> context.getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON));
     }
 
     public static void disableScreensaver(Activity context) {
@@ -520,7 +520,7 @@ public final class Helpers {
             return;
         }
 
-        context.getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        context.runOnUiThread(() -> context.getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON));
     }
 
     /**

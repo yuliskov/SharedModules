@@ -9,15 +9,21 @@ public class Log {
     private static MyLogger sLogger = new SystemLogger();
 
     public static void d(String tag, Object msg) {
-        sLogger.d(tag, msg.toString());
+        if (msg != null) {
+            sLogger.d(tag, msg.toString());
+        }
     }
 
     public static void i(String tag, Object msg) {
-        sLogger.i(tag, msg.toString());
+        if (msg != null) {
+            sLogger.i(tag, msg.toString());
+        }
     }
 
     public static void w(String tag, Object msg) {
-        sLogger.w(tag, msg.toString());
+        if (msg != null) {
+            sLogger.w(tag, msg.toString());
+        }
     }
 
     public static void e(String tag, Object msg) {

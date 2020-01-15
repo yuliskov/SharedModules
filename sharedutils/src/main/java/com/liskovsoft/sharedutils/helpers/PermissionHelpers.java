@@ -27,7 +27,7 @@ public class PermissionHelpers {
      * @param activity to apply permissions to
      */
     public static void verifyStoragePermissions(Context activity) {
-        if (!hasStoragePermissions(activity) && activity instanceof Activity) {
+        if (!hasStoragePermissions(activity) && activity instanceof Activity && !Helpers.isGenymotion()) {
             requestStoragePermissions((Activity) activity);
         }
     }
