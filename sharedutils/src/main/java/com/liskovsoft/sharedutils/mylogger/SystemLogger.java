@@ -1,11 +1,14 @@
 package com.liskovsoft.sharedutils.mylogger;
 
 import android.util.Log;
+import com.liskovsoft.sharedutils.BuildConfig;
 
 class SystemLogger extends MyLogger {
     @Override
     public void d(String tag, String msg) {
-        Log.d(tag, msg);
+        if (BuildConfig.DEBUG) {
+            Log.d(tag, msg);
+        }
     }
 
     @Override

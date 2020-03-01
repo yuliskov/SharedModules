@@ -1,14 +1,18 @@
 package com.liskovsoft.sharedutils.helpers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.TypedValue;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+import com.liskovsoft.sharedutils.R;
 
 public class MessageHelpers {
     private static long sExitMsgTimeMS = 0;
     private static final int LONG_MSG_TIMEOUT = 5000;
+    private static float mTextSize;
 
     public static void showMessage(final Context ctx, final String TAG, final Throwable ex) {
         showMessage(ctx, TAG, Helpers.toString(ex));
@@ -32,14 +36,13 @@ public class MessageHelpers {
             return;
         }
 
-        Runnable toast = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-                } catch (Exception ex) { // NPE fix
-                    ex.printStackTrace();
-                }
+        Runnable toast = () -> {
+            try {
+                Toast toastReal = Toast.makeText(ctx, msg, Toast.LENGTH_LONG);
+                fixTextSize(toastReal, ctx);
+                toastReal.show();
+            } catch (Exception ex) { // NPE fix
+                ex.printStackTrace();
             }
         };
 
@@ -90,5 +93,15 @@ public class MessageHelpers {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void fixTextSize(Toast toast, Context context) {
+        if (mTextSize == 0) {
+            mTextSize = context.getResources().getDimension(R.dimen.dialog_text_size);
+        }
+
+        ViewGroup group = (ViewGroup) toast.getView();
+        TextView messageTextView = (TextView) group.getChildAt(0);
+        messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
     }
 }

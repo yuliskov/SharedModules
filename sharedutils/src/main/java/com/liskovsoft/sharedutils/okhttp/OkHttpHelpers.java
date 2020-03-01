@@ -173,6 +173,9 @@ public class OkHttpHelpers {
             builder.addInterceptor(new OkHttpProfilerInterceptor());
         }
 
+        builder.addInterceptor(new RateLimitInterceptor());
+        builder.addInterceptor(new UnzippingInterceptor());
+
         //configureToIgnoreCertificate(builder);
 
         return setupBuilder(builder).build();

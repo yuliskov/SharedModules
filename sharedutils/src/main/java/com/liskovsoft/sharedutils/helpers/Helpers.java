@@ -494,17 +494,7 @@ public final class Helpers {
     }
 
     public static KeyEvent newEvent(KeyEvent origin, int newKeyCode) {
-        return new KeyEvent(
-                origin.getDownTime(),
-                origin.getEventTime(),
-                origin.getAction(),
-                newKeyCode,
-                origin.getRepeatCount(),
-                origin.getMetaState(),
-                origin.getDeviceId(),
-                origin.getScanCode(),
-                origin.getFlags(),
-                origin.getSource());
+        return KeyHelpers.newEvent(origin, newKeyCode);
     }
 
     public static void enableScreensaver(Activity context) {
