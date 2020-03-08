@@ -309,6 +309,10 @@ public final class Helpers {
         return VERSION.SDK_INT >= 26 && isAndroidTVLauncher(context);
     }
 
+    public static boolean isATVRecommendationsSupported(Context context) {
+        return VERSION.SDK_INT >= 21 && (isAndroidTVLauncher(context) || isAmazonFireTVDevice());
+    }
+
     public static boolean isAndroidTV(Context context) {
         PackageManager pm = context.getPackageManager();
 
