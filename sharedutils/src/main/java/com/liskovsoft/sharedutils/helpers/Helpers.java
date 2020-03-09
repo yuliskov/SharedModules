@@ -39,6 +39,7 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -95,7 +96,22 @@ public final class Helpers {
     public static String getAndroidVersion() {
         String release = Build.VERSION.RELEASE;
         int sdkVersion = Build.VERSION.SDK_INT;
-        return "Android SDK: " + sdkVersion + " (" + release +")";
+        return release + " (" + sdkVersion +")";
+    }
+
+    public static int getDeviceDpi(Context context) {
+        int dpi = 0;
+
+        if (context != null && context.getResources() != null) {
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            dpi = displayMetrics != null ? displayMetrics.densityDpi : 0;
+        }
+
+        return dpi;
+    }
+
+    public static String getCurrentTime() {
+        return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US).format(new Date());
     }
 
     public static boolean isGenymotion() {

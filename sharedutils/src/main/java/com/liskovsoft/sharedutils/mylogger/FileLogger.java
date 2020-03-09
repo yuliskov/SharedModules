@@ -2,6 +2,7 @@ package com.liskovsoft.sharedutils.mylogger;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import com.liskovsoft.sharedutils.R;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
@@ -102,14 +103,15 @@ class FileLogger extends MyLogger {
     }
 
     private void writeLogHeader() {
-        String time = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US).format(new Date());
-        String version = String.format("%s (%s)", AppInfoHelpers.getAppVersionName(mContext), mCustomLabel);
+        String versionFull = String.format("%s (%s)", AppInfoHelpers.getAppVersionName(mContext), mCustomLabel);
+
         append("----------------------------------------------------");
         append("----------- STARTING LOG");
-        append("----------- " +     time);
-        append("----------- " +     version);
-        append("----------- " +     Helpers.getDeviceName());
-        append("----------- " +     Helpers.getAndroidVersion());
+        append("----------- " +     Helpers.getCurrentTime());
+        append("----------- " +     versionFull);
+        append("----------- " +     "Device: " + Helpers.getDeviceName());
+        append("----------- " +     "Android Version: " + Helpers.getAndroidVersion());
+        append("----------- " +     Helpers.getDeviceDpi(mContext) + " dpi");
         append("----------------------------------------------------");
     }
 
