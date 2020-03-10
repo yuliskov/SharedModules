@@ -326,7 +326,8 @@ public final class Helpers {
     }
 
     public static boolean isATVRecommendationsSupported(Context context) {
-        return VERSION.SDK_INT >= 21 && (isAndroidTVLauncher(context) || isAmazonFireTVDevice());
+        boolean isApiSupported = VERSION.SDK_INT >= 21 && VERSION.SDK_INT < 26;
+        return isApiSupported && (isAndroidTVLauncher(context) || isAmazonFireTVDevice());
     }
 
     public static boolean isAndroidTV(Context context) {
