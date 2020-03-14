@@ -157,6 +157,7 @@ public class FileHelpers {
             }
         } catch (FileNotFoundException ex) { // fix: open failed: EACCES (Permission denied)
             ex.printStackTrace();
+            throw new IllegalStateException(ex);
         } catch (IOException ex) {
             ex.printStackTrace();
             throw new IllegalStateException(ex);
