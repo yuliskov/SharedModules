@@ -594,4 +594,12 @@ public final class Helpers {
 
         return name.substring(name.lastIndexOf('.') + 1);
     }
+
+    public static String dumpIntent(Intent intent) {
+        if (intent != null) {
+            return intent.toUri(0);
+        }
+
+        return null;
+    }
 }
