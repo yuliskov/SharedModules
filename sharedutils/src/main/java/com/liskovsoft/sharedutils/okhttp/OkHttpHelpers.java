@@ -5,10 +5,7 @@ import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionSpec;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
 import okhttp3.Headers;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,8 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 public class OkHttpHelpers {
     private static final String TAG = OkHttpHelpers.class.getSimpleName();
-    private static final int NUM_TRIES = 10;
-    private static final long CONNECT_TIMEOUT_S = 20;
+    private static final int NUM_TRIES = 1;
+    private static final long CONNECT_TIMEOUT_S = 5;
     private static OkHttpClient mClient;
 
     public static Response doOkHttpRequest(String url) {
@@ -151,7 +148,7 @@ public class OkHttpHelpers {
 
                 break; // no exception is thrown - job is done
             } catch (Exception ex) {
-                Log.e(TAG, ex.getMessage()); // network error, just return null
+                //Log.e(TAG, ex.getMessage()); // network error, just return null
                 okHttpResponse = null;
                 lastEx = ex;
             }

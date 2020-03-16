@@ -7,7 +7,10 @@ import android.os.Environment;
 import androidx.core.content.FileProvider;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
@@ -167,7 +171,32 @@ public class FileHelpers {
         }
     }
 
+    /**
+     * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
+     */
     public static String toString(InputStream content) {
+        if (content == null) {
+            return null;
+        }
+
+        String result = null;
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = content.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
+            }
+            // StandardCharsets.UTF_8.name() > JDK 7
+            result = outputStream.toString("UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, e.getMessage());
+        }
+
+        return result;
+    }
+
+    public static String toStringOld(InputStream content) {
         if (content == null) {
             return null;
         }
