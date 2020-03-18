@@ -33,7 +33,9 @@ import java.util.concurrent.TimeUnit;
 public class OkHttpHelpers {
     private static final String TAG = OkHttpHelpers.class.getSimpleName();
     private static final int NUM_TRIES = 1;
-    private static final long CONNECT_TIMEOUT_S = 10;
+    private static final long CONNECT_TIMEOUT_S = 5;
+    private static final long READ_TIMEOUT_S = 20;
+    private static final long WRITE_TIMEOUT_S = 20;
     private static OkHttpClient mClient;
 
     public static Response doOkHttpRequest(String url) {
@@ -190,8 +192,8 @@ public class OkHttpHelpers {
 
         builder
             .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
-            .readTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
-            .writeTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
+            .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)
+            .writeTimeout(WRITE_TIMEOUT_S, TimeUnit.SECONDS)
             .connectionSpecs(Collections.singletonList(spec));
 
         return enableTls12OnPreLollipop(builder);
