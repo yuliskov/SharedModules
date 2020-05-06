@@ -21,8 +21,8 @@ project.ext {
     autoValueVersion = '1.6'
     checkerframeworkVersion = '2.5.0'
     testRunnerVersion = '1.0.2'
-    exoplayerVersion = '2.10.8'
-    // exoplayerVersion = '2.11.3'
+    // exoplayerVersion = '2.10.8'
+    exoplayerVersion = '2.11.4'
     amazonExoplayerVersion = '2.10.6'
     // amazonExoplayerVersion = '2.11.3'
     espressoVersion = '3.1.0'
@@ -52,4 +52,5 @@ project.ext {
     asmVersion = '5.0.4'
     nanoHttpdVersion = '2.3.1'
     voiceOverlayVersion = '1.0.0-beta02' // https://github.com/algolia/voice-overlay-android
+    apacheCommonsLangVersion = '3.10'
 }

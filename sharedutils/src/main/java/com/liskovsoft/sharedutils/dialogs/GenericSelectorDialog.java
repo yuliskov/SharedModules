@@ -154,6 +154,9 @@ public abstract class GenericSelectorDialog implements OnClickListener {
 
     protected void updateViews(View root) {
         List<DialogItem> items = mDialogSource.getItems();
+
+        boolean enableFocus = mDialogSource instanceof CombinedDialogSource || mDialogSource instanceof SingleDialogSource;
+
         for (DialogItem item : items) {
             CheckedTextView view = root.findViewWithTag(item);
 
@@ -163,6 +166,10 @@ public abstract class GenericSelectorDialog implements OnClickListener {
 
             view.setChecked(item.getChecked());
             view.setVisibility(item.doRender() ? View.VISIBLE : View.GONE);
+
+            if (enableFocus && item.getChecked() && item.doRender()) {
+                view.requestFocus();
+            }
         }
     }
 

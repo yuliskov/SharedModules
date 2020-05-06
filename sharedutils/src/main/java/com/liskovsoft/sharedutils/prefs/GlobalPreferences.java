@@ -40,6 +40,6 @@ public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public String getRecommendedPlaylistType() {
-        return getString(RECOMMENDED_PLAYLIST_TYPE, PLAYLIST_TYPE_RECOMMENDATIONS);
+        return getString(RECOMMENDED_PLAYLIST_TYPE, PLAYLIST_TYPE_SUBSCRIPTIONS);
     }
 }

@@ -2,6 +2,7 @@ package com.liskovsoft.sharedutils.helpers;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -452,7 +453,12 @@ public final class Helpers {
         Uri file = FileHelpers.getFileUri(context, packagePath);
         intent.setDataAndType(file, "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION); // without this flag android returned a intent error!
-        context.getApplicationContext().startActivity(intent);
+
+        try {
+            context.getApplicationContext().startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static List<ApplicationInfo> getInstalledPackages(Context context) {
@@ -601,5 +607,25 @@ public final class Helpers {
         }
 
         return null;
+    }
+
+    public static boolean checkStackTrace(String name) {
+        if (name == null) {
+            return false;
+        }
+
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+        if (stackTrace == null) {
+            return false;
+        }
+
+        for (StackTraceElement item : stackTrace) {
+            if (item.getClassName().toLowerCase().contains(name.toLowerCase())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
