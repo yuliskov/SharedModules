@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -56,6 +57,7 @@ public final class Helpers {
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
+     *
      * @param host
      * @param mask
      * @return
@@ -97,7 +99,7 @@ public final class Helpers {
     public static String getAndroidVersion() {
         String release = Build.VERSION.RELEASE;
         int sdkVersion = Build.VERSION.SDK_INT;
-        return release + " (" + sdkVersion +")";
+        return release + " (" + sdkVersion + ")";
     }
 
     public static int getDeviceDpi(Context context) {
@@ -217,7 +219,8 @@ public final class Helpers {
 
     /**
      * Get scale for use in {@link android.webkit.WebView} instantiation
-     * @param ctx context
+     *
+     * @param ctx      context
      * @param picWidth constant that I knew beforehand
      * @return calculated scale
      */
@@ -252,8 +255,9 @@ public final class Helpers {
 
     /**
      * Force normal font size regardless of the system settings
+     *
      * @param configuration app config
-     * @param ctx activity
+     * @param ctx           activity
      */
     public static void adjustFontScale(Configuration configuration, Activity ctx) {
         WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
@@ -285,6 +289,7 @@ public final class Helpers {
 
     /**
      * Return true to first matched string from the array
+     *
      * @param fullStr full string
      * @param nameArr array to match
      * @return whether ended with arr
@@ -340,6 +345,17 @@ public final class Helpers {
 
         return (pm.hasSystemFeature(PackageManager.FEATURE_TELEVISION)
                 || pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK));
+    }
+
+    public static boolean matchAll(String input, Pattern... patterns) {
+        for (Pattern pattern : patterns) {
+            Matcher matcher = pattern.matcher(input);
+            if (!matcher.find()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static boolean matchAll(String input, String... regex) {
@@ -402,7 +418,8 @@ public final class Helpers {
 
     /**
      * Find all packages starting for specified name
-     * @param context ctx
+     *
+     * @param context   ctx
      * @param pkgPrefix starts with
      * @return packages or empty list if not found
      */
@@ -515,7 +532,7 @@ public final class Helpers {
     public static void bringToBack(View myCurrentView) {
         ViewGroup myViewGroup = ((ViewGroup) myCurrentView.getParent());
         int index = myViewGroup.indexOfChild(myCurrentView);
-        for(int i = 0; i < index; i++) {
+        for (int i = 0; i < index; i++) {
             myViewGroup.bringChildToFront(myViewGroup.getChildAt(i));
         }
     }
@@ -542,6 +559,7 @@ public final class Helpers {
 
     /**
      * Utility method to check if device is Amazon Fire TV device
+     *
      * @return {@code true} true if device is Amazon Fire TV device.
      */
     public static boolean isAmazonFireTVDevice() {
