@@ -3,23 +3,7 @@ package com.liskovsoft.sharedutils.okhttp;
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor;
 import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import okhttp3.CipherSuite;
-import okhttp3.ConnectionSpec;
-import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.TlsVersion;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -30,57 +14,58 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class OkHttpHelpers {
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.CipherSuite;
+import okhttp3.ConnectionSpec;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.TlsVersion;
+
+public final class OkHttpHelpers {
     private static final String TAG = OkHttpHelpers.class.getSimpleName();
     private static final int NUM_TRIES = 1;
     private static final long CONNECT_TIMEOUT_S = 20;
     private static final long READ_TIMEOUT_S = 20;
     private static final long WRITE_TIMEOUT_S = 20;
-    private static OkHttpClient mClient;
+    private static final OkHttpClient OK_HTTP_CLIENT = createOkHttpClient();
+
+    private OkHttpHelpers() {
+    }
 
     public static Response doOkHttpRequest(String url) {
-        if (mClient == null) {
-            mClient = createOkHttpClient();
-        }
-
-        return doOkHttpRequest(url, mClient);
+        return doOkHttpRequest(url, OK_HTTP_CLIENT);
     }
 
     public static Response doGetOkHttpRequest(String url, Map<String, String> headers) {
-        if (mClient == null) {
-            mClient = createOkHttpClient();
-        }
-
         if (headers == null) {
             Log.d(TAG, "Headers are null... doing regular request...");
-            return doGetOkHttpRequest(url, mClient);
+            return doGetOkHttpRequest(url, OK_HTTP_CLIENT);
         }
 
-        return doGetOkHttpRequest(url, mClient, headers);
+        return doGetOkHttpRequest(url, OK_HTTP_CLIENT, headers);
     }
 
     public static Response doPostOkHttpRequest(String url, Map<String, String> headers, String postBody, String contentType) {
-        if (mClient == null) {
-            mClient = createOkHttpClient();
-        }
-
-        return doPostOkHttpRequest(url, mClient, headers, postBody, contentType);
+        return doPostOkHttpRequest(url, OK_HTTP_CLIENT, headers, postBody, contentType);
     }
 
     public static Response doGetOkHttpRequest(String url) {
-        if (mClient == null) {
-            mClient = createOkHttpClient();
-        }
-
-        return doGetOkHttpRequest(url, mClient);
+        return doGetOkHttpRequest(url, OK_HTTP_CLIENT);
     }
 
     public static Response doHeadOkHttpRequest(String url) {
-        if (mClient == null) {
-            mClient = createOkHttpClient();
-        }
-
-        return doHeadOkHttpRequest(url, mClient);
+        return doHeadOkHttpRequest(url, OK_HTTP_CLIENT);
     }
 
     public static Response doOkHttpRequest(String url, OkHttpClient client) {
@@ -164,7 +149,7 @@ public class OkHttpHelpers {
         return okHttpResponse;
     }
 
-    public static OkHttpClient createOkHttpClient() {
+    private static OkHttpClient createOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         // Outputs to logcat tons of info
@@ -191,10 +176,10 @@ public class OkHttpHelpers {
                 .build();
 
         builder
-            .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
-            .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)
-            .writeTimeout(WRITE_TIMEOUT_S, TimeUnit.SECONDS)
-            .connectionSpecs(Collections.singletonList(spec));
+                .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
+                .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)
+                .writeTimeout(WRITE_TIMEOUT_S, TimeUnit.SECONDS)
+                .connectionSpecs(Collections.singletonList(spec));
 
         return enableTls12OnPreLollipop(builder);
     }
@@ -243,7 +228,7 @@ public class OkHttpHelpers {
             X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
 
             SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(null, new TrustManager[] { trustManager }, null);
+            sslContext.init(null, new TrustManager[]{trustManager}, null);
             SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
             builder.sslSocketFactory(sslSocketFactory, trustManager);
@@ -271,7 +256,7 @@ public class OkHttpHelpers {
         try {
 
             // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustAllCerts = new TrustManager[] {
+            final TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
@@ -296,7 +281,7 @@ public class OkHttpHelpers {
             // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
             builder.hostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
@@ -309,10 +294,6 @@ public class OkHttpHelpers {
     }
 
     public static OkHttpClient getOkHttpClient() {
-        if (mClient == null) {
-            mClient = createOkHttpClient();
-        }
-
-        return mClient;
+        return OK_HTTP_CLIENT;
     }
 }

@@ -3,7 +3,6 @@ package com.liskovsoft.sharedutils.dialogs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import androidx.appcompat.app.AlertDialog;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+
 import com.liskovsoft.sharedutils.R;
 import com.liskovsoft.sharedutils.dialogs.GenericSelectorDialog.DialogSourceBase.DialogItem;
 import com.liskovsoft.sharedutils.dialogs.GenericSelectorDialog.DialogSourceBase.MultiDialogItem;
 import com.liskovsoft.sharedutils.dialogs.GenericSelectorDialog.DialogSourceBase.SingleDialogItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GenericSelectorDialog implements OnClickListener {
@@ -24,7 +25,6 @@ public abstract class GenericSelectorDialog implements OnClickListener {
     protected AlertDialog mAlertDialog;
     private final DialogSourceBase mDialogSource;
     private final int mThemeResId;
-    private ArrayList<CheckedTextView> mDialogItems;
     protected static final int SINGLE_CHOICE = 0;
     protected static final int MULTI_CHOICE = 1;
 
@@ -73,12 +73,14 @@ public abstract class GenericSelectorDialog implements OnClickListener {
 
         /**
          * Your data
+         *
          * @return pairs that consist of item text and tag
          */
         List<DialogItem> getItems();
 
         /**
          * Get dialog main title
+         *
          * @return dialog title
          */
         String getTitle();
@@ -134,18 +136,16 @@ public abstract class GenericSelectorDialog implements OnClickListener {
         int selectableItemBackgroundResourceId = attributeArray.getResourceId(0, 0);
         attributeArray.recycle();
 
-        mDialogItems = new ArrayList<>();
-
         for (DialogItem item : mDialogSource.getItems()) {
             CheckedTextView dialogItem = createDialogItem(inflater, root, item);
+
             dialogItem.setBackgroundResource(selectableItemBackgroundResourceId);
             dialogItem.setText(item.getTitle());
-
             dialogItem.setFocusable(true);
             dialogItem.setTag(item);
             dialogItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, mActivity.getResources().getDimension(R.dimen.dialog_text_size));
             dialogItem.setOnClickListener(this);
-            mDialogItems.add(dialogItem);
+
             root.addView(dialogItem);
         }
 

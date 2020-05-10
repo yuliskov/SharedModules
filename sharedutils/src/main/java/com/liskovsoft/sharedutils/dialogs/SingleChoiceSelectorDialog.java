@@ -5,16 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+
 import com.liskovsoft.sharedutils.R;
 import com.liskovsoft.sharedutils.dialogs.GenericSelectorDialog.DialogSourceBase.DialogItem;
 
 public class SingleChoiceSelectorDialog extends GenericSelectorDialog {
-    private final SingleDialogSource mDialogSource;
 
-    public SingleChoiceSelectorDialog(Context activity, SingleDialogSource dataSource, int themeResId) {
+    private SingleChoiceSelectorDialog(Context activity, SingleDialogSource dataSource, int themeResId) {
         super(activity, dataSource, themeResId);
-
-        mDialogSource = dataSource;
     }
 
     public static void create(Context ctx, SingleDialogSource dataSource, int themeResId) {
