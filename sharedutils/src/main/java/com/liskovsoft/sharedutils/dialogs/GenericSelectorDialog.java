@@ -108,7 +108,7 @@ public abstract class GenericSelectorDialog implements OnClickListener {
         View title = createCustomTitle(builder.getContext());
         mAlertDialog = builder.setCustomTitle(title).setView(buildView(builder.getContext())).create();
         mAlertDialog.show();
-        updateViews(getRoot());
+        updateViews(getRoot(), true);
     }
 
     protected View getRoot() {
@@ -153,9 +153,13 @@ public abstract class GenericSelectorDialog implements OnClickListener {
     }
 
     protected void updateViews(View root) {
+        updateViews(root, false);
+    }
+
+    private void updateViews(View root, boolean focusDefault) {
         List<DialogItem> items = mDialogSource.getItems();
 
-        boolean enableFocus = mDialogSource instanceof CombinedDialogSource || mDialogSource instanceof SingleDialogSource;
+        boolean enableFocus = focusDefault && (mDialogSource instanceof CombinedDialogSource || mDialogSource instanceof SingleDialogSource);
 
         for (DialogItem item : items) {
             CheckedTextView view = root.findViewWithTag(item);
