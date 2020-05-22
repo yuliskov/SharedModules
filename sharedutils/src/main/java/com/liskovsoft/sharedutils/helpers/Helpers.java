@@ -628,4 +628,14 @@ public final class Helpers {
 
         return false;
     }
+
+    public static boolean isValidUrl(String url) {
+        if (url == null || url.isEmpty()) {
+            return false;
+        }
+
+        return url.startsWith("http://") ||
+               url.startsWith("https://") ||
+               url.startsWith("youtube://");
+    }
 }
