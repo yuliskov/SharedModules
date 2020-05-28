@@ -81,17 +81,22 @@ public class AppInfoHelpers {
         PackageManager pm = context.getPackageManager();
 
         ActivityInfo info = null;
+        String label = "No Label";
 
         try {
-            info = pm.getActivityInfo(name, 0);
-            return context.getResources().getString(info.labelRes);
+            info = pm.getActivityInfo(name, PackageManager.GET_META_DATA);
+            label = context.getResources().getString(info.labelRes);
         } catch (NameNotFoundException | NotFoundException e) {
             if (info != null) {
-                return Helpers.getSimpleClassName(info.name); // label not found, return simple class name
+                if (info.metaData != null && info.metaData.containsKey("AppLabel")) {
+                    label = info.metaData.getString("AppLabel");
+                } else {
+                    label = Helpers.getSimpleClassName(info.name); // label not found, return simple class name
+                }
             }
         }
 
-        return null;
+        return label;
     }
 
     public static ActivityInfo getActivityInfo(Context ctx, ComponentName componentName) {

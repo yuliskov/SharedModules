@@ -342,6 +342,17 @@ public final class Helpers {
                 || pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK));
     }
 
+    public static boolean matchAll(String input, Pattern... patterns) {
+        for (Pattern pattern : patterns) {
+            Matcher matcher = pattern.matcher(input);
+            if (!matcher.find()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static boolean matchAll(String input, String... regex) {
         for (String reg : regex) {
             Pattern pattern = Pattern.compile(reg);
