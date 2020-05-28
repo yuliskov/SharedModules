@@ -53,4 +53,5 @@ project.ext {
     nanoHttpdVersion = '2.3.1'
     voiceOverlayVersion = '1.0.0-beta02' // https://github.com/algolia/voice-overlay-android
     apacheCommonsLangVersion = '3.10'
+    firebaseCrashlyticsVersion = '17.0.0'
 }

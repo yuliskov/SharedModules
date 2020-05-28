@@ -1,5 +1,6 @@
 package com.liskovsoft.sharedutils.helpers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
@@ -374,6 +375,7 @@ public final class Helpers {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     public static void makeActivityHorizontal(Activity activity) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
@@ -567,7 +569,7 @@ public final class Helpers {
             return false;
         }
 
-        return intent.resolveActivityInfo(context.getPackageManager(), PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) != null;
+        return intent.resolveActivityInfo(context.getPackageManager(), PackageManager.MATCH_DEFAULT_ONLY) != null;
     }
 
     /**
