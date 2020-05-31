@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -316,7 +317,8 @@ public final class Helpers {
     }
 
     public static boolean isAndroidTVLauncher(Context context) {
-        return isPackageExists(context, "com.google.android.leanbacklauncher");
+        return  isPackageExists(context, "com.google.android.leanbacklauncher") ||
+                isPackageExists(context, "com.google.android.tvlauncher"); // Android TV 10
     }
 
     public static boolean isAndroidTVRecommendations(Context context) {
@@ -650,5 +652,15 @@ public final class Helpers {
         return url.startsWith("http://") ||
                url.startsWith("https://") ||
                url.startsWith("youtube://");
+    }
+
+    public static void showKeyboard(Context context){
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    public static void hideKeyboard(Context context, View view){
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
