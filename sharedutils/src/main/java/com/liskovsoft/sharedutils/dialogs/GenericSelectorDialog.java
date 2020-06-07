@@ -2,6 +2,7 @@ package com.liskovsoft.sharedutils.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import androidx.appcompat.app.AlertDialog;
 import android.util.TypedValue;
@@ -82,6 +83,8 @@ public abstract class GenericSelectorDialog implements OnClickListener {
          * @return dialog title
          */
         String getTitle();
+
+        void onDismiss();
     }
 
     public interface CombinedDialogSource extends DialogSourceBase {
@@ -109,6 +112,17 @@ public abstract class GenericSelectorDialog implements OnClickListener {
         mAlertDialog = builder.setCustomTitle(title).setView(buildView(builder.getContext())).create();
         mAlertDialog.show();
         updateViews(getRoot(), true);
+        setUpDismissListener();
+    }
+
+    private void setUpDismissListener() {
+        if (mAlertDialog != null) {
+            mAlertDialog.setOnDismissListener((DialogInterface dialog) -> {
+                if (mDialogSource != null) {
+                    mDialogSource.onDismiss();
+                }
+            });
+        }
     }
 
     protected View getRoot() {

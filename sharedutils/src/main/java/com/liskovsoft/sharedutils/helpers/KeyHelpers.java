@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.view.KeyEvent;
 
 public class KeyHelpers {
+    // Philips ambilight button
+    private static final int KEYCODE_SVC_EXIT = 319;
+
     public static void press(Activity activity, int keyCode) {
         KeyEvent newEventDown = newEvent(KeyEvent.ACTION_DOWN, keyCode);
         KeyEvent newEventUp = newEvent(KeyEvent.ACTION_UP, keyCode);
@@ -28,5 +31,27 @@ public class KeyHelpers {
 
     public static KeyEvent newEvent(int action, int keyCode) {
         return new KeyEvent(action, keyCode);
+    }
+
+    /** Whether the key will, by default, trigger a click on the focused view.
+     */
+    public static boolean isConfirmKey(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_SPACE:
+            case KeyEvent.KEYCODE_NUMPAD_ENTER:
+            case KeyEvent.KEYCODE_BUTTON_A:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Philips ambilight button
+     */
+    public static boolean isAmbilightKey(int keyCode) {
+        return keyCode == KEYCODE_SVC_EXIT;
     }
 }

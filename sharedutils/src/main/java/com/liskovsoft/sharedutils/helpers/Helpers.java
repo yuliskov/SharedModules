@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
+import androidx.fragment.app.FragmentActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -662,5 +663,19 @@ public final class Helpers {
     public static void hideKeyboard(Context context, View view){
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static int getDeviceRam(Context context) {
+        if (context == null || VERSION.SDK_INT < 16) {
+            return -1;
+        }
+
+        ActivityManager actManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+        if (actManager != null) {
+            actManager.getMemoryInfo(memInfo);
+        } else return 500000000;//safe value for devices with 1gb or more...
+
+        return (int) (memInfo.totalMem / 18);
     }
 }
