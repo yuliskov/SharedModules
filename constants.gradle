@@ -22,7 +22,7 @@ project.ext {
     checkerframeworkVersion = '2.5.0'
     testRunnerVersion = '1.0.2'
     // exoplayerVersion = '2.10.8'
-    exoplayerVersion = '2.11.4'
+    exoplayerVersion = '2.11.5'
     amazonExoplayerVersion = '2.10.6'
     // amazonExoplayerVersion = '2.11.3'
     espressoVersion = '3.1.0'
