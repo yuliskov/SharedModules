@@ -37,6 +37,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
@@ -140,7 +142,16 @@ public final class Helpers {
                 ex.getCause() != null) {
             ex = ex.getCause();
         }
-        return String.format("%s: %s", ex.getClass().getCanonicalName(), ex.getMessage());
+
+        String message = ex.getMessage();
+
+        if (message == null || message.isEmpty()) {
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            message = errors.toString();
+        }
+
+        return String.format("%s: %s", ex.getClass().getCanonicalName(), message);
     }
 
     public static String toString(InputStream content) {

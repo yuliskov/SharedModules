@@ -32,10 +32,10 @@ import java.util.concurrent.TimeUnit;
 
 public class OkHttpHelpers {
     private static final String TAG = OkHttpHelpers.class.getSimpleName();
-    private static final int NUM_TRIES = 1;
-    private static final long CONNECT_TIMEOUT_S = 20;
-    private static final long READ_TIMEOUT_S = 20;
-    private static final long WRITE_TIMEOUT_S = 20;
+    private static final int NUM_TRIES = 3;
+    private static final long CONNECT_TIMEOUT_S = 30;
+    private static final long READ_TIMEOUT_S = 30;
+    private static final long WRITE_TIMEOUT_S = 30;
     private static OkHttpClient mClient;
 
     public static Response doOkHttpRequest(String url) {
