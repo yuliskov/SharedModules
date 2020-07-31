@@ -2,14 +2,20 @@ package com.liskovsoft.sharedutils.prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
-class SharedPreferencesBase {
+public class SharedPreferencesBase {
     private final SharedPreferences mPrefs;
     protected final Context mContext;
 
     public SharedPreferencesBase(Context context, String prefName) {
         mContext = context;
         mPrefs = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+    }
+
+    public SharedPreferencesBase(Context context) {
+        mContext = context;
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void putLong(String key, long val) {

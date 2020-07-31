@@ -47,8 +47,6 @@ dependencies {
 
     implementation project(path: ':sharedutils')
 
-    implementation project(path: ':common')
-
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
 
     implementation 'dnsjava:dnsjava:' + dnsjavaVersion
