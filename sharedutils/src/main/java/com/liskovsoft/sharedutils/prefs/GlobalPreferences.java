@@ -3,6 +3,9 @@ package com.liskovsoft.sharedutils.prefs;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GlobalPreferences extends SharedPreferencesBase {
     public static GlobalPreferences sInstance;
     private static final String SHARED_PREFERENCES_NAME = GlobalPreferences.class.getName();
@@ -12,6 +15,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
     public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
     public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
     public static final String PLAYLIST_TYPE_NONE = "playlist_type_none";
+    private static final List<Runnable> sCallbacks = new ArrayList<>();
 
     private GlobalPreferences(Context context) {
         super(context, SHARED_PREFERENCES_NAME);
@@ -20,9 +24,20 @@ public class GlobalPreferences extends SharedPreferencesBase {
     public static GlobalPreferences instance(Context context) {
         if (sInstance == null) {
             sInstance = new GlobalPreferences(context);
+
+            for (Runnable callback : sCallbacks) {
+                new Thread(callback).start(); // fix network on main thread exception
+            }
+
+            // make callbacks garbage collected
+            sCallbacks.clear();
         }
 
         return sInstance;
+    }
+
+    public static void setOnInit(Runnable callback) {
+        sCallbacks.add(callback);
     }
 
     public void setRawAuthData(String data) {
