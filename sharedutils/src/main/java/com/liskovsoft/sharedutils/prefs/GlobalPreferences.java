@@ -13,12 +13,12 @@ public class GlobalPreferences extends SharedPreferencesBase {
     public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
     public static final String PLAYLIST_TYPE_NONE = "playlist_type_none";
 
-    public GlobalPreferences(Context context) {
+    private GlobalPreferences(Context context) {
         super(context, SHARED_PREFERENCES_NAME);
     }
 
     public static GlobalPreferences instance(Context context) {
-        if (sInstance == null){
+        if (sInstance == null) {
             sInstance = new GlobalPreferences(context);
         }
 
