@@ -689,4 +689,8 @@ public final class Helpers {
 
         return (int) (memInfo.totalMem / 18);
     }
+
+    public static String replace(String content, Pattern oldVal, String newVal) {
+        return oldVal.matcher(content).replaceFirst(newVal);
+    }
 }
