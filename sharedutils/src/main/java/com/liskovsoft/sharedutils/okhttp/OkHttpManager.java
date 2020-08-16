@@ -41,11 +41,11 @@ public class OkHttpManager {
     private final boolean mEnableProfilerWhenDebugging;
 
     private OkHttpManager(boolean enableProfilerWhenDebugging) {
-        mClient = createOkHttpClient();
-
         // Profiler could cause OutOfMemoryError when testing.
         // Also outputs to logcat tons of info.
         mEnableProfilerWhenDebugging = enableProfilerWhenDebugging;
+
+        mClient = createOkHttpClient();
     }
 
     public static OkHttpManager instance() {
