@@ -182,8 +182,6 @@ public class AppUpdateChecker {
             public int compare(Integer object1, Integer object2) {
                 return object2.compareTo(object1);
             }
-
-            ;
         });
 
         for (final Iterator<String> i = jo.keys(); i.hasNext(); ) {

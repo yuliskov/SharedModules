@@ -1,5 +1,7 @@
 package com.liskovsoft.sharedutils.okhttp;
 
+import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor;
+import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionSpec;
@@ -36,14 +38,23 @@ public class OkHttpManager {
     private static final long WRITE_TIMEOUT_S = 30;
     private static OkHttpManager sInstance;
     private final OkHttpClient mClient;
+    private final boolean mEnableProfilerWhenDebugging;
 
-    private OkHttpManager() {
+    private OkHttpManager(boolean enableProfilerWhenDebugging) {
         mClient = createOkHttpClient();
+
+        // Profiler could cause OutOfMemoryError when testing.
+        // Also outputs to logcat tons of info.
+        mEnableProfilerWhenDebugging = enableProfilerWhenDebugging;
     }
 
     public static OkHttpManager instance() {
+        return instance(true); // profiler is enabled by default
+    }
+
+    public static OkHttpManager instance(boolean enableProfilerWhenDebugging) {
         if (sInstance == null) {
-            sInstance = new OkHttpManager();
+            sInstance = new OkHttpManager(enableProfilerWhenDebugging);
         }
 
         return sInstance;
@@ -158,11 +169,11 @@ public class OkHttpManager {
     public OkHttpClient createOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        // Profiler could cause: OutOfMemoryError
-        // Outputs to logcat tons of info
-        //if (BuildConfig.DEBUG) {
-        //    builder.addInterceptor(new OkHttpProfilerInterceptor());
-        //}
+        // Profiler could cause OutOfMemoryError when testing.
+        // Also outputs to logcat tons of info.
+        if (BuildConfig.DEBUG && mEnableProfilerWhenDebugging) {
+            builder.addInterceptor(new OkHttpProfilerInterceptor());
+        }
 
         builder.addInterceptor(new RateLimitInterceptor());
         builder.addInterceptor(new UnzippingInterceptor());

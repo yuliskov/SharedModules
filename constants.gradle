@@ -3,7 +3,7 @@ project.ext {
     // components provided by the library may be of use on older devices.
     // However, please note that the core media playback functionality provided
     // by the app requires API level 16 or greater.
-    minSdkVersion = 14
+    minSdkVersion = 17
     targetSdkVersion = 28
     compileSdkVersion = 28
 
@@ -27,7 +27,7 @@ project.ext {
     exoplayerVersion = '2.11.5'
     amazonExoplayerVersion = '2.10.6'
     // amazonExoplayerVersion = '2.11.3'
-    espressoVersion = '3.1.0'
+    espressoVersion = '3.2.0'
     retrofitVersion = '2.5.0'
     gsonVersion = '2.8.2'
     jsonPathVersion = '2.4.0'
