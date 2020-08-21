@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="log_stored_in_path">Logging bewaard: %s</string>
     <string name="log_to_file_started">Logging gestart: %s</string>
