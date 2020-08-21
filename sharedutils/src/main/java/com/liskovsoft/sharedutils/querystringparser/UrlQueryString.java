@@ -1,6 +1,6 @@
 package com.liskovsoft.sharedutils.querystringparser;
 
-public interface MyQueryString {
+public interface UrlQueryString {
     void remove(String key);
     String get(String key);
     float getFloat(String key);

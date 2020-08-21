@@ -6,13 +6,13 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class MyUrlEncodedQueryString implements MyQueryString {
+public class UrlEncodedQueryString implements UrlQueryString {
     private String mUrl;
     private URI mParsedUri;
     private UrlEncodedQueryStringBase mQueryString;
     private boolean mHasPrefix;
 
-    private MyUrlEncodedQueryString(String url) {
+    private UrlEncodedQueryString(String url) {
         if (url == null) {
             return;
         }
@@ -37,8 +37,8 @@ public class MyUrlEncodedQueryString implements MyQueryString {
         }
     }
 
-    public static MyUrlEncodedQueryString parse(String url) {
-        return new MyUrlEncodedQueryString(url);
+    public static UrlEncodedQueryString parse(String url) {
+        return new UrlEncodedQueryString(url);
     }
 
     @Override

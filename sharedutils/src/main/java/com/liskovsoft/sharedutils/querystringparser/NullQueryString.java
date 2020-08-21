@@ -2,15 +2,15 @@ package com.liskovsoft.sharedutils.querystringparser;
 
 import androidx.annotation.NonNull;
 
-public class MyNullQueryString implements MyQueryString {
+public class NullQueryString implements UrlQueryString {
     private final String mUrl;
 
-    private MyNullQueryString(String url) {
+    private NullQueryString(String url) {
         mUrl = url;
     }
 
-    public static MyQueryString parse(String url) {
-        return new MyNullQueryString(url);
+    public static UrlQueryString parse(String url) {
+        return new NullQueryString(url);
     }
 
     @Override

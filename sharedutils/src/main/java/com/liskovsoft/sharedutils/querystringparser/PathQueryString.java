@@ -10,12 +10,12 @@ import java.util.regex.Pattern;
  * Overview: http://myurl.com/key/value/key2/value2/key3/value3<br/>
  * Regex: \/key\/([^\/]*)
  */
-public class MyPathQueryString implements MyQueryString {
+public class PathQueryString implements UrlQueryString {
     private static final Pattern VALIDATION_PATTERN_1 = Pattern.compile("^[^&=]*$");
     private static final Pattern VALIDATION_PATTERN_2 = Pattern.compile("\\/[^\\/]+\\/[^\\/]+");
     private String mUrl;
 
-    public MyPathQueryString(String url) {
+    public PathQueryString(String url) {
         mUrl = url;
     }
 
@@ -100,8 +100,8 @@ public class MyPathQueryString implements MyQueryString {
         return mUrl == null || mUrl.isEmpty();
     }
 
-    public static MyPathQueryString parse(String url) {
-        return new MyPathQueryString(url);
+    public static PathQueryString parse(String url) {
+        return new PathQueryString(url);
     }
 
     @Override
