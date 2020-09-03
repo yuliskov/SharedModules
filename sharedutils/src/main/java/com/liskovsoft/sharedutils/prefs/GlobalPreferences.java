@@ -10,6 +10,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
     public static GlobalPreferences sInstance;
     private static final String SHARED_PREFERENCES_NAME = GlobalPreferences.class.getName();
     private final static String MESSAGE_AUTH_BODY = "message_auth_body";
+    private final static String MEDIA_SERVICE_REFRESH_TOKEN = "media_service_refresh_token";
     private static final String RECOMMENDED_PLAYLIST_TYPE = "recommended_playlist_type";
     public static final String PLAYLIST_TYPE_RECOMMENDATIONS = "playlist_type_recommendations";
     public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
@@ -23,7 +24,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
 
     public static GlobalPreferences instance(Context context) {
         if (sInstance == null) {
-            sInstance = new GlobalPreferences(context);
+            sInstance = new GlobalPreferences(context.getApplicationContext());
 
             for (Runnable callback : sCallbacks) {
                 new Thread(callback).start(); // fix network on main thread exception
@@ -56,5 +57,13 @@ public class GlobalPreferences extends SharedPreferencesBase {
 
     public String getRecommendedPlaylistType() {
         return getString(RECOMMENDED_PLAYLIST_TYPE, PLAYLIST_TYPE_SUBSCRIPTIONS);
+    }
+
+    public void setMediaServiceRefreshToken(String token) {
+        putString(MEDIA_SERVICE_REFRESH_TOKEN, token);
+    }
+
+    public String getMediaServiceRefreshToken() {
+        return getString(MEDIA_SERVICE_REFRESH_TOKEN, null);
     }
 }
