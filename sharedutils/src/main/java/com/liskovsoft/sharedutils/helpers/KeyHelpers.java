@@ -78,4 +78,9 @@ public class KeyHelpers {
     public static boolean isAmbilightKey(int keyCode) {
         return keyCode == KEYCODE_SVC_EXIT;
     }
+
+    public static boolean isBackKey(int keyCode) {
+        return keyCode == KeyEvent.KEYCODE_BACK ||
+               keyCode == KeyEvent.KEYCODE_ESCAPE;
+    }
 }

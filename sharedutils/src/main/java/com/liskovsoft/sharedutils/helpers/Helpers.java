@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
-import androidx.fragment.app.FragmentActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,6 +39,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -692,5 +692,27 @@ public final class Helpers {
 
     public static String replace(String content, Pattern oldVal, String newVal) {
         return oldVal.matcher(content).replaceFirst(newVal);
+    }
+
+    public static void setField(Object these, String fieldName, Object value) {
+        try {
+            Field f1 = these.getClass().getSuperclass().getDeclaredField(fieldName);
+            f1.setAccessible(true);
+            f1.set(these, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object getField(Object these, String fieldName) {
+        try {
+            Field f1 = these.getClass().getSuperclass().getDeclaredField(fieldName);
+            f1.setAccessible(true);
+            return f1.get(these);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
