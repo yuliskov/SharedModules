@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
+import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -696,23 +697,44 @@ public final class Helpers {
 
     public static void setField(Object these, String fieldName, Object value) {
         try {
-            Field f1 = these.getClass().getSuperclass().getDeclaredField(fieldName);
-            f1.setAccessible(true);
-            f1.set(these, value);
+            Field f1 = getDeclaredField(these.getClass(), fieldName);
+            if (f1 != null) {
+                f1.setAccessible(true);
+                f1.set(these, value);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static Object getField(Object these, String fieldName) {
+    public static @Nullable Object getField(Object these, String fieldName) {
         try {
-            Field f1 = these.getClass().getSuperclass().getDeclaredField(fieldName);
-            f1.setAccessible(true);
-            return f1.get(these);
+            Field f1 = getDeclaredField(these.getClass(), fieldName);
+
+            if (f1 != null) {
+                f1.setAccessible(true);
+                return f1.get(these);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    private static Field getDeclaredField(Class<?> aClass, String fieldName) {
+        if (aClass.getSuperclass() == null) { // null if superclass is object
+            return null;
+        }
+
+        Field f1 = null;
+
+        try {
+            f1 = aClass.getSuperclass().getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            f1 = getDeclaredField(aClass.getSuperclass(), fieldName);
+        }
+
+        return f1;
     }
 }
