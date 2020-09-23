@@ -1,4 +1,4 @@
-package edu.mit.mobile.android.appupdater.addons;
+package com.liskovsoft.appupdatechecker2.addons;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import edu.mit.mobile.android.appupdater.R;
-import edu.mit.mobile.android.appupdater.downloadmanager.MyDownloadManager;
-import edu.mit.mobile.android.appupdater.downloadmanager.MyDownloadManager.MyRequest;
+import com.liskovsoft.appupdatechecker2.downloadmanager.MyDownloadManager;
+import com.liskovsoft.appupdatechecker2.downloadmanager.MyDownloadManager.MyRequest;
 
 import java.io.File;
 

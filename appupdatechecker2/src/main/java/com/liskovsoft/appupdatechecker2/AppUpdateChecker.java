@@ -1,4 +1,4 @@
-package edu.mit.mobile.android.appupdater;
+package com.liskovsoft.appupdatechecker2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +10,9 @@ import android.preference.PreferenceManager;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import edu.mit.mobile.android.appupdater.downloadmanager.MyDownloadManager;
-import edu.mit.mobile.android.appupdater.downloadmanager.MyDownloadManager.MyRequest;
+import edu.mit.mobile.android.appupdater.R;
+import com.liskovsoft.appupdatechecker2.downloadmanager.MyDownloadManager;
+import com.liskovsoft.appupdatechecker2.downloadmanager.MyDownloadManager.MyRequest;
 import edu.mit.mobile.android.utils.StreamUtils;
 import org.json.JSONArray;
 import org.json.JSONException;

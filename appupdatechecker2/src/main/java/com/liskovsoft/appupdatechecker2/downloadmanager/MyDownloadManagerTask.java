@@ -1,4 +1,4 @@
-package edu.mit.mobile.android.appupdater.downloadmanager;
+package com.liskovsoft.appupdatechecker2.downloadmanager;
 
 import android.app.DownloadManager;
 import android.content.Context;

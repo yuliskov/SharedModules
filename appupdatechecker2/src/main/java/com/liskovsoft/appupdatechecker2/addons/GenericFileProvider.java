@@ -1,4 +1,4 @@
-package edu.mit.mobile.android.appupdater.addons;
+package com.liskovsoft.appupdatechecker2.addons;
 
 import androidx.core.content.FileProvider;
 

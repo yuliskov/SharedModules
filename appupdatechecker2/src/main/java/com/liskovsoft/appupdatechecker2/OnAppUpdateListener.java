@@ -1,4 +1,4 @@
-package edu.mit.mobile.android.appupdater;
+package com.liskovsoft.appupdatechecker2;
 
 import java.util.List;
 

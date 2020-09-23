@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.mit.mobile.android.appupdater.downloadmanager;
+package com.liskovsoft.appupdatechecker2.downloadmanager;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -1,4 +1,4 @@
-package edu.mit.mobile.android.appupdater.downloadmanager;
+package com.liskovsoft.appupdatechecker2.downloadmanager;
 
 import android.util.Log;
 import org.xbill.DNS.ARecord;

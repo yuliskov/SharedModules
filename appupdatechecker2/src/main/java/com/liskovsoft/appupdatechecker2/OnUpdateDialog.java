@@ -1,4 +1,4 @@
-package edu.mit.mobile.android.appupdater;
+package com.liskovsoft.appupdatechecker2;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +8,8 @@ import android.os.Message;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
 import android.widget.Button;
-import edu.mit.mobile.android.appupdater.addons.UpdateApp;
+import edu.mit.mobile.android.appupdater.R;
+import com.liskovsoft.appupdatechecker2.addons.UpdateApp;
 
 import java.util.List;
 
