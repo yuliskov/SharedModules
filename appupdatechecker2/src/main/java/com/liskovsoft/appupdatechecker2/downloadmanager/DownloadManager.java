@@ -59,8 +59,8 @@ import java.util.Random;
  * MyRequest.setProgressListener(progressListener);
  * }</pre>
  */
-public final class MyDownloadManager {
-    private static final String TAG = MyDownloadManager.class.getSimpleName();
+public final class DownloadManager {
+    private static final String TAG = DownloadManager.class.getSimpleName();
     private static final int NUM_TRIES = 10;
     private final Context mContext;
     private final OkHttpClient mClient;
@@ -70,7 +70,7 @@ public final class MyDownloadManager {
     private int mTotalLen = 0;
     private Uri mFileUri;
 
-    public MyDownloadManager(Context context) {
+    public DownloadManager(Context context) {
         mContext = context;
         mClient = createOkHttpClient();
     }

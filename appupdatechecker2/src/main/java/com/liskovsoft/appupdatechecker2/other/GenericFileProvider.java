@@ -1,4 +1,4 @@
-package com.liskovsoft.appupdatechecker2.addons;
+package com.liskovsoft.appupdatechecker2.other;
 
 import androidx.core.content.FileProvider;
 

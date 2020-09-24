@@ -1,48 +1,47 @@
-package com.liskovsoft.appupdatechecker2.addons;
+package com.liskovsoft.appupdatechecker2.core;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.webkit.URLUtil;
-import android.widget.Toast;
+import com.liskovsoft.appupdatechecker2.downloadmanager.DownloadManager;
+import com.liskovsoft.appupdatechecker2.downloadmanager.DownloadManager.MyRequest;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
-import com.liskovsoft.sharedutils.helpers.Helpers;
-import edu.mit.mobile.android.appupdater.R;
-import com.liskovsoft.appupdatechecker2.downloadmanager.MyDownloadManager;
-import com.liskovsoft.appupdatechecker2.downloadmanager.MyDownloadManager.MyRequest;
 
 import java.io.File;
 
 /**
  * Usage:
  * <pre>
- *   atualizaApp = new UpdateApp(ctx);
- *   atualizaApp.execute("http://serverurl/appfile.apk");
+ *   downloader = new AppDownloader(ctx, listener);
+ *   downloader.download(new String[]{"http://serverurl/appfile.apk"});
  * </pre>
  */
-public class UpdateApp extends AsyncTask<Uri[],Void,Void> {
-    private static final String TAG = UpdateApp.class.getSimpleName();
+public class AppDownloader extends AsyncTask<Uri[],Void,Void> {
+    private static final String TAG = AppDownloader.class.getSimpleName();
     private final Context mContext;
     private boolean mInProgress;
-    private boolean mCancelInstall;
-    private String mDownPath;
+    private final AppDownloaderListener mListener;
 
-    public UpdateApp(Context context) {
+    public AppDownloader(Context context, AppDownloaderListener listener) {
         mContext = context;
+        mListener = listener;
     }
 
-    public void downloadAndInstall(Uri[] downloadUris) {
+    /**
+     * Uses first available url in the list.
+     */
+    public void download(Uri[] downloadUris) {
         if (!mInProgress) {
             execute(downloadUris);
+        } else {
+            Log.e(TAG, "Another downloading in progress. Canceling...");
         }
     }
 
     @Override
     protected Void doInBackground(Uri[]... args) {
-        mDownPath = null;
         mInProgress = true;
 
         Uri[] uris = args[0];
@@ -57,23 +56,16 @@ public class UpdateApp extends AsyncTask<Uri[],Void,Void> {
         }
 
         if (path != null) {
-            if (!mCancelInstall) {
-                Helpers.installPackage(mContext, path);
-            } else {
-                mDownPath = path;
-            }
+            mListener.onApkDownloaded(path);
         } else {
-            Log.e(TAG, "Error while download. Install path is null");
-            showMessage(mContext.getResources().getString(R.string.cant_download_msg));
+            String msg = "Error while download. Install path is null";
+            Log.e(TAG, msg);
+            mListener.onDownloadError(new IllegalStateException(msg));
         }
 
         mInProgress = false;
 
         return null;
-    }
-
-    private void showMessage(final String msg) {
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show());
     }
 
     private String downloadPackage(String uri) {
@@ -84,7 +76,7 @@ public class UpdateApp extends AsyncTask<Uri[],Void,Void> {
         File outputFile = new File(cacheDir, "update.apk");
         String path = null;
         try {
-            MyDownloadManager manager = new MyDownloadManager(mContext);
+            DownloadManager manager = new DownloadManager(mContext);
             MyRequest request = new MyRequest(Uri.parse(uri));
             request.setDestinationUri(Uri.fromFile(outputFile));
             try {
@@ -101,22 +93,7 @@ public class UpdateApp extends AsyncTask<Uri[],Void,Void> {
         return path;
     }
 
-    // Smart update logic
-
-    public boolean cancelPendingUpdate() {
-        mCancelInstall = true;
+    public boolean isInProgress() {
         return mInProgress;
-    }
-
-    public boolean tryInstallPendingUpdate() {
-        mCancelInstall = false;
-
-        if (mDownPath != null) {
-            Helpers.installPackage(mContext, mDownPath);
-            mDownPath = null;
-            return true;
-        }
-
-        return false;
     }
 }

@@ -1,6 +1,5 @@
 package com.liskovsoft.appupdatechecker2.downloadmanager;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,8 +12,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.File;
 
-public class MyDownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
-    private static final String TAG = MyDownloadManagerTask.class.getSimpleName();
+public class DownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
+    private static final String TAG = DownloadManagerTask.class.getSimpleName();
     private static final String DEFAULT_DOWNLOAD_FILE_NAME = "tmp.apk";
 
     /**
@@ -57,16 +56,16 @@ public class MyDownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
     private DownloadListener mListener;
     private Context mContext;
     private String mDownloadUrl;
-    private MyDownloadManager mDownloadManager;
+    private DownloadManager mDownloadManager;
     private long mDownloadId;
     private boolean isDone;
 
-    public MyDownloadManagerTask(DownloadListener listener, Context context, String url) {
+    public DownloadManagerTask(DownloadListener listener, Context context, String url) {
         super();
         mListener = listener;
         mContext = context;
         mDownloadUrl = url;
-        mDownloadManager = new MyDownloadManager(mContext);
+        mDownloadManager = new DownloadManager(mContext);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class MyDownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
 
     @Override
     protected Integer doInBackground(Void... params) {
-        if (mDownloadUrl == null) return DownloadManager.STATUS_FAILED;
+        if (mDownloadUrl == null) return android.app.DownloadManager.STATUS_FAILED;
 
 
         String savedFile = DEFAULT_DOWNLOAD_FILE_NAME;
@@ -91,7 +90,7 @@ public class MyDownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
         File downloadFile = new File(downloadDir, savedFile);
         if (downloadFile.isFile()) downloadFile.delete();
 
-        MyDownloadManager.MyRequest request = new MyDownloadManager.MyRequest(Uri.parse(mDownloadUrl));
+        DownloadManager.MyRequest request = new DownloadManager.MyRequest(Uri.parse(mDownloadUrl));
         request.setDestinationUri(Uri.fromFile(downloadFile));
         request.setProgressListener((bytesRead, contentLength, done) -> {
             publishProgress((int)bytesRead, (int)contentLength);
@@ -105,7 +104,7 @@ public class MyDownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
             MessageHelpers.showMessage(mContext, TAG, ex);
         }
 
-        return isDone ? DownloadManager.STATUS_SUCCESSFUL : DownloadManager.STATUS_FAILED;
+        return isDone ? android.app.DownloadManager.STATUS_SUCCESSFUL : android.app.DownloadManager.STATUS_FAILED;
     }
 
     @Override
@@ -130,7 +129,7 @@ public class MyDownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
     protected void onPostExecute(Integer result) {
         Log.d(TAG, "DownloadManagerTask finished, " + result);
 
-        if (result == DownloadManager.STATUS_SUCCESSFUL) {
+        if (result == android.app.DownloadManager.STATUS_SUCCESSFUL) {
             try {
                 Uri uri = mDownloadManager.getUriForDownloadedFile(mDownloadId);
 
@@ -142,10 +141,10 @@ public class MyDownloadManagerTask extends AsyncTask<Void, Integer, Integer> {
             } catch (IllegalStateException ex) {
                 Log.e(TAG, ex.getMessage(), ex);
                 MessageHelpers.showMessage(mContext, TAG, ex);
-                mListener.onDownloadFailed(result, DownloadManager.ERROR_UNKNOWN);
+                mListener.onDownloadFailed(result, android.app.DownloadManager.ERROR_UNKNOWN);
             }
         } else {
-            int error = DownloadManager.ERROR_UNKNOWN;
+            int error = android.app.DownloadManager.ERROR_UNKNOWN;
             mListener.onDownloadFailed(result, error);
         }
     }

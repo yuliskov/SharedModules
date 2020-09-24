@@ -17,10 +17,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MyDownloadListener {
+public class DownloadListener {
     private final Context mContext;
 
-    public MyDownloadListener(Context ctx) {
+    public DownloadListener(Context ctx) {
         mContext = ctx;
     }
 

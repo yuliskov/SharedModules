@@ -1,4 +1,4 @@
-package com.liskovsoft.appupdatechecker2;
+package com.liskovsoft.appupdatechecker2.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,8 +8,9 @@ import android.os.Message;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
 import android.widget.Button;
+import com.liskovsoft.appupdatechecker2.old.AppVersionCheckerOldListener;
+import com.liskovsoft.appupdatechecker2.old.AppUpdateDownloaderOld;
 import edu.mit.mobile.android.appupdater.R;
-import com.liskovsoft.appupdatechecker2.addons.UpdateApp;
 
 import java.util.List;
 
@@ -18,21 +19,21 @@ import java.util.List;
  *
  * @author steve
  */
-public class LegacyUpdateDialog implements AppUpdateListener {
+public class LegacyUpdateDialog implements AppVersionCheckerOldListener {
     private final Context mContext;
     private final CharSequence mAppName;
     private Uri[] mDownloadUris;
     private final Handler mHandler;
     private static final int MSG_SHOW_DIALOG = 1;
     private AlertDialog mDialog;
-    private final UpdateApp mUpdateApp;
+    private final AppUpdateDownloaderOld mUpdateApp;
     private boolean mCancelDialog;
 
     public LegacyUpdateDialog(Context context, CharSequence appName) {
         mContext = context;
         mAppName = appName;
         mHandler = new MyHandler();
-        mUpdateApp = new UpdateApp(mContext);
+        mUpdateApp = new AppUpdateDownloaderOld(mContext);
     }
 
     public void onChangelogReceived(boolean isLatestVersion, String latestVersionName, List<String> changelog, Uri[] downloadUris) {
