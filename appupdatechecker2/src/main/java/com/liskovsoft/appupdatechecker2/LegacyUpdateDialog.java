@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author steve
  */
-public class OnUpdateDialog implements OnAppUpdateListener {
+public class LegacyUpdateDialog implements AppUpdateListener {
     private final Context mContext;
     private final CharSequence mAppName;
     private Uri[] mDownloadUris;
@@ -28,14 +28,14 @@ public class OnUpdateDialog implements OnAppUpdateListener {
     private final UpdateApp mUpdateApp;
     private boolean mCancelDialog;
 
-    public OnUpdateDialog(Context context, CharSequence appName) {
+    public LegacyUpdateDialog(Context context, CharSequence appName) {
         mContext = context;
         mAppName = appName;
         mHandler = new MyHandler();
         mUpdateApp = new UpdateApp(mContext);
     }
 
-    public void appUpdateStatus(boolean isLatestVersion, String latestVersionName, List<String> changelog, Uri[] downloadUris) {
+    public void onChangelogReceived(boolean isLatestVersion, String latestVersionName, List<String> changelog, Uri[] downloadUris) {
         mCancelDialog = false;
         mDownloadUris = downloadUris;
 

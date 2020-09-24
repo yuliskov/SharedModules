@@ -62,23 +62,23 @@ public class AppUpdateChecker {
     public static final String SHARED_PREFERENCES_NAME = "edu.mit.mobile.android.appupdater.preferences";
     public static final String PREF_ENABLED = "enabled", PREF_MIN_INTERVAL = "min_interval", PREF_LAST_UPDATED = "last_checked";
 
-    private int currentAppVersion;
+    private int mCurrentAppVersion;
 
-    private JSONObject pkgInfo;
+    private JSONObject mPkgInfo;
     private final Context mContext;
 
-    private final OnAppUpdateListener mUpdateListener;
+    private final AppUpdateListener mUpdateListener;
     private SharedPreferences mPrefs;
 
     private static final int MILLISECONDS_IN_MINUTE = 60000;
     private boolean mInProgress;
     
-    public AppUpdateChecker(Context context, OnAppUpdateListener updateListener) {
+    public AppUpdateChecker(Context context, AppUpdateListener updateListener) {
         mContext = context;
         mUpdateListener = updateListener;
 
         try {
-            currentAppVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+            mCurrentAppVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
         } catch (final NameNotFoundException e) {
             Log.e(TAG, "Cannot get version for self! Who am I?! What's going on!? I'm so confused :-(");
             return;
@@ -184,7 +184,7 @@ public class AppUpdateChecker {
         for (final Iterator<String> i = jo.keys(); i.hasNext(); ) {
             final String versionName = i.next();
             if (versionName.equals("package")) {
-                pkgInfo = jo.getJSONObject(versionName);
+                mPkgInfo = jo.getJSONObject(versionName);
                 continue;
             }
             final JSONObject versionInfo = jo.getJSONObject(versionName);
@@ -198,28 +198,28 @@ public class AppUpdateChecker {
 
         final Uri[] downloadUrls;
 
-        if (pkgInfo.has("downloadUrlList")) {
-            JSONArray urls = pkgInfo.getJSONArray("downloadUrlList");
+        if (mPkgInfo.has("downloadUrlList")) {
+            JSONArray urls = mPkgInfo.getJSONArray("downloadUrlList");
             downloadUrls = parse(urls);
         } else {
-            String url = pkgInfo.getString("downloadUrl");
+            String url = mPkgInfo.getString("downloadUrl");
             downloadUrls = new Uri[]{Uri.parse(url)};
         }
 
-        if (currentAppVersion > latestVersionNumber) {
+        if (mCurrentAppVersion > latestVersionNumber) {
             Log.d(TAG, "We're newer than the latest published version (" + latestVersionName + "). Living in the future...");
-            mUpdateListener.appUpdateStatus(true, latestVersionName, null, downloadUrls);
+            mUpdateListener.onChangelogReceived(true, latestVersionName, null, downloadUrls);
             return;
         }
 
-        if (currentAppVersion == latestVersionNumber) {
-            Log.d(TAG, "We're at the latest version (" + currentAppVersion + ")");
-            mUpdateListener.appUpdateStatus(true, latestVersionName, null, downloadUrls);
+        if (mCurrentAppVersion == latestVersionNumber) {
+            Log.d(TAG, "We're at the latest version (" + mCurrentAppVersion + ")");
+            mUpdateListener.onChangelogReceived(true, latestVersionName, null, downloadUrls);
             return;
         }
 
         // construct the changelog. Newest entries are at the top.
-        for (final Entry<Integer, JSONObject> version : versionMap.headMap(currentAppVersion).entrySet()) {
+        for (final Entry<Integer, JSONObject> version : versionMap.headMap(mCurrentAppVersion).entrySet()) {
             final JSONObject versionInfo = version.getValue();
 
             JSONArray versionChangelog = versionInfo.optJSONArray("changelog_" + LocaleUtility.getCurrentLanguage(mContext));
@@ -236,7 +236,7 @@ public class AppUpdateChecker {
             }
         }
 
-        mUpdateListener.appUpdateStatus(false, latestVersionName, changelog, downloadUrls);
+        mUpdateListener.onChangelogReceived(false, latestVersionName, changelog, downloadUrls);
     }
 
     private Uri[] parse(JSONArray urls) {
@@ -271,7 +271,7 @@ public class AppUpdateChecker {
      */
     public void startUpgrade() {
         try {
-            final Uri downloadUri = Uri.parse(pkgInfo.getString("downloadUrl"));
+            final Uri downloadUri = Uri.parse(mPkgInfo.getString("downloadUrl"));
             mContext.startActivity(new Intent(Intent.ACTION_VIEW, downloadUri));
         } catch (final JSONException e) {
             e.printStackTrace();
