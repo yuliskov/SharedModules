@@ -67,19 +67,18 @@ More info:
 Changes
 -------
 
-Changes from [original version](https://github.com/mitmel/AppUpdateChecker):
+Changes:
 
 - support apk download & install
 - ready for Android 7.0 and above
-- get rid of legacy code
-- new localization
+- fully localized
 
 
 License
 =======
 
 AppUpdateChecker  
-Copyright (C) 2011 [MIT Mobile Experience Lab][mel]
+Copyright (C) 2020 [LiskovSoft][mel]
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -95,4 +94,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-[mel]: http://mobile.mit.edu/
+[mel]: https://github.com/yuliskov
