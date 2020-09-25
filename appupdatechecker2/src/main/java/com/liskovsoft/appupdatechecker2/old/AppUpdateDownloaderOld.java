@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import edu.mit.mobile.android.appupdater.R;
-import com.liskovsoft.appupdatechecker2.downloadmanager.DownloadManager;
-import com.liskovsoft.appupdatechecker2.downloadmanager.DownloadManager.MyRequest;
+import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager;
+import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager.MyRequest;
 
 import java.io.File;
 

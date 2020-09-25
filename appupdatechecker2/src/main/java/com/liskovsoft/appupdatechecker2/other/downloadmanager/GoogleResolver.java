@@ -1,4 +1,4 @@
-package com.liskovsoft.appupdatechecker2.downloadmanager;
+package com.liskovsoft.appupdatechecker2.other.downloadmanager;
 
 import android.util.Log;
 import org.xbill.DNS.ARecord;

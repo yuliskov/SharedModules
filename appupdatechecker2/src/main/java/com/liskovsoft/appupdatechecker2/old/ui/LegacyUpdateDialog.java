@@ -1,4 +1,4 @@
-package com.liskovsoft.appupdatechecker2.ui;
+package com.liskovsoft.appupdatechecker2.old.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
