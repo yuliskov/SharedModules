@@ -7,6 +7,6 @@ public interface AppUpdateCheckerListener {
      * Callback fired when update is found and apk is downloaded and ready to install.
      * @param changelog items what is changed
      */
-    void onUpdateFound(List<String> changelog, String apkPath);
+    void onUpdateFound(String versionName, List<String> changelog, String apkPath);
     void onError(Exception error);
 }

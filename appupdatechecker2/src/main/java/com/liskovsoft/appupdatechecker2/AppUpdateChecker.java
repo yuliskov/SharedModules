@@ -21,6 +21,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     private final AppUpdateCheckerListener mListener;
     private final SettingsManager mSettingsManager;
     private List<String> mChangeLog;
+    private String mLatestVersionName;
 
     public AppUpdateChecker(Context context, AppUpdateCheckerListener listener) {
         Log.d(TAG, "Starting...");
@@ -74,17 +75,22 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     @Override
     public void onChangelogReceived(boolean isLatestVersion, String latestVersionName, int latestVersionNumber, List<String> changelog, Uri[] downloadUris) {
-        if (!isLatestVersion && downloadUris != null) {
-            mChangeLog = changelog;
-            mSettingsManager.setLatestVersionName(latestVersionName);
-            mSettingsManager.setLatestVersionNumber(latestVersionNumber);
+        if (!isLatestVersion) {
+            if (downloadUris != null) {
+                mChangeLog = changelog;
+                mLatestVersionName = latestVersionName;
+                mSettingsManager.setLatestVersionName(latestVersionName);
+                mSettingsManager.setLatestVersionNumber(latestVersionNumber);
 
-            if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
-                FileHelpers.isFileExists(mSettingsManager.getApkPath())) {
-                mListener.onUpdateFound(changelog, mSettingsManager.getApkPath());
-            } else {
-                mDownloader.download(downloadUris);
+                if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
+                        FileHelpers.isFileExists(mSettingsManager.getApkPath())) {
+                    mListener.onUpdateFound(latestVersionName, changelog, mSettingsManager.getApkPath());
+                } else {
+                    mDownloader.download(downloadUris);
+                }
             }
+        } else {
+            mSettingsManager.setLastUpdatedMs(System.currentTimeMillis());
         }
     }
 
@@ -92,13 +98,11 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     public void onApkDownloaded(String path) {
         if (path != null) {
             mSettingsManager.setApkPath(path);
-            
-            mSettingsManager.setLastUpdatedMs(System.currentTimeMillis());
 
             Log.d(TAG, "App update received. Apk path: " + path);
             Log.d(TAG, "App update received. Changelog: " + mChangeLog);
 
-            mListener.onUpdateFound(mChangeLog, path);
+            mListener.onUpdateFound(mLatestVersionName, mChangeLog, path);
         }
     }
 
@@ -122,9 +126,5 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     public void installUpdate() {
         Helpers.installPackage(mContext, mSettingsManager.getApkPath());
-    }
-
-    public void onUserCancel() {
-        mSettingsManager.setLastUpdatedMs(0);
     }
 }

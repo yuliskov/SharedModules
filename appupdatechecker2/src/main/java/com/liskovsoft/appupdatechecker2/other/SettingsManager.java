@@ -26,8 +26,9 @@ public class SettingsManager {
         mContext = context.getApplicationContext();
 
         mPrefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
         // defaults are kept in the preference file for ease of tweaking
-        android.preference.PreferenceManager.setDefaultValues(context, SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE, R.xml.preferences, true);
+        //android.preference.PreferenceManager.setDefaultValues(context, SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE, R.xml.preferences, true);
     }
 
     public long getLastUpdatedMs() {
