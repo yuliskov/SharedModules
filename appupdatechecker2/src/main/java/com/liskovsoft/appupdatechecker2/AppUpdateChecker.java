@@ -22,9 +22,6 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     private final AppUpdateCheckerListener mListener;
     private final SettingsManager mSettingsManager;
     private List<String> mChangeLog;
-    private String mLatestVersionName;
-    private String mApkPath;
-    private int mLatestVersionNumber;
 
     public AppUpdateChecker(Context context, AppUpdateCheckerListener listener) {
         Log.d(TAG, "Starting...");
@@ -80,8 +77,8 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     public void onChangelogReceived(boolean isLatestVersion, String latestVersionName, int latestVersionNumber, List<String> changelog, Uri[] downloadUris) {
         if (!isLatestVersion && downloadUris != null) {
             mChangeLog = changelog;
-            mLatestVersionName = latestVersionName;
-            mLatestVersionNumber = latestVersionNumber;
+            mSettingsManager.setLatestVersionName(latestVersionName);
+            mSettingsManager.setLatestVersionNumber(latestVersionNumber);
 
             if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
                 FileHelpers.isFileExists(mSettingsManager.getApkPath())) {
@@ -95,17 +92,13 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     @Override
     public void onApkDownloaded(String path) {
         if (path != null) {
-            mApkPath = path;
+            mSettingsManager.setApkPath(path);
 
             // this line may not be executed because of json error above
             mSettingsManager.setLastUpdatedMs(System.currentTimeMillis());
 
             Log.d(TAG, "App update received. Apk path: " + path);
             Log.d(TAG, "App update received. Changelog: " + mChangeLog);
-
-            mSettingsManager.setLatestVersionName(mLatestVersionName);
-            mSettingsManager.setLatestVersionNumber(mLatestVersionNumber);
-            mSettingsManager.setApkPath(path);
 
             mListener.onUpdateFound(mChangeLog, path);
         }
@@ -130,8 +123,6 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     public void installUpdate() {
-        if (mApkPath != null) {
-            Helpers.installPackage(mContext, mApkPath);
-        }
+        Helpers.installPackage(mContext, mSettingsManager.getApkPath());
     }
 }
