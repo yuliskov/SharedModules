@@ -8,12 +8,13 @@ import com.liskovsoft.appupdatechecker2.core.AppDownloader;
 import com.liskovsoft.appupdatechecker2.core.AppDownloaderListener;
 import com.liskovsoft.appupdatechecker2.core.AppVersionChecker;
 import com.liskovsoft.appupdatechecker2.core.AppVersionCheckerListener;
-import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import edu.mit.mobile.android.appupdater.R;
 
 import java.util.List;
 
 public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloaderListener {
+    private static final String TAG = AppUpdateChecker.class.getSimpleName();
     public static final String SHARED_PREFERENCES_NAME = "com.liskovsoft.appupdatechecker2.preferences";
     public static final String PREF_ENABLED = "enabled", PREF_MIN_INTERVAL = "min_interval", PREF_LAST_UPDATED = "last_checked";
     private static final int MILLISECONDS_IN_MINUTE = 60_000;
@@ -21,8 +22,11 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     private final SharedPreferences mPrefs;
     private final AppVersionChecker mVersionChecker;
     private final AppDownloader mDownloader;
+    private List<String> mChangeLog;
 
     public AppUpdateChecker(Context context) {
+        Log.d(TAG, "Starting...");
+
         mContext = context.getApplicationContext();
         mVersionChecker = new AppVersionChecker(mContext, this);
         mDownloader = new AppDownloader(mContext, this);
@@ -59,37 +63,50 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
         return System.currentTimeMillis() - mPrefs.getLong(PREF_LAST_UPDATED, 0) > getMinInterval() * MILLISECONDS_IN_MINUTE;
     }
 
+    public void checkForUpdates(String updateManifestUrl) {
+        checkForUpdates(new String[]{updateManifestUrl});
+    }
+
     /**
      * Checks for updates if updates haven't been checked for recently and if checking is enabled.
      */
-    public void checkForUpdates(String[] versionListUrls) {
+    public void checkForUpdates(String[] updateManifestUrls) {
         if (getEnabled() && isStale()) {
-            mVersionChecker.forceCheckForUpdates(versionListUrls);
+            mVersionChecker.checkForUpdates(updateManifestUrls);
         }
     }
 
-    /**
-     * Check for updates is enabled
-     */
-    public void forceCheckForUpdatesIfEnabled(String[] versionListUrls) {
-        if (getEnabled()) {
-            mVersionChecker.forceCheckForUpdates(versionListUrls);
-        }
+    public void forceCheckForUpdates(String updateManifestUrl) {
+        forceCheckForUpdates(new String[]{updateManifestUrl});
     }
 
-    /**
-     * Minimize server payload!<br/>
-     * Check for updates only if prev update was long enough
-     */
-    public void forceCheckForUpdatesIfStalled(String[] versionListUrls) {
-        if (isStale()) {
-            mVersionChecker.forceCheckForUpdates(versionListUrls);
-        }
+    public void forceCheckForUpdates(String[] updateManifestUrls) {
+        mVersionChecker.checkForUpdates(updateManifestUrls);
     }
+
+    ///**
+    // * Check for updates is enabled
+    // */
+    //public void forceCheckForUpdatesIfEnabled(String[] versionListUrls) {
+    //    if (getEnabled()) {
+    //        mVersionChecker.checkForUpdates(versionListUrls);
+    //    }
+    //}
+    //
+    ///**
+    // * Minimize server payload!<br/>
+    // * Check for updates only if prev update was long enough
+    // */
+    //public void forceCheckForUpdatesIfStalled(String[] versionListUrls) {
+    //    if (isStale()) {
+    //        mVersionChecker.checkForUpdates(versionListUrls);
+    //    }
+    //}
 
     @Override
     public void onChangelogReceived(boolean isLatestVersion, String latestVersionName, List<String> changelog, Uri[] downloadUris) {
         if (!isLatestVersion && downloadUris != null) {
+            mChangeLog = changelog;
             mDownloader.download(downloadUris);
         }
     }
@@ -97,9 +114,13 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     @Override
     public void onApkDownloaded(String path) {
         if (path != null) {
-            Helpers.installPackage(mContext, path);
             // this line may not be executed because of json error above
             mPrefs.edit().putLong(PREF_LAST_UPDATED, System.currentTimeMillis()).apply();
+
+            Log.d(TAG, "App update received. Apk path: " + path);
+            Log.d(TAG, "App update received. Changelog: " + mChangeLog);
+
+            //Helpers.installPackage(mContext, path);
         }
     }
 

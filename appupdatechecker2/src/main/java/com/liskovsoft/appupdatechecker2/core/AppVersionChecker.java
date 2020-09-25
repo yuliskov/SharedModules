@@ -79,7 +79,7 @@ public class AppVersionChecker {
      * URL pointing to a JSON file with the update list <br/>
      * @param versionListUrls url array, tests url by access, first worked is used
      */
-    public void forceCheckForUpdates(String[] versionListUrls) {
+    public void checkForUpdates(String[] versionListUrls) {
         Log.d(TAG, "Checking for updates...");
 
         if (mInProgress) {
