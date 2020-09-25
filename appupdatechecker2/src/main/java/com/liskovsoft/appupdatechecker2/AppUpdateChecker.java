@@ -15,7 +15,6 @@ import java.util.List;
 
 public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloaderListener {
     private static final String TAG = AppUpdateChecker.class.getSimpleName();
-    private static final int MILLISECONDS_IN_MINUTE = 60_000;
     private final Context mContext;
     private final AppVersionChecker mVersionChecker;
     private final AppDownloader mDownloader;
@@ -39,7 +38,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
      * @return true if the updater should check for updates
      */
     private boolean isStale() {
-        return System.currentTimeMillis() - mSettingsManager.getLastUpdatedMs() > mSettingsManager.getMinInterval() * MILLISECONDS_IN_MINUTE;
+        return System.currentTimeMillis() - mSettingsManager.getLastUpdatedMs() > mSettingsManager.getMinIntervalMs();
     }
 
     public void checkForUpdates(String updateManifestUrl) {
@@ -93,8 +92,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     public void onApkDownloaded(String path) {
         if (path != null) {
             mSettingsManager.setApkPath(path);
-
-            // this line may not be executed because of json error above
+            
             mSettingsManager.setLastUpdatedMs(System.currentTimeMillis());
 
             Log.d(TAG, "App update received. Apk path: " + path);
@@ -124,5 +122,9 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     public void installUpdate() {
         Helpers.installPackage(mContext, mSettingsManager.getApkPath());
+    }
+
+    public void onUserCancel() {
+        mSettingsManager.setLastUpdatedMs(0);
     }
 }

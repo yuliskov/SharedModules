@@ -10,11 +10,13 @@ public class SettingsManager {
     private static final String SHARED_PREFERENCES_NAME = "com.liskovsoft.appupdatechecker2.preferences";
     private static final String PREF_ENABLED = "enabled";
     private static final String PREF_MIN_INTERVAL = "min_interval";
+    private static final String PREF_MIN_INTERVAL_MS = "min_interval_ms";
     private static final String PREF_LAST_UPDATED = "last_checked";
-    private static final String PREF_CHANGELOG = "changelog";
     private static final String PREF_APK_PATH = "apk_path";
     private static final String PREF_LATEST_VERSION_NAME = "latest_version_name";
     private static final String PREF_LATEST_VERSION_NUMBER = "latest_version_number";
+    private static final String CHECK_MIN_INTERVAL = "60";
+    private static final long CHECK_MIN_INTERVAL_MS = 60*60*1_000;
     private final Context mContext;
     private final SharedPreferences mPrefs;
 
@@ -60,16 +62,24 @@ public class SettingsManager {
         mPrefs.edit().putInt(PREF_LATEST_VERSION_NUMBER, latestVersionNumber).apply();
     }
 
-    /**
-     * Min interval is stored as a string so a preference editor could potentially edit it using a text edit widget
-     */
-    public int getMinInterval() {
-        return Integer.parseInt(mPrefs.getString(PREF_MIN_INTERVAL, "60"));
+    public long getMinIntervalMs() {
+        return mPrefs.getLong(PREF_MIN_INTERVAL_MS, CHECK_MIN_INTERVAL_MS);
     }
 
-    public void setMinInterval(int minutes) {
-        mPrefs.edit().putString(PREF_MIN_INTERVAL, String.valueOf(minutes)).apply();
+    public void setMinIntervalMs(long milliseconds) {
+        mPrefs.edit().putLong(PREF_MIN_INTERVAL_MS, milliseconds).apply();
     }
+
+    ///**
+    // * Min interval is stored as a string so a preference editor could potentially edit it using a text edit widget
+    // */
+    //public int getMinInterval() {
+    //    return Integer.parseInt(mPrefs.getString(PREF_MIN_INTERVAL, CHECK_MIN_INTERVAL));
+    //}
+    //
+    //public void setMinInterval(int minutes) {
+    //    mPrefs.edit().putString(PREF_MIN_INTERVAL, String.valueOf(minutes)).apply();
+    //}
 
     public boolean isEnabled() {
         return mPrefs.getBoolean(PREF_ENABLED, true);
