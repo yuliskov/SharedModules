@@ -278,6 +278,14 @@ public class FileHelpers {
         return isExternalStorageWritable() || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
+    public static boolean isFileExists(String path) {
+        if (path == null) {
+            return false;
+        }
+
+        return new File(path).exists();
+    }
+
     public static void ensureFileExists(File file) {
         if (file == null) {
             return;

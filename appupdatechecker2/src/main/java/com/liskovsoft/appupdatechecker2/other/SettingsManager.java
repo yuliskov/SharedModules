@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import edu.mit.mobile.android.appupdater.R;
 
-import java.util.List;
-
 public class SettingsManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static final String SHARED_PREFERENCES_NAME = "com.liskovsoft.appupdatechecker2.preferences";
@@ -15,6 +13,8 @@ public class SettingsManager {
     private static final String PREF_LAST_UPDATED = "last_checked";
     private static final String PREF_CHANGELOG = "changelog";
     private static final String PREF_APK_PATH = "apk_path";
+    private static final String PREF_LATEST_VERSION_NAME = "latest_version_name";
+    private static final String PREF_LATEST_VERSION_NUMBER = "latest_version_number";
     private final Context mContext;
     private final SharedPreferences mPrefs;
 
@@ -36,22 +36,28 @@ public class SettingsManager {
         mPrefs.edit().putLong(PREF_LAST_UPDATED, milliseconds).apply();
     }
 
-    public void setChangeLog(List<String> changeLog) {
-        StringBuilder result = new StringBuilder();
-
-        for (String change : changeLog) {
-            if (result.length() != 0) {
-                result.append(",");
-            }
-
-            result.append(change);
-        }
-
-        mPrefs.edit().putString(PREF_CHANGELOG, result.toString()).apply();
+    public String getApkPath() {
+        return mPrefs.getString(PREF_APK_PATH, null);
     }
 
     public void setApkPath(String path) {
         mPrefs.edit().putString(PREF_APK_PATH, path).apply();
+    }
+
+    public String getLatestVersionName() {
+        return mPrefs.getString(PREF_LATEST_VERSION_NAME, null);
+    }
+
+    public void setLatestVersionName(String lastVersionName) {
+        mPrefs.edit().putString(PREF_LATEST_VERSION_NAME, lastVersionName).apply();
+    }
+
+    public int getLatestVersionNumber() {
+        return mPrefs.getInt(PREF_LATEST_VERSION_NUMBER, 0);
+    }
+
+    public void setLatestVersionNumber(int latestVersionNumber) {
+        mPrefs.edit().putInt(PREF_LATEST_VERSION_NUMBER, latestVersionNumber).apply();
     }
 
     /**

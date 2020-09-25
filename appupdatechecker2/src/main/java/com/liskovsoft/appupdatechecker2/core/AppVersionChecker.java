@@ -140,13 +140,13 @@ public class AppVersionChecker {
 
         if (mCurrentAppVersion > latestVersionNumber) {
             Log.d(TAG, "We're newer than the latest published version (" + latestVersionName + "). Living in the future...");
-            mListener.onChangelogReceived(true, latestVersionName, null, downloadUrls);
+            mListener.onChangelogReceived(true, latestVersionName, latestVersionNumber, null, downloadUrls);
             return;
         }
 
         if (mCurrentAppVersion == latestVersionNumber) {
             Log.d(TAG, "We're at the latest version (" + mCurrentAppVersion + ")");
-            mListener.onChangelogReceived(true, latestVersionName, null, downloadUrls);
+            mListener.onChangelogReceived(true, latestVersionName, latestVersionNumber, null, downloadUrls);
             return;
         }
 
@@ -168,7 +168,7 @@ public class AppVersionChecker {
             }
         }
 
-        mListener.onChangelogReceived(false, latestVersionName, changelog, downloadUrls);
+        mListener.onChangelogReceived(false, latestVersionName, latestVersionNumber, changelog, downloadUrls);
     }
 
     private Uri[] parse(JSONArray urls) {

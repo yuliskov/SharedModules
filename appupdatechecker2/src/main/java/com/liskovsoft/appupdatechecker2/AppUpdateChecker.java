@@ -7,6 +7,7 @@ import com.liskovsoft.appupdatechecker2.core.AppDownloaderListener;
 import com.liskovsoft.appupdatechecker2.core.AppVersionChecker;
 import com.liskovsoft.appupdatechecker2.core.AppVersionCheckerListener;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -21,6 +22,9 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     private final AppUpdateCheckerListener mListener;
     private final SettingsManager mSettingsManager;
     private List<String> mChangeLog;
+    private String mLatestVersionName;
+    private String mApkPath;
+    private int mLatestVersionNumber;
 
     public AppUpdateChecker(Context context, AppUpdateCheckerListener listener) {
         Log.d(TAG, "Starting...");
@@ -73,30 +77,37 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     @Override
-    public void onChangelogReceived(boolean isLatestVersion, String latestVersionName, List<String> changelog, Uri[] downloadUris) {
+    public void onChangelogReceived(boolean isLatestVersion, String latestVersionName, int latestVersionNumber, List<String> changelog, Uri[] downloadUris) {
         if (!isLatestVersion && downloadUris != null) {
             mChangeLog = changelog;
-            mDownloader.download(downloadUris);
+            mLatestVersionName = latestVersionName;
+            mLatestVersionNumber = latestVersionNumber;
+
+            if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
+                FileHelpers.isFileExists(mSettingsManager.getApkPath())) {
+                mListener.onUpdateFound(changelog, mSettingsManager.getApkPath());
+            } else {
+                mDownloader.download(downloadUris);
+            }
         }
     }
 
     @Override
     public void onApkDownloaded(String path) {
         if (path != null) {
+            mApkPath = path;
+
             // this line may not be executed because of json error above
             mSettingsManager.setLastUpdatedMs(System.currentTimeMillis());
 
             Log.d(TAG, "App update received. Apk path: " + path);
             Log.d(TAG, "App update received. Changelog: " + mChangeLog);
 
-            int action = mListener.onUpdateFound(mChangeLog);
+            mSettingsManager.setLatestVersionName(mLatestVersionName);
+            mSettingsManager.setLatestVersionNumber(mLatestVersionNumber);
+            mSettingsManager.setApkPath(path);
 
-            if (action == AppUpdateCheckerListener.ACTION_INSTALL) {
-                Helpers.installPackage(mContext, path);
-            } else if (action == AppUpdateCheckerListener.ACTION_POSTPONE) {
-                mSettingsManager.setChangeLog(mChangeLog);
-                mSettingsManager.setApkPath(path);
-            }
+            mListener.onUpdateFound(mChangeLog, path);
         }
     }
 
@@ -116,5 +127,11 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     @Override
     public void onDownloadError(Exception e) {
         mListener.onError(e);
+    }
+
+    public void installUpdate() {
+        if (mApkPath != null) {
+            Helpers.installPackage(mContext, mApkPath);
+        }
     }
 }
