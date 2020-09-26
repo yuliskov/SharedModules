@@ -85,6 +85,10 @@ public class FileHelpers {
         }
     }
 
+    public static boolean delete(String filePath) {
+        return delete(new File(filePath));
+    }
+
     public static boolean delete(File sourceLocation) {
         if (sourceLocation != null && sourceLocation.isDirectory()) {
             String[] children = sourceLocation.list();

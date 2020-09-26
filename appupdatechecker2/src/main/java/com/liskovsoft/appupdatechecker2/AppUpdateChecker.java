@@ -90,7 +90,10 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
                 }
             }
         } else {
+            // No update is needed.
             mSettingsManager.setLastUpdatedMs(System.currentTimeMillis());
+            //  Cleanup the storage. I don't want to accidentally install old version.
+            FileHelpers.delete(mSettingsManager.getApkPath());
         }
     }
 
