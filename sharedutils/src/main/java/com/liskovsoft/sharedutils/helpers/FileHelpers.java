@@ -86,7 +86,7 @@ public class FileHelpers {
     }
 
     public static boolean delete(String filePath) {
-        return delete(new File(filePath));
+        return filePath != null && delete(new File(filePath));
     }
 
     public static boolean delete(File sourceLocation) {
