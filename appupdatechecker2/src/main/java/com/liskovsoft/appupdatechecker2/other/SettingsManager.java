@@ -3,20 +3,17 @@ package com.liskovsoft.appupdatechecker2.other;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import edu.mit.mobile.android.appupdater.R;
 
 public class SettingsManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static final String SHARED_PREFERENCES_NAME = "com.liskovsoft.appupdatechecker2.preferences";
     private static final String PREF_ENABLED = "enabled";
-    private static final String PREF_MIN_INTERVAL = "min_interval";
     private static final String PREF_MIN_INTERVAL_MS = "min_interval_ms";
-    private static final String PREF_LAST_UPDATED = "last_checked";
+    private static final String PREF_LAST_CHECKED_MS = "last_checked_ms";
     private static final String PREF_APK_PATH = "apk_path";
     private static final String PREF_LATEST_VERSION_NAME = "latest_version_name";
     private static final String PREF_LATEST_VERSION_NUMBER = "latest_version_number";
-    private static final String CHECK_MIN_INTERVAL = "60";
-    private static final long CHECK_MIN_INTERVAL_MS = 60*60*1_000;
+    private static final long CHECK_MIN_INTERVAL_MS = 60 * 60 * 1_000;
     private final Context mContext;
     private final SharedPreferences mPrefs;
 
@@ -31,12 +28,13 @@ public class SettingsManager {
         //android.preference.PreferenceManager.setDefaultValues(context, SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE, R.xml.preferences, true);
     }
 
-    public long getLastUpdatedMs() {
-        return mPrefs.getLong(PREF_LAST_UPDATED, 0);
+    public long getLastCheckedMs() {
+        // Do not store as var cause object not persistent in memory!
+        return mPrefs.getLong(PREF_LAST_CHECKED_MS, 0);
     }
 
-    public void setLastUpdatedMs(long milliseconds) {
-        mPrefs.edit().putLong(PREF_LAST_UPDATED, milliseconds).apply();
+    public void setLastCheckedMs(long milliseconds) {
+        mPrefs.edit().putLong(PREF_LAST_CHECKED_MS, milliseconds).apply();
     }
 
     public String getApkPath() {
@@ -70,17 +68,6 @@ public class SettingsManager {
     public void setMinIntervalMs(long milliseconds) {
         mPrefs.edit().putLong(PREF_MIN_INTERVAL_MS, milliseconds).apply();
     }
-
-    ///**
-    // * Min interval is stored as a string so a preference editor could potentially edit it using a text edit widget
-    // */
-    //public int getMinInterval() {
-    //    return Integer.parseInt(mPrefs.getString(PREF_MIN_INTERVAL, CHECK_MIN_INTERVAL));
-    //}
-    //
-    //public void setMinInterval(int minutes) {
-    //    mPrefs.edit().putString(PREF_MIN_INTERVAL, String.valueOf(minutes)).apply();
-    //}
 
     public boolean isEnabled() {
         return mPrefs.getBoolean(PREF_ENABLED, true);

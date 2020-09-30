@@ -39,7 +39,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
      * @return true if the updater should check for updates
      */
     private boolean isStale() {
-        return System.currentTimeMillis() - mSettingsManager.getLastUpdatedMs() > mSettingsManager.getMinIntervalMs();
+        return System.currentTimeMillis() - mSettingsManager.getLastCheckedMs() > mSettingsManager.getMinIntervalMs();
     }
 
     public void checkForUpdates(String updateManifestUrl) {
@@ -91,7 +91,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
             }
         } else {
             // No update is needed.
-            mSettingsManager.setLastUpdatedMs(System.currentTimeMillis());
+            mSettingsManager.setLastCheckedMs(System.currentTimeMillis());
             //  Cleanup the storage. I don't want to accidentally install old version.
             FileHelpers.delete(mSettingsManager.getApkPath());
         }
