@@ -730,14 +730,14 @@ public final class Helpers {
     }
 
     private static Field getDeclaredField(Class<?> aClass, String fieldName) {
-        if (aClass.getSuperclass() == null) { // null if superclass is object
+        if (aClass == null) { // null if superclass is object
             return null;
         }
 
         Field f1 = null;
 
         try {
-            f1 = aClass.getSuperclass().getDeclaredField(fieldName);
+            f1 = aClass.getDeclaredField(fieldName);
         } catch (NoSuchFieldException e) {
             f1 = getDeclaredField(aClass.getSuperclass(), fieldName);
         }
