@@ -99,7 +99,7 @@ public class FileHelpers {
                 }
             }
             return sourceLocation.delete();
-        } else if(sourceLocation!= null && sourceLocation.isFile()) {
+        } else if (sourceLocation != null && sourceLocation.isFile()) {
             return sourceLocation.delete();
         } else {
             return false;

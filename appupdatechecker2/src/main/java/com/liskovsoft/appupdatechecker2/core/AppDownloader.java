@@ -83,7 +83,15 @@ public class AppDownloader extends AsyncTask<Uri[],Void,Void> {
                 long id = manager.enqueue(request);
                 int size = manager.getSizeForDownloadedFile(id);
                 Uri destination = manager.getUriForDownloadedFile(id);
-                path = size > 1_000_000 ? destination.getPath() : null; // it could be a web page instead of apk
+
+                if (destination != null) {
+                    // It could be a web page instead of apk
+                    if (size > 1_000_000) {
+                        path = destination.getPath();
+                    } else { // do cleanup
+                        FileHelpers.delete(destination.getPath());
+                    }
+                }
             } catch (IllegalStateException ex) { // 403 or something else
                 Log.d(TAG, ex.toString());
             }

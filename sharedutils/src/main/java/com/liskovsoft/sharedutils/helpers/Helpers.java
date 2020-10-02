@@ -261,8 +261,15 @@ public final class Helpers {
                !Character.isDigit(num.charAt(0));
     }
 
+    /**
+     * Any number, e.g. -1.0, 15
+     */
     public static boolean isNumeric(String s) {
-        return s != null && s.matches("[-+]?\\d*\\.?\\d+");
+        return s != null && s.matches("^[-+]?\\d*\\.?\\d+$");
+    }
+
+    public static boolean isInteger(String s) {
+        return s != null && s.matches("^[-+]?\\d+$");
     }
 
     /**
@@ -736,5 +743,21 @@ public final class Helpers {
         }
 
         return f1;
+    }
+
+    public static int parseInt(String numString) {
+        if (!isInteger(numString)) {
+            return -1;
+        }
+
+        return Integer.parseInt(numString);
+    }
+
+    public static float parseFloat(String numString) {
+        if (!isNumeric(numString)) {
+            return -1;
+        }
+
+        return Float.parseFloat(numString);
     }
 }
