@@ -310,4 +310,27 @@ public class FileHelpers {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test that file is created within specified time period
+     */
+    public static boolean isFreshFile(String path, int maxHours) {
+        if (path == null) {
+            return false;
+        }
+
+        File file = new File(path);
+
+        if (!file.exists()) {
+            return false;
+        }
+
+        int fileSizeKB = Integer.parseInt(String.valueOf(file.length() / 1024));
+
+        if (fileSizeKB < 1_000) { // 1MB
+            return false;
+        }
+
+        return System.currentTimeMillis() - file.lastModified() < maxHours * 60 * 60 * 1_000;
+    }
 }

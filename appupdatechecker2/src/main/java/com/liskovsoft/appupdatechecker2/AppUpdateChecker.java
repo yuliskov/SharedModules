@@ -83,7 +83,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
                 mSettingsManager.setLatestVersionNumber(latestVersionNumber);
 
                 if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
-                        FileHelpers.isFileExists(mSettingsManager.getApkPath())) {
+                        FileHelpers.isFreshFile(mSettingsManager.getApkPath(), 24)) {
                     mListener.onUpdateFound(latestVersionName, changelog, mSettingsManager.getApkPath());
                 } else {
                     mDownloader.download(downloadUris);
