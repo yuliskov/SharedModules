@@ -8,34 +8,25 @@ public class Log {
 
     private static MyLogger sLogger = new SystemLogger();
 
-    public static void d(String tag, Object msg) {
-        if (msg != null) {
-            sLogger.d(tag, msg.toString());
-        }
+    public static void d(String tag, Object msg, Object... formatArgs) {
+        sLogger.d(tag, formatMsg(msg, formatArgs));
     }
 
-    public static void i(String tag, Object msg) {
-        if (msg != null) {
-            sLogger.i(tag, msg.toString());
-        }
+    public static void i(String tag, Object msg, Object... formatArgs) {
+        sLogger.i(tag, formatMsg(msg, formatArgs));
     }
 
-    public static void w(String tag, Object msg) {
-        if (msg != null) {
-            sLogger.w(tag, msg.toString());
-        }
+    public static void w(String tag, Object msg, Object... formatArgs) {
+        sLogger.w(tag, formatMsg(msg, formatArgs));
     }
 
-    public static void e(String tag, Object msg) {
-        if (msg != null) {
-            sLogger.e(tag, msg.toString());
-        }
+    public static void e(String tag, Object msg, Object... formatArgs) {
+        sLogger.e(tag, formatMsg(msg, formatArgs));
     }
 
     public static void i(String tag, Object msg, Throwable ex) {
         i(tag, msg + " " + ex.getMessage());
     }
-
 
     public static void e(String tag, Object msg, Throwable ex) {
         if (msg != null && ex != null) {
@@ -79,5 +70,17 @@ public class Log {
         }
 
         return LOG_TYPE_SYSTEM;
+    }
+
+    private static String formatMsg(Object msg, Object... formatArgs) {
+        String result = null;
+
+        if (msg != null && formatArgs != null && formatArgs.length > 0) {
+            result = String.format(msg.toString(), formatArgs);
+        } else if (msg != null) {
+            result = msg.toString();
+        }
+
+        return result;
     }
 }
