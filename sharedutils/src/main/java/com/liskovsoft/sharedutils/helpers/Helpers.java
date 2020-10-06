@@ -354,6 +354,14 @@ public final class Helpers {
         return isApiSupported && (isAndroidTVLauncher(context) || isAmazonFireTVDevice());
     }
 
+    public static boolean isPictureInPictureSupported(Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        return VERSION.SDK_INT >= 24 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
+    }
+
     public static boolean isAndroidTV(Context context) {
         PackageManager pm = context.getPackageManager();
 
