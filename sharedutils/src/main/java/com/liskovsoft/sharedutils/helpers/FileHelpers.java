@@ -176,6 +176,8 @@ public class FileHelpers {
     }
 
     /**
+     * Converts with respect to charset encoding.<br/>
+     * Use alt methods carefully.<br/>
      * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
      */
     public static String toString(InputStream content) {
@@ -192,6 +194,7 @@ public class FileHelpers {
             }
             // StandardCharsets.UTF_8.name() > JDK 7
             result = outputStream.toString("UTF-8");
+            content.close();
         } catch (IOException e) {
             e.printStackTrace();
             Log.d(TAG, e.getMessage());
@@ -199,6 +202,28 @@ public class FileHelpers {
 
         return result;
     }
+
+    //public static String toStringEfficient(InputStream content) {
+    //    if (content == null) {
+    //        return null;
+    //    }
+    //
+    //    StringBuilder sb = new StringBuilder();
+    //
+    //    try (BufferedReader in
+    //            = new BufferedReader(new InputStreamReader(content, "UTF-8"))) {
+    //        char[] buffer = new char[1024];
+    //
+    //        while (in.read(buffer) != -1) {
+    //            sb.append(buffer);
+    //        }
+    //    } catch (IOException e) {
+    //        e.printStackTrace();
+    //        Log.d(TAG, e.getMessage());
+    //    }
+    //
+    //    return sb.toString();
+    //}
 
     public static String toStringOld(InputStream content) {
         if (content == null) {
