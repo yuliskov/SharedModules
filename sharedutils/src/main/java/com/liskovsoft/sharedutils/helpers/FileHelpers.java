@@ -187,14 +187,15 @@ public class FileHelpers {
 
         String result = null;
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            BufferedInputStream bis = new BufferedInputStream(content);
             byte[] buffer = new byte[1024];
             int length;
-            while ((length = content.read(buffer)) != -1) {
+            while ((length = bis.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, length);
             }
             // StandardCharsets.UTF_8.name() > JDK 7
             result = outputStream.toString("UTF-8");
-            content.close();
+            bis.close();
         } catch (IOException e) {
             e.printStackTrace();
             Log.d(TAG, e.getMessage());
