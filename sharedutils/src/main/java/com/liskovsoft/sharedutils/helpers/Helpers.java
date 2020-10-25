@@ -772,4 +772,36 @@ public final class Helpers {
     public static boolean parseBoolean(String boolString) {
         return Boolean.parseBoolean(boolString);
     }
+
+    public static String parseStr(String str) {
+        if (str == null || str.equals("null")) {
+            return null;
+        }
+
+        return str;
+    }
+
+    public static int parseInt(String[] arr, int index) {
+        if (arr == null || arr.length <= index) {
+            return 0;
+        }
+
+        return parseInt(arr[index]);
+    }
+
+    public static String parseStr(String[] arr, int index) {
+        if (arr == null || arr.length <= index) {
+            return null;
+        }
+
+        return parseStr(arr[index]);
+    }
+
+    public static boolean parseBoolean(String[] arr, int index) {
+        if (arr == null || arr.length <= index) {
+            return false;
+        }
+
+        return parseBoolean(arr[index]);
+    }
 }
