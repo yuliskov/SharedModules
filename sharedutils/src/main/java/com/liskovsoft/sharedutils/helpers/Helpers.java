@@ -768,4 +768,8 @@ public final class Helpers {
 
         return Float.parseFloat(numString);
     }
+
+    public static boolean parseBoolean(String boolString) {
+        return Boolean.parseBoolean(boolString);
+    }
 }

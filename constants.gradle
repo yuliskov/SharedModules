@@ -39,7 +39,7 @@ project.ext {
     okhttpLoggerVersion = '3.12.0'
     multiDexVersion = '1.0.3' // crashlytics fix on Android 4.4
     stethoVersion = '1.5.0' // Chrome Dev Tools
-    glideVersion = '4.9.0'
+    glideVersion = '4.11.0'
     rxAndroidVersion = '2.1.1'
     rxJavaVersion = '2.2.7'
     diskLruCacheVersion = '2.0.2'

@@ -31,6 +31,10 @@ public class MessageHelpers {
         showMessage(ctx, msg);
     }
 
+    public static void showMessageThrottled(final Context ctx, final int msgResId) {
+        showMessageThrottled(ctx, ctx.getString(msgResId));
+    }
+
     public static void showMessage(final Context ctx, final String msg) {
         if (ctx == null) {
             return;
