@@ -35,8 +35,10 @@ public class FileHelpers {
     }
 
     public static File getCacheDir(Context context) {
-        // NOTE: Android 6.0 fix
-        File cacheDir = context.getExternalCacheDir();
+        File cacheDir = null;
+
+        // Android 6.0 fix (providers not supported)
+        cacheDir = context.getExternalCacheDir();
 
         //if (!PermissionHelpers.hasStoragePermissions(context)) {
         //    MessageHelpers.showMessage(context, "Storage permission not granted!");
@@ -44,7 +46,12 @@ public class FileHelpers {
         //}
 
         if (cacheDir == null || !cacheDir.canWrite()) { // no storage, try to use internal one
-            cacheDir = context.getCacheDir();
+            cacheDir = Environment.getExternalStorageDirectory();
+
+            if (cacheDir == null || !cacheDir.canWrite()) {
+                // Android 7.0 and above (supports install from internal dirs)
+                cacheDir = context.getCacheDir();
+            }
         }
 
         return cacheDir;
@@ -259,7 +266,7 @@ public class FileHelpers {
 
     // NOTE: Android 7.0 fix
     public static Uri getFileUri(Context context, String filePath) {
-        // if your targetSdkVersion is 24 or higher, we have to use FileProvider class
+        // If your targetSdkVersion is 24 (Android 7.0) or higher, we have to use FileProvider class
         // https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
         if (VERSION.SDK_INT >= 24) {
             return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".update_provider", new File(filePath));
