@@ -101,4 +101,8 @@ public class KeyHelpers {
     public static boolean isStopKey(int keyCode) {
         return keyCode == KeyEvent.KEYCODE_MEDIA_STOP;
     }
+
+    public static boolean isTogglePlaybackKey(int keyCode) {
+        return keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+    }
 }

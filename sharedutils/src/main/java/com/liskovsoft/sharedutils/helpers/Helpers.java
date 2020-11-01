@@ -755,7 +755,7 @@ public final class Helpers {
 
     public static int parseInt(String numString) {
         if (!isInteger(numString)) {
-            return -1;
+            return 0;
         }
 
         return Integer.parseInt(numString);
@@ -763,7 +763,7 @@ public final class Helpers {
 
     public static float parseFloat(String numString) {
         if (!isNumeric(numString)) {
-            return -1;
+            return 0;
         }
 
         return Float.parseFloat(numString);
@@ -810,6 +810,10 @@ public final class Helpers {
         // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        context.startActivity(intent);
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            // NOP
+        }
     }
 }
