@@ -804,4 +804,12 @@ public final class Helpers {
 
         return parseBoolean(arr[index]);
     }
+
+    public static void openLink(String url, Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        context.startActivity(intent);
+    }
 }

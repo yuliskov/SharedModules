@@ -6,6 +6,14 @@ import android.view.KeyEvent;
 public class KeyHelpers {
     // Philips ambilight button
     private static final int KEYCODE_SVC_EXIT = 319;
+    /** Key code constant: Contents menu key.
+     * Goes to the title list. Corresponds to Contents Menu (0x0B) of CEC User Control
+     * Code */
+    private static final int KEYCODE_TV_CONTENTS_MENU = 256;
+    /** Key code constant: Media context menu key.
+     * Goes to the context menu of media contents. Corresponds to Media Context-sensitive
+     * Menu (0x11) of CEC User Control Code. */
+    private static final int KEYCODE_TV_MEDIA_CONTEXT_MENU = 257;
 
     public static void press(Activity activity, int keyCode) {
         KeyEvent newEventDown = newEvent(KeyEvent.ACTION_DOWN, keyCode);
@@ -82,5 +90,15 @@ public class KeyHelpers {
     public static boolean isBackKey(int keyCode) {
         return keyCode == KeyEvent.KEYCODE_BACK ||
                keyCode == KeyEvent.KEYCODE_ESCAPE;
+    }
+
+    public static boolean isMenuKey(int keyCode) {
+        return keyCode == KeyEvent.KEYCODE_MENU ||
+               keyCode == KEYCODE_TV_CONTENTS_MENU ||
+               keyCode == KEYCODE_TV_MEDIA_CONTEXT_MENU;
+    }
+
+    public static boolean isStopKey(int keyCode) {
+        return keyCode == KeyEvent.KEYCODE_MEDIA_STOP;
     }
 }
