@@ -269,6 +269,7 @@ public class AppVersionChecker {
             }
 
             mInProgress = false;
+            mJsonUpdateTask = null;
         }
     }
 
