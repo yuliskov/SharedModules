@@ -755,7 +755,7 @@ public final class Helpers {
 
     public static int parseInt(String numString) {
         if (!isInteger(numString)) {
-            return 0;
+            return -1;
         }
 
         return Integer.parseInt(numString);
@@ -763,7 +763,7 @@ public final class Helpers {
 
     public static float parseFloat(String numString) {
         if (!isNumeric(numString)) {
-            return 0;
+            return -1;
         }
 
         return Float.parseFloat(numString);
@@ -782,11 +782,16 @@ public final class Helpers {
     }
 
     public static int parseInt(String[] arr, int index) {
+        return parseInt(arr, index, 0);
+    }
+
+    public static int parseInt(String[] arr, int index, int defaultValue) {
         if (arr == null || arr.length <= index) {
-            return 0;
+            return defaultValue;
         }
 
-        return parseInt(arr[index]);
+        int result = parseInt(arr[index]);
+        return result != -1 ? result : defaultValue;
     }
 
     public static String parseStr(String[] arr, int index) {
@@ -798,8 +803,12 @@ public final class Helpers {
     }
 
     public static boolean parseBoolean(String[] arr, int index) {
+        return parseBoolean(arr, index, false);
+    }
+
+    public static boolean parseBoolean(String[] arr, int index, boolean defaultValue) {
         if (arr == null || arr.length <= index) {
-            return false;
+            return defaultValue;
         }
 
         return parseBoolean(arr[index]);
