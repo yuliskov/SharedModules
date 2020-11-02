@@ -825,4 +825,32 @@ public final class Helpers {
             // NOP
         }
     }
+
+    public static String[] split(String data) {
+        if (data == null || data.isEmpty()) {
+            return null;
+        }
+
+        String delim = ",";
+        return data.split(delim);
+    }
+
+    public static String merge(Object... params) {
+        if (params == null || params.length == 0) {
+            return null;
+        }
+
+        String delim = ",";
+        StringBuilder sb = new StringBuilder();
+
+        for (Object param : params) {
+            if (sb.length() != 0) {
+                sb.append(delim);
+            }
+
+            sb.append(param);
+        }
+
+        return sb.toString();
+    }
 }
