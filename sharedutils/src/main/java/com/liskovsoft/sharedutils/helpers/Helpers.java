@@ -814,33 +814,35 @@ public final class Helpers {
         return parseBoolean(arr[index]);
     }
 
-    public static void openLink(String url, Context context) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        try {
-            context.startActivity(intent);
-        } catch (Exception e) {
-            // NOP
-        }
+    public static String[] splitArray(String arr) {
+        return Helpers.split("\\|", arr);
     }
 
-    public static String[] split(String data) {
+    public static String mergeArray(Object... items) {
+        return Helpers.merge("|", items);
+    }
+
+    public static String[] splitObject(String obj) {
+        return Helpers.split(",", obj);
+    }
+
+    public static String mergeObject(Object... params) {
+        return Helpers.merge(",", params);
+    }
+
+    private static String[] split(String delim, String data) {
         if (data == null || data.isEmpty()) {
             return null;
         }
 
-        String delim = ",";
         return data.split(delim);
     }
 
-    public static String merge(Object... params) {
+    private static String merge(String delim, Object... params) {
         if (params == null || params.length == 0) {
             return null;
         }
 
-        String delim = ",";
         StringBuilder sb = new StringBuilder();
 
         for (Object param : params) {
@@ -852,5 +854,17 @@ public final class Helpers {
         }
 
         return sb.toString();
+    }
+
+    public static void openLink(String url, Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            // NOP
+        }
     }
 }
