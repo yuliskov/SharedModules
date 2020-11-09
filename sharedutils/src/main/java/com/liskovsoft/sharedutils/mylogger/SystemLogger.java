@@ -5,22 +5,30 @@ import android.util.Log;
 class SystemLogger extends MyLogger {
     @Override
     public void d(String tag, String msg) {
-        Log.d(tag, msg);
+        if (msg != null) {
+            Log.d(tag, msg);
+        }
     }
 
     @Override
     public void i(String tag, String msg) {
-        Log.i(tag, msg);
+        if (msg != null) {
+            Log.i(tag, msg);
+        }
     }
 
     @Override
     public void w(String tag, String msg) {
-        Log.w(tag, msg);
+        if (msg != null) {
+            Log.w(tag, msg);
+        }
     }
 
     @Override
     public void e(String tag, String msg) {
-        Log.e(tag, msg);
+        if (msg != null) {
+            Log.e(tag, msg);
+        }
     }
 
     @Override
