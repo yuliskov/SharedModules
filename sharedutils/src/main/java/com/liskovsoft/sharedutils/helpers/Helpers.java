@@ -632,7 +632,7 @@ public final class Helpers {
     }
 
     public static boolean floatEquals(float num1, float num2) {
-        float epsilon = 0.1f;
+        float epsilon = 0.01f;
         return Math.abs(num1 - num2) < epsilon;
     }
 
@@ -812,6 +812,14 @@ public final class Helpers {
         }
 
         return parseBoolean(arr[index]);
+    }
+
+    public static float parseFloat(String[] arr, int index, float defaultValue) {
+        if (arr == null || arr.length <= index) {
+            return defaultValue;
+        }
+
+        return parseFloat(arr[index]);
     }
 
     public static String[] splitArray(String arr) {
