@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloaderListener {
     private static final String TAG = AppUpdateChecker.class.getSimpleName();
-    private static final int FRESH_FILE_HOURS = 3;
+    private static final int FRESH_FILE_HOURS = 1;
     private final Context mContext;
     private final AppVersionChecker mVersionChecker;
     private final AppDownloader mDownloader;
