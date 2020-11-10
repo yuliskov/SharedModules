@@ -819,7 +819,8 @@ public final class Helpers {
             return defaultValue;
         }
 
-        return parseFloat(arr[index]);
+        float result = parseFloat(arr[index]);
+        return !floatEquals(result, -1) ? result : defaultValue;
     }
 
     public static String[] splitArray(String arr) {
