@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -875,5 +877,36 @@ public final class Helpers {
         } catch (Exception e) {
             // NOP
         }
+    }
+
+    public static boolean contains(String[] arr, String item) {
+        if (arr == null || arr.length == 0) {
+            return false;
+        }
+
+        for (String elem : arr) {
+            if (elem.equals(item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static int getResourceId(String resourceName, String resourceType, Context context) {
+        if (resourceName == null) {
+            return -1;
+        }
+
+        return context.getResources().getIdentifier(resourceName, resourceType, context.getPackageName());
+    }
+
+    /**
+     * Info: https://stackoverflow.com/questions/7896615/android-how-to-get-value-of-an-attribute-in-code
+     */
+    public static int getThemeAttr(Context context, int attrName) {
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(attrName, outValue, true);
+        return outValue.resourceId;
     }
 }
