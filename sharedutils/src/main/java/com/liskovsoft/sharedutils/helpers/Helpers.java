@@ -788,7 +788,7 @@ public final class Helpers {
     }
 
     public static int parseInt(String[] arr, int index, int defaultValue) {
-        if (arr == null || arr.length <= index) {
+        if (arr == null || arr.length <= index || index < 0) {
             return defaultValue;
         }
 
@@ -797,7 +797,7 @@ public final class Helpers {
     }
 
     public static String parseStr(String[] arr, int index) {
-        if (arr == null || arr.length <= index) {
+        if (arr == null || arr.length <= index || index < 0) {
             return null;
         }
 
@@ -809,7 +809,7 @@ public final class Helpers {
     }
 
     public static boolean parseBoolean(String[] arr, int index, boolean defaultValue) {
-        if (arr == null || arr.length <= index) {
+        if (arr == null || arr.length <= index || index < 0) {
             return defaultValue;
         }
 
@@ -817,7 +817,7 @@ public final class Helpers {
     }
 
     public static float parseFloat(String[] arr, int index, float defaultValue) {
-        if (arr == null || arr.length <= index) {
+        if (arr == null || arr.length <= index || index < 0) {
             return defaultValue;
         }
 

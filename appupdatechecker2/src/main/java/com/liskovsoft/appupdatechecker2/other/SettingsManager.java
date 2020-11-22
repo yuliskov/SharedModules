@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class SettingsManager {
+    public static final long CHECK_INTERVAL_DEFAULT = 60 * 60 * 1_000;
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static final String SHARED_PREFERENCES_NAME = "com.liskovsoft.appupdatechecker2.preferences";
     private static final String PREF_ENABLED = "enabled";
@@ -13,7 +14,6 @@ public class SettingsManager {
     private static final String PREF_APK_PATH = "apk_path";
     private static final String PREF_LATEST_VERSION_NAME = "latest_version_name";
     private static final String PREF_LATEST_VERSION_NUMBER = "latest_version_number";
-    private static final long CHECK_MIN_INTERVAL_MS = 60 * 60 * 1_000;
     private final Context mContext;
     private final SharedPreferences mPrefs;
 
@@ -62,7 +62,7 @@ public class SettingsManager {
     }
 
     public long getMinIntervalMs() {
-        return mPrefs.getLong(PREF_MIN_INTERVAL_MS, CHECK_MIN_INTERVAL_MS);
+        return mPrefs.getLong(PREF_MIN_INTERVAL_MS, CHECK_INTERVAL_DEFAULT);
     }
 
     public void setMinIntervalMs(long milliseconds) {

@@ -13,7 +13,8 @@ project.ext {
     appCompatXLibraryVersion = '1.0.0'
     leanbackXLibraryVersion = '1.0.0'
     annotationXLibraryVersion = '1.1.0'
-    mediaXLibraryVersion = '1.0.1' // exoplayer fix
+    coreXLibraryVersion = '1.1.0'
+    mediaXLibraryVersion = '1.2.0' // exoplayer fix
     constraintLayoutXVersion = '1.1.2'
     supportLibraryVersion = '28.0.0'
     dexmakerVersion = '1.2'
@@ -26,7 +27,7 @@ project.ext {
     testRunnerVersion = '1.0.2'
     legacyExoplayerVersion = '2.9.6'
     // exoplayerVersion = '2.10.8'
-    exoplayerVersion = '2.11.5'
+    exoplayerVersion = '2.12.1'
     amazonExoplayerVersion = '2.10.6'
     // amazonExoplayerVersion = '2.11.3'
     espressoVersion = '3.2.0'
@@ -34,9 +35,9 @@ project.ext {
     gsonVersion = '2.8.2'
     jsonPathVersion = '2.4.0'
     ottoVersion = '1.3.8'
-    okhttpVersion = '3.12.0'
-    okhttpProfilerVersion = '1.0.5'
-    okhttpLoggerVersion = '3.12.0'
+    okhttpVersion = '3.12.12'
+    okhttpProfilerVersion = '1.0.7'
+    okhttpLoggerVersion = '3.12.12'
     multiDexVersion = '1.0.3' // crashlytics fix on Android 4.4
     stethoVersion = '1.5.0' // Chrome Dev Tools
     glideVersion = '4.11.0'

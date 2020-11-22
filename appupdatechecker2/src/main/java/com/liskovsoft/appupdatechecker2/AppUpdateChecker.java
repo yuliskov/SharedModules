@@ -40,6 +40,10 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
      * @return true if the updater should check for updates
      */
     private boolean isStale() {
+        if (mSettingsManager.getMinIntervalMs() < 0) {
+            return false;
+        }
+
         return System.currentTimeMillis() - mSettingsManager.getLastCheckedMs() > mSettingsManager.getMinIntervalMs();
     }
 
@@ -132,5 +136,13 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     public void installUpdate() {
         Helpers.installPackage(mContext, mSettingsManager.getApkPath());
+    }
+
+    public void enableUpdateCheck(boolean enable) {
+        mSettingsManager.setMinIntervalMs(enable ? SettingsManager.CHECK_INTERVAL_DEFAULT : -1);
+    }
+
+    public boolean isUpdateCheckEnabled() {
+        return mSettingsManager.getMinIntervalMs() > 0;
     }
 }
