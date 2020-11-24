@@ -13,6 +13,9 @@ public class MessageHelpers {
     private static long sExitMsgTimeMS = 0;
     private static final int LONG_MSG_TIMEOUT = 5000;
     private static float mTextSize;
+    private static Toast mCurrentToast;
+    private static final Runnable mCleanupContext = () -> mCurrentToast = null;
+    private static final Handler mHandler = new Handler(Looper.getMainLooper());
 
     public static void showMessage(final Context ctx, final String TAG, final Throwable ex) {
         showMessage(ctx, TAG, Helpers.toString(ex));
@@ -42,9 +45,15 @@ public class MessageHelpers {
 
         Runnable toast = () -> {
             try {
-                Toast toastReal = Toast.makeText(ctx, msg, Toast.LENGTH_LONG);
-                fixTextSize(toastReal, ctx);
-                toastReal.show();
+                if (mCurrentToast != null) {
+                    mCurrentToast.cancel();
+                }
+
+                mCurrentToast = Toast.makeText(ctx, msg, Toast.LENGTH_LONG);
+                fixTextSize(mCurrentToast, ctx);
+                mCurrentToast.show();
+
+                setupCleanup();
             } catch (Exception ex) { // NPE fix
                 ex.printStackTrace();
             }
@@ -107,5 +116,10 @@ public class MessageHelpers {
         ViewGroup group = (ViewGroup) toast.getView();
         TextView messageTextView = (TextView) group.getChildAt(0);
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+    }
+
+    private static void setupCleanup() {
+        mHandler.removeCallbacks(mCleanupContext);
+        mHandler.postDelayed(mCleanupContext, 5_000);
     }
 }
