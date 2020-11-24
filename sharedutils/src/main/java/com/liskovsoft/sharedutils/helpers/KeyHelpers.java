@@ -95,7 +95,8 @@ public class KeyHelpers {
     public static boolean isMenuKey(int keyCode) {
         return keyCode == KeyEvent.KEYCODE_MENU ||
                keyCode == KEYCODE_TV_CONTENTS_MENU ||
-               keyCode == KEYCODE_TV_MEDIA_CONTEXT_MENU;
+               keyCode == KEYCODE_TV_MEDIA_CONTEXT_MENU ||
+               keyCode == KeyEvent.KEYCODE_INFO;
     }
 
     public static boolean isStopKey(int keyCode) {
