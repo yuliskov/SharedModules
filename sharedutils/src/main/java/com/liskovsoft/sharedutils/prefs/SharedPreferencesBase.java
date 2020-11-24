@@ -13,6 +13,19 @@ public class SharedPreferencesBase {
         mPrefs = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
     }
 
+    public SharedPreferencesBase(Context context, String prefName, int defValResId) {
+        mContext = context;
+        mPrefs = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        PreferenceManager.setDefaultValues(context, prefName, Context.MODE_PRIVATE, defValResId, true);
+    }
+
+    public SharedPreferencesBase(Context context, int defValResId) {
+        mContext = context;
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String defaultPrefsName = context.getPackageName() + "_preferences";
+        PreferenceManager.setDefaultValues(context, defaultPrefsName, Context.MODE_PRIVATE, defValResId, true);
+    }
+
     public SharedPreferencesBase(Context context) {
         mContext = context;
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
