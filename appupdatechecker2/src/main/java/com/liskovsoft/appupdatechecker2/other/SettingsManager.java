@@ -2,14 +2,16 @@ package com.liskovsoft.appupdatechecker2.other;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import edu.mit.mobile.android.appupdater.R;
 
 public class SettingsManager {
     public static final long CHECK_INTERVAL_DEFAULT = 60 * 60 * 1_000;
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static final String SHARED_PREFERENCES_NAME = "com.liskovsoft.appupdatechecker2.preferences";
     private static final String PREF_ENABLED = "enabled";
-    private static final String PREF_MIN_INTERVAL_MS = "min_interval_ms";
+    private static final String PREF_CHECK_INTERVAL_MS = "check_interval_ms";
     private static final String PREF_LAST_CHECKED_MS = "last_checked_ms";
     private static final String PREF_APK_PATH = "apk_path";
     private static final String PREF_LATEST_VERSION_NAME = "latest_version_name";
@@ -25,7 +27,7 @@ public class SettingsManager {
         mPrefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
         // defaults are kept in the preference file for ease of tweaking
-        //android.preference.PreferenceManager.setDefaultValues(context, SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE, R.xml.preferences, true);
+        android.preference.PreferenceManager.setDefaultValues(context, SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE, R.xml.upd_prefs, true);
     }
 
     public long getLastCheckedMs() {
@@ -62,11 +64,12 @@ public class SettingsManager {
     }
 
     public long getMinIntervalMs() {
-        return mPrefs.getLong(PREF_MIN_INTERVAL_MS, CHECK_INTERVAL_DEFAULT);
+        String interval = mPrefs.getString(PREF_CHECK_INTERVAL_MS, null);
+        return interval != null ? Long.parseLong(interval) : CHECK_INTERVAL_DEFAULT;
     }
 
     public void setMinIntervalMs(long milliseconds) {
-        mPrefs.edit().putLong(PREF_MIN_INTERVAL_MS, milliseconds).apply();
+        mPrefs.edit().putString(PREF_CHECK_INTERVAL_MS, String.valueOf(milliseconds)).apply();
     }
 
     public boolean isEnabled() {
