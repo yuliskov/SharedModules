@@ -2,6 +2,7 @@ package com.liskovsoft.appupdatechecker2;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import com.liskovsoft.appupdatechecker2.core.AppDownloader;
 import com.liskovsoft.appupdatechecker2.core.AppDownloaderListener;
 import com.liskovsoft.appupdatechecker2.core.AppVersionChecker;
@@ -9,6 +10,7 @@ import com.liskovsoft.appupdatechecker2.core.AppVersionCheckerListener;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.List;
@@ -69,6 +71,11 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     private void checkForUpdatesInt(String[] updateManifestUrls) {
+        // Workaround for Android 6 (cannot write to app cache dir)
+        if (Build.VERSION.SDK_INT == 23) {
+            PermissionHelpers.verifyStoragePermissions(mContext);
+        }
+
         if (!checkPostponed()) {
             mVersionChecker.checkForUpdates(updateManifestUrls);
         }
