@@ -879,13 +879,27 @@ public final class Helpers {
         }
     }
 
-    public static boolean contains(String[] arr, String item) {
+    public static boolean contains(Object[] arr, Object item) {
         if (arr == null || arr.length == 0) {
             return false;
         }
 
-        for (String elem : arr) {
+        for (Object elem : arr) {
             if (elem.equals(item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean contains(int[] arr, int item) {
+        if (arr == null || arr.length == 0) {
+            return false;
+        }
+
+        for (int elem : arr) {
+            if (elem == item) {
                 return true;
             }
         }
