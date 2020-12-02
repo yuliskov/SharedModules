@@ -3,6 +3,7 @@ package com.liskovsoft.sharedutils.locale;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.LocaleList;
@@ -91,17 +92,18 @@ public class LangHelper {
         }
 
         Locale.setDefault(locale);
-        Configuration config = context.getResources().getConfiguration();
+        Resources resources = context.getResources();
+        Configuration config = resources.getConfiguration();
         config.locale = locale;
 
-        if (VERSION.SDK_INT >= VERSION_CODES.N) {
+        if (VERSION.SDK_INT >= 24) {
             config.setLocales(new LocaleList(locale));
         }
 
-        context.getResources()
+        resources
                 .updateConfiguration(
                         config,
-                        context.getResources().getDisplayMetrics()
+                        resources.getDisplayMetrics()
                 );
     }
 
