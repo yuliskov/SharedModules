@@ -29,10 +29,10 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     public AppUpdateChecker(Context context, AppUpdateCheckerListener listener) {
         Log.d(TAG, "Starting...");
 
-        // Workaround for Android 6 (cannot write to app cache dir)
-        if (Build.VERSION.SDK_INT == 23) {
-            PermissionHelpers.verifyStoragePermissions(context); // should be an Activity context
-        }
+        //// Workaround for Android 6 (cannot write to app cache dir)
+        //if (Build.VERSION.SDK_INT == 23) {
+        //    PermissionHelpers.verifyStoragePermissions(context); // should be an Activity context
+        //}
 
         mContext = context.getApplicationContext();
         mListener = listener;
