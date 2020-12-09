@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloaderListener {
     private static final String TAG = AppUpdateChecker.class.getSimpleName();
-    private static final int FRESH_FILE_HOURS = 1;
+    private static final int FRESH_TIME_MS = 15 * 60 * 1_000; // 15 minutes
     private final Context mContext;
     private final AppVersionChecker mVersionChecker;
     private final AppDownloader mDownloader;
@@ -67,7 +67,9 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     public void forceCheckForUpdates(String[] updateManifestUrls) {
-        checkForUpdatesInt(updateManifestUrls);
+        if (isEnabled()) {
+            checkForUpdatesInt(updateManifestUrls);
+        }
     }
 
     private void checkForUpdatesInt(String[] updateManifestUrls) {
@@ -95,7 +97,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
                 mSettingsManager.setLatestVersionNumber(latestVersionNumber);
 
                 if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
-                        FileHelpers.isFreshFile(mSettingsManager.getApkPath(), FRESH_FILE_HOURS)) {
+                        FileHelpers.isFreshFile(mSettingsManager.getApkPath(), FRESH_TIME_MS)) {
                     mListener.onUpdateFound(latestVersionName, changelog, mSettingsManager.getApkPath());
                 } else {
                     mDownloader.download(downloadUris);

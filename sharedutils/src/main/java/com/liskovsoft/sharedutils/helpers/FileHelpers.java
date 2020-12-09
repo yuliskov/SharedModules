@@ -347,7 +347,7 @@ public class FileHelpers {
     /**
      * Test that file is created within specified time period
      */
-    public static boolean isFreshFile(String path, int maxHours) {
+    public static boolean isFreshFile(String path, int freshTimeMS) {
         if (path == null) {
             return false;
         }
@@ -364,6 +364,6 @@ public class FileHelpers {
             return false;
         }
 
-        return System.currentTimeMillis() - file.lastModified() < maxHours * 60 * 60 * 1_000;
+        return System.currentTimeMillis() - file.lastModified() < freshTimeMS;
     }
 }
