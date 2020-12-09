@@ -29,6 +29,11 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     public AppUpdateChecker(Context context, AppUpdateCheckerListener listener) {
         Log.d(TAG, "Starting...");
 
+        // Workaround for Android 6 (cannot write to app cache dir)
+        if (Build.VERSION.SDK_INT == 23) {
+            PermissionHelpers.verifyStoragePermissions(context);
+        }
+
         mContext = context.getApplicationContext();
         mListener = listener;
         mVersionChecker = new AppVersionChecker(mContext, this);
@@ -73,11 +78,6 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     private void checkForUpdatesInt(String[] updateManifestUrls) {
-        // Workaround for Android 6 (cannot write to app cache dir)
-        if (Build.VERSION.SDK_INT == 23) {
-            PermissionHelpers.verifyStoragePermissions(mContext);
-        }
-
         if (!checkPostponed()) {
             mVersionChecker.checkForUpdates(updateManifestUrls);
         }
