@@ -31,7 +31,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
         // Workaround for Android 6 (cannot write to app cache dir)
         if (Build.VERSION.SDK_INT == 23) {
-            PermissionHelpers.verifyStoragePermissions(context);
+            PermissionHelpers.verifyStoragePermissions(context); // should be an Activity context
         }
 
         mContext = context.getApplicationContext();
@@ -72,9 +72,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     public void forceCheckForUpdates(String[] updateManifestUrls) {
-        if (isUpdateCheckEnabled()) {
-            checkForUpdatesInt(updateManifestUrls);
-        }
+        checkForUpdatesInt(updateManifestUrls);
     }
 
     private void checkForUpdatesInt(String[] updateManifestUrls) {
@@ -140,7 +138,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     public void enableUpdateCheck(boolean enable) {
-        mSettingsManager.setMinIntervalMs(enable ? SettingsManager.CHECK_INTERVAL_DEFAULT : -1);
+        mSettingsManager.setMinIntervalMs(enable ? SettingsManager.CHECK_INTERVAL_DEFAULT_MS : -1);
     }
 
     public boolean isUpdateCheckEnabled() {

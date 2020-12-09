@@ -6,7 +6,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import edu.mit.mobile.android.appupdater.R;
 
 public class SettingsManager {
-    public static final long CHECK_INTERVAL_DEFAULT = 60 * 60 * 1_000;
+    public static final long CHECK_INTERVAL_DEFAULT_MS = 60 * 1_000;
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static final String SHARED_PREFERENCES_NAME = "com.liskovsoft.appupdatechecker2.preferences";
     private static final String PREF_CHECK_INTERVAL_MS = "check_interval_ms";
@@ -63,7 +63,7 @@ public class SettingsManager {
 
     public long getMinIntervalMs() {
         String interval = mPrefs.getString(PREF_CHECK_INTERVAL_MS, null);
-        return interval != null ? Long.parseLong(interval) : CHECK_INTERVAL_DEFAULT;
+        return interval != null ? Long.parseLong(interval) : CHECK_INTERVAL_DEFAULT_MS;
     }
 
     public void setMinIntervalMs(long milliseconds) {
