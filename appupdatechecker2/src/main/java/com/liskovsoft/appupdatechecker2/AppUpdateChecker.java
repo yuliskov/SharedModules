@@ -62,7 +62,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
      * Checks for updates if updates haven't been checked for recently and if checking is enabled.
      */
     public void checkForUpdates(String[] updateManifestUrls) {
-        if (isEnabled() && isStale()) {
+        if (isUpdateCheckEnabled() && isStale()) {
             checkForUpdatesInt(updateManifestUrls);
         }
     }
@@ -72,7 +72,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     }
 
     public void forceCheckForUpdates(String[] updateManifestUrls) {
-        if (isEnabled()) {
+        if (isUpdateCheckEnabled()) {
             checkForUpdatesInt(updateManifestUrls);
         }
     }
@@ -123,14 +123,6 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
             mListener.onUpdateFound(mLatestVersionName, mChangeLog, path);
         }
-    }
-
-    public boolean isEnabled() {
-        return mSettingsManager.isEnabled();
-    }
-
-    public void setEnabled(boolean enabled) {
-        mSettingsManager.setEnabled(enabled);
     }
 
     @Override
