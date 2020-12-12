@@ -8,7 +8,6 @@ import androidx.core.content.FileProvider;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -18,7 +17,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
@@ -35,15 +33,10 @@ public class FileHelpers {
     }
 
     public static File getCacheDir(Context context) {
-        File cacheDir = null;
+        File cacheDir;
 
         // Android 6.0 fix (providers not supported)
         cacheDir = context.getExternalCacheDir();
-
-        //if (!PermissionHelpers.hasStoragePermissions(context)) {
-        //    MessageHelpers.showMessage(context, "Storage permission not granted!");
-        //    return null;
-        //}
 
         if (cacheDir == null || !cacheDir.canWrite()) { // no storage, try to use internal one
             cacheDir = Environment.getExternalStorageDirectory();
@@ -55,6 +48,28 @@ public class FileHelpers {
         }
 
         return cacheDir;
+    }
+
+    /**
+     * Note: we cannot use an application context here
+     * @param context only Activity context is supported
+     */
+    public static void checkCachePermissions(Context context) {
+        File cacheDir;
+
+        // Android 6.0 fix (providers not supported)
+        cacheDir = context.getExternalCacheDir();
+
+        if (cacheDir == null || !cacheDir.canWrite()) { // no storage, try to use internal one
+            cacheDir = Environment.getExternalStorageDirectory();
+
+            if (cacheDir == null || !cacheDir.canWrite()) {
+                if (VERSION.SDK_INT <= 23) {
+                    // On Android 6.0 we can't use file providers so we need to ask a permissions
+                    PermissionHelpers.verifyStoragePermissions(context); // should be an Activity context
+                }
+            }
+        }
     }
 
     public static File getBackupDir(Context context) {
