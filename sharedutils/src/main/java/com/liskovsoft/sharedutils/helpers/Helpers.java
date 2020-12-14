@@ -926,7 +926,8 @@ public final class Helpers {
     private static Object escapeDelim(Object obj) {
         if (obj instanceof String) {
             obj = ((String) obj)
-                    .replace(",", "COMMA");
+                    .replace(",", "COMMA")
+                    .replace("|", "PIPE");
         }
 
         return obj;
@@ -935,7 +936,8 @@ public final class Helpers {
     private static Object unescapeDelim(Object obj) {
         if (obj instanceof String) {
             obj = ((String) obj)
-                    .replace(",", "COMMA");
+                    .replace("COMMA", ",")
+                    .replace("PIPE", "|");
         }
 
         return obj;
