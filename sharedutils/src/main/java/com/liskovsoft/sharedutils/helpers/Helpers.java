@@ -160,6 +160,14 @@ public final class Helpers {
         return FileHelpers.toString(content);
     }
 
+    public static String toString(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+
+        return obj.toString();
+    }
+
     public static InputStream toStream(String content) {
         return FileHelpers.toStream(content);
     }
@@ -779,7 +787,7 @@ public final class Helpers {
             return null;
         }
 
-        return (String) unescapeDelim(str);
+        return str;
     }
 
     public static int parseInt(String[] arr, int index) {
@@ -825,19 +833,19 @@ public final class Helpers {
     }
 
     public static String[] splitArray(String arr) {
-        return Helpers.split("\\|", arr);
+        return Helpers.split("%AR%", arr);
     }
 
     public static String mergeArray(Object... items) {
-        return Helpers.merge("|", items);
+        return Helpers.merge("%AR%", items);
     }
 
     public static String[] splitObject(String obj) {
-        return Helpers.split(",", obj);
+        return Helpers.split("%OB%", obj);
     }
 
     public static String mergeObject(Object... params) {
-        return Helpers.merge(",", params);
+        return Helpers.merge("%OB%", params);
     }
 
     private static String[] split(String delim, String data) {
@@ -860,7 +868,7 @@ public final class Helpers {
                 sb.append(delim);
             }
 
-            sb.append(escapeDelim(param));
+            sb.append(param);
         }
 
         return sb.toString();
@@ -923,23 +931,7 @@ public final class Helpers {
         return outValue.resourceId;
     }
 
-    private static Object escapeDelim(Object obj) {
-        if (obj instanceof String) {
-            obj = ((String) obj)
-                    .replace(",", "COMMA")
-                    .replace("|", "PIPE");
-        }
-
-        return obj;
-    }
-
-    private static Object unescapeDelim(Object obj) {
-        if (obj instanceof String) {
-            obj = ((String) obj)
-                    .replace("COMMA", ",")
-                    .replace("PIPE", "|");
-        }
-
-        return obj;
+    public static <T> T get(T obj, T defObj) {
+        return obj != null ? obj : defObj;
     }
 }
