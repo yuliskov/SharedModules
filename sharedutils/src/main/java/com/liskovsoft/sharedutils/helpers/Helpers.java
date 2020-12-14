@@ -31,7 +31,6 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -780,7 +779,7 @@ public final class Helpers {
             return null;
         }
 
-        return str;
+        return (String) unescapeDelim(str);
     }
 
     public static int parseInt(String[] arr, int index) {
@@ -861,7 +860,7 @@ public final class Helpers {
                 sb.append(delim);
             }
 
-            sb.append(param);
+            sb.append(escapeDelim(param));
         }
 
         return sb.toString();
@@ -922,5 +921,23 @@ public final class Helpers {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(attrName, outValue, true);
         return outValue.resourceId;
+    }
+
+    private static Object escapeDelim(Object obj) {
+        if (obj instanceof String) {
+            obj = ((String) obj)
+                    .replace(",", "COMMA");
+        }
+
+        return obj;
+    }
+
+    private static Object unescapeDelim(Object obj) {
+        if (obj instanceof String) {
+            obj = ((String) obj)
+                    .replace(",", "COMMA");
+        }
+
+        return obj;
     }
 }
