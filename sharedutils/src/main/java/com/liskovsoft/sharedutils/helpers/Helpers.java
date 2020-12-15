@@ -833,7 +833,7 @@ public final class Helpers {
     }
 
     public static String[] splitArray(String arr) {
-        return Helpers.split("%AR%", arr);
+        return splitArrayLegacy(Helpers.split("%AR%", arr), arr);
     }
 
     public static String mergeArray(Object... items) {
@@ -841,7 +841,7 @@ public final class Helpers {
     }
 
     public static String[] splitObject(String obj) {
-        return Helpers.split("%OB%", obj);
+        return splitObjectLegacy(Helpers.split("%OB%", obj), obj);
     }
 
     public static String mergeObject(Object... params) {
@@ -933,5 +933,21 @@ public final class Helpers {
 
     public static <T> T get(T obj, T defObj) {
         return obj != null ? obj : defObj;
+    }
+
+    private static String[] splitArrayLegacy(String[] split, String arr) {
+        if (split != null && split.length == 1) {
+            return split("|", arr);
+        }
+
+        return split;
+    }
+
+    private static String[] splitObjectLegacy(String[] split, String obj) {
+        if (split != null && split.length == 1) {
+            return split(",", obj);
+        }
+
+        return split;
     }
 }
