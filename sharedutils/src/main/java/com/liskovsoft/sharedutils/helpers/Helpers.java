@@ -431,6 +431,18 @@ public final class Helpers {
         return first.equals(second);
     }
 
+    public static boolean contains(String first, String second) {
+        if (first == null && second == null) {
+            return true;
+        }
+
+        if (first == null || second == null) {
+            return false;
+        }
+
+        return first.contains(second) || second.contains(first);
+    }
+
     public static boolean isDash(String id) {
         if (!Helpers.isNumeric(id)) {
             return false;
