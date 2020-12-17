@@ -440,6 +440,9 @@ public final class Helpers {
             return false;
         }
 
+        first = first.toLowerCase();
+        second = second.toLowerCase();
+
         return first.contains(second) || second.contains(first);
     }
 
