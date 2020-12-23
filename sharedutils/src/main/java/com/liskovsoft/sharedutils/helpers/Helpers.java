@@ -58,8 +58,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Helpers {
-    private static HashMap<String, List<String>> sCache = new HashMap<>();
+    private static final String ARRAY_DELIM = "%AR%";
+    private static final String OBJECT_DELIM = "%OB%";
+    private static final String LEGACY_ARRAY_DELIM = "|";
+    private static final String LEGACY_OBJECT_DELIM = ",";
     public static final int REMOVE_PACKAGE_CODE = 521;
+    private static HashMap<String, List<String>> sCache = new HashMap<>();
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
@@ -848,19 +852,19 @@ public final class Helpers {
     }
 
     public static String[] splitArray(String arr) {
-        return splitArrayLegacy(Helpers.split("%AR%", arr), arr);
+        return splitArrayLegacy(split(ARRAY_DELIM, arr), arr);
     }
 
     public static String mergeArray(Object... items) {
-        return Helpers.merge("%AR%", items);
+        return Helpers.merge(ARRAY_DELIM, items);
     }
 
     public static String[] splitObject(String obj) {
-        return splitObjectLegacy(Helpers.split("%OB%", obj), obj);
+        return splitObjectLegacy(split(OBJECT_DELIM, obj), obj);
     }
 
     public static String mergeObject(Object... params) {
-        return Helpers.merge("%OB%", params);
+        return Helpers.merge(OBJECT_DELIM, params);
     }
 
     private static String[] split(String delim, String data) {
@@ -868,7 +872,7 @@ public final class Helpers {
             return null;
         }
 
-        return data.split(delim);
+        return data.split(Pattern.quote(delim));
     }
 
     private static String merge(String delim, Object... params) {
@@ -952,7 +956,7 @@ public final class Helpers {
 
     private static String[] splitArrayLegacy(String[] split, String arr) {
         if (split != null && split.length == 1) {
-            return split("|", arr);
+            return split(LEGACY_ARRAY_DELIM, arr);
         }
 
         return split;
@@ -960,7 +964,7 @@ public final class Helpers {
 
     private static String[] splitObjectLegacy(String[] split, String obj) {
         if (split != null && split.length == 1) {
-            return split(",", obj);
+            return split(LEGACY_OBJECT_DELIM, obj);
         }
 
         return split;
