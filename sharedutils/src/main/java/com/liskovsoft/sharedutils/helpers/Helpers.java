@@ -172,6 +172,23 @@ public final class Helpers {
         return obj.toString();
     }
 
+    public static String toString(float num) {
+        if (num % 1.0 != 0) {
+            return String.valueOf(num);
+        } else {
+            return String.valueOf((int) num);
+        }
+    }
+
+    public static String toIntString(Object floatOrIntString) {
+        if (floatOrIntString == null) {
+            return null;
+        }
+
+        float val = Float.parseFloat(String.valueOf(floatOrIntString));
+        return String.valueOf((int) val);
+    }
+
     public static InputStream toStream(String content) {
         return FileHelpers.toStream(content);
     }
@@ -307,15 +324,6 @@ public final class Helpers {
         Type type = new TypeToken<Map<String, T>>(){}.getType();
         Gson gson = new Gson();
         return gson.fromJson(jsonContent, type);
-    }
-
-    public static String toIntString(Object floatOrIntString) {
-        if (floatOrIntString == null) {
-            return null;
-        }
-
-        float val = Float.parseFloat(String.valueOf(floatOrIntString));
-        return String.valueOf((int) val);
     }
 
     /**
