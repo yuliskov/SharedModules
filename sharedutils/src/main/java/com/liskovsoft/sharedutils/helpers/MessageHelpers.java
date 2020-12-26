@@ -67,13 +67,27 @@ public class MessageHelpers {
     }
 
     /**
+     * Shows toast message.<br/>
+     * Uses resource id as message.
+     * @param ctx context
+     * @param resId resource id
+     */
+    public static void showMessage(Context ctx, int resId) {
+        if (ctx != null) {
+            showMessage(ctx, ctx.getResources().getString(resId));
+        }
+    }
+
+    /**
      * Shows long toast message.<br/>
      * Uses resource id as message.
      * @param ctx context
      * @param resId resource id
      */
     public static void showLongMessage(Context ctx, int resId) {
-        showLongMessage(ctx, ctx.getResources().getString(resId));
+        if (ctx != null) {
+            showLongMessage(ctx, ctx.getResources().getString(resId));
+        }
     }
 
     public static void showLongMessage(Context ctx, String msg) {
@@ -86,16 +100,6 @@ public class MessageHelpers {
         for (int i = 0; i < 3; i++) {
             showMessage(ctx, TAG, msg);
         }
-    }
-
-    /**
-     * Shows toast message.<br/>
-     * Uses resource id as message.
-     * @param ctx context
-     * @param resId resource id
-     */
-    public static void showMessage(Context ctx, int resId) {
-        showMessage(ctx, ctx.getResources().getString(resId));
     }
 
     public static void showLongMessageEndPause(Context context, int resId) {
