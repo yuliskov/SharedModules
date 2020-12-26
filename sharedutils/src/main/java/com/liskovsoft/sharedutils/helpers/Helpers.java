@@ -977,4 +977,17 @@ public final class Helpers {
 
         return split;
     }
+
+    public static int[] range(int start, int end, int step) {
+        int size = (Math.abs(start) + Math.abs(end)) / step + 1;
+        int[] result = new int[size];
+        int value = start;
+
+        for (int i = 0; i < size; i++) {
+             result[i] = value;
+             value += step;
+        }
+
+        return result;
+    }
 }
