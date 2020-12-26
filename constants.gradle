@@ -1,7 +1,7 @@
 project.ext {
-    // ExoPlayer is based on the Android Codec APIs. 
-    // These are available starting with API 16
-    minSdkVersion = 16
+    // ExoPlayer (Android Codec APIs) requires API 16+
+    // Leanback requires API 17+
+    minSdkVersion = 17
     targetSdkVersion = 28
     compileSdkVersion = 28
 
