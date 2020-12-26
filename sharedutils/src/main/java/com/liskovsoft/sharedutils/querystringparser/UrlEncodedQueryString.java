@@ -31,7 +31,9 @@ public class UrlEncodedQueryString implements UrlQueryString {
 
     private URI getURI(String url) {
         try {
-            return new URI(url);
+            // Fix illegal character exception.
+            // E.g. https://www.youtube.com/results?search_query=Джентльмены удачи
+            return new URI(url.replace(" ", "+"));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
