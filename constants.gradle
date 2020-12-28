@@ -2,7 +2,11 @@ project.ext {
     // ExoPlayer (Android Codec APIs) requires API 16+
     // Leanback requires API 17+
     minSdkVersion = 17
-    targetSdkVersion = 28
+    // Fix AppSettingsActivity crash: "Only fullscreen opaque activities can request orientation".
+    // Error happen only on Android 8.0 (api 26) when you set activity orientation in manifest.
+    // Possible fix is to set targetSdkVersion to 26.
+    // More info: https://stackoverflow.com/questions/48072438/java-lang-illegalstateexception-only-fullscreen-opaque-activities-can-request-o
+    targetSdkVersion = 26
     compileSdkVersion = 28
 
     buildToolsVersion = '28.0.3'

@@ -23,6 +23,11 @@ public class LocaleContextWrapper extends ContextWrapper {
         }
 
         Resources res = context.getResources();
+
+        if (res == null) {
+            return context;
+        }
+
         Configuration configuration = res.getConfiguration();
 
         if (VERSION.SDK_INT >= 24) {
