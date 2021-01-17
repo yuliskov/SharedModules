@@ -51,7 +51,7 @@ project.ext {
     dnsjavaVersion = '2.1.8'
     xwalkSharedLibraryVersion = '23.53.589.4'
     xwalkCoreLibraryVersion = '23.53.589.4'
-    commonsIOVersion = '2.5'
+    commonsIOVersion = '2.8.0'
     crashlyticsVersion = '2.10.1@aar'
     assertJVersion = '3.11.1'
     espressoCoreVersion = '2.2.2'

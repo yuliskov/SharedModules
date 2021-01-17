@@ -859,16 +859,24 @@ public final class Helpers {
         return !floatEquals(result, -1) ? result : defaultValue;
     }
 
-    public static String[] splitArray(String arr) {
+    public static String[] splitArrayLegacy(String arr) {
         return splitArrayLegacy(split(ARRAY_DELIM, arr), arr);
+    }
+
+    public static String[] splitArray(String arr) {
+        return split(ARRAY_DELIM, arr);
     }
 
     public static String mergeArray(Object... items) {
         return Helpers.merge(ARRAY_DELIM, items);
     }
 
-    public static String[] splitObject(String obj) {
+    public static String[] splitObjectLegacy(String obj) {
         return splitObjectLegacy(split(OBJECT_DELIM, obj), obj);
+    }
+
+    public static String[] splitObject(String obj) {
+        return split(OBJECT_DELIM, obj);
     }
 
     public static String mergeObject(Object... params) {

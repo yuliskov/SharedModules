@@ -12,6 +12,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
     private final static String MESSAGE_AUTH_BODY = "message_auth_body";
     private final static String MEDIA_SERVICE_REFRESH_TOKEN = "media_service_refresh_token";
     private final static String MEDIA_SERVICE_ACCOUNT_DATA = "media_service_account_data";
+    private final static String MEDIA_SERVICE_DATA = "media_service_data";
     private static final String RECOMMENDED_PLAYLIST_TYPE = "recommended_playlist_type";
     public static final String PLAYLIST_TYPE_RECOMMENDATIONS = "playlist_type_recommendations";
     public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
@@ -74,5 +75,13 @@ public class GlobalPreferences extends SharedPreferencesBase {
 
     public String getMediaServiceAccountData() {
         return getString(MEDIA_SERVICE_ACCOUNT_DATA, null);
+    }
+
+    public void setMediaServiceData(String data) {
+        putString(MEDIA_SERVICE_DATA, data);
+    }
+
+    public String getMediaServiceData() {
+        return getString(MEDIA_SERVICE_DATA, null);
     }
 }

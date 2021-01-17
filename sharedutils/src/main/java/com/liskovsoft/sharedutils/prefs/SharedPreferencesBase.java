@@ -31,6 +31,10 @@ public class SharedPreferencesBase {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    public Context getContext() {
+        return mContext;
+    }
+
     public void putLong(String key, long val) {
         mPrefs.edit()
                 .putLong(key, val)

@@ -49,6 +49,16 @@ public class AppInfoHelpers {
         return null;
     }
 
+    public static String getAppLabel(Context context) {
+        PackageInfo packageInfo = createPackageInfo(context);
+
+        if (packageInfo != null) {
+            return packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
+        }
+
+        return null;
+    }
+
     private static PackageInfo createPackageInfo(Context context) {
         try {
             return context
