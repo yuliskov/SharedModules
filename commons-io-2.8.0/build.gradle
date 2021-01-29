@@ -1,0 +1,53 @@
+apply from: '../constants.gradle'
+apply plugin: 'com.android.library'
+
+android {
+    // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // allow other modules import debug/release configurations
+    //publishNonDefault true
+
+    compileSdkVersion project.properties.compileSdkVersion
+    buildToolsVersion project.properties.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.properties.minSdkVersion
+        targetSdkVersion project.properties.targetSdkVersion
+        versionCode 10
+        versionName "1.0.1"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError true
+        lintConfig rootProject.file('lint.xml')
+    }
+}
+
+dependencies {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testImplementation 'org.apache.commons:commons-lang3:' + commonsLangVersion
+    testImplementation 'com.google.jimfs:jimfs:' + jimfsVersion
+    testImplementation 'junit:junit:' + junitVersion
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:' + jupiterVersion
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:' + jupiterVersion
+    testImplementation 'org.junit-pioneer:junit-pioneer:' + junitPioneerVersion
+    testImplementation 'org.mockito:mockito-core:' + mockitoVersion
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}

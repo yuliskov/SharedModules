@@ -1,7 +1,8 @@
 def rootDir = gradle.ext.sharedModulesRoot
 
-include ':sharedutils', ':sharedtests', ':appupdatechecker', ':appupdatechecker2'
+include ':sharedutils', ':sharedtests', ':appupdatechecker', ':appupdatechecker2', ':commons-io-2.8.0'
 project(':sharedutils').projectDir = new File(rootDir, 'sharedutils')
 project(':sharedtests').projectDir = new File(rootDir, 'sharedtests')
 project(':appupdatechecker').projectDir = new File(rootDir, 'appupdatechecker')
 project(':appupdatechecker2').projectDir = new File(rootDir, 'appupdatechecker2')
+project(':commons-io-2.8.0').projectDir = new File(rootDir, 'commons-io-2.8.0')
