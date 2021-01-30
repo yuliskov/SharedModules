@@ -3,6 +3,7 @@ package com.liskovsoft.sharedutils.helpers;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -103,6 +104,12 @@ public final class Helpers {
 
     public static String getDeviceName() {
         return String.format("%s (%s)", Build.MODEL, Build.PRODUCT);
+    }
+
+    public static String getUserDeviceName() {
+        BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+
+        return myDevice != null ? myDevice.getName() : Build.MODEL;
     }
 
     public static String getAndroidVersion() {
