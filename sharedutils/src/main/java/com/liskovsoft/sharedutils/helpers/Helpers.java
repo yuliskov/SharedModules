@@ -804,6 +804,14 @@ public final class Helpers {
         return Integer.parseInt(numString);
     }
 
+    public static long parseLong(String numString) {
+        if (!isInteger(numString)) {
+            return -1;
+        }
+
+        return Long.parseLong(numString);
+    }
+
     public static float parseFloat(String numString) {
         if (!isNumeric(numString)) {
             return -1;
