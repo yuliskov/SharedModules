@@ -30,11 +30,16 @@ public class UrlEncodedQueryString implements UrlQueryString {
     }
 
     private URI getURI(String url) {
+        if (url == null) {
+            return null;
+        }
+
         try {
             // Fix illegal character exception. E.g.
             // https://www.youtube.com/results?search_query=Джентльмены удачи
             // https://www.youtube.com/results?search_query=|FR|+Mrs.+Doubtfire
-            return new URI(url
+            return new URI(url.length() > 100 ? // OOM fix
+                    url : url
                       .replace(" ", "+")
                       .replace("|", "%7C")
             );
