@@ -7,26 +7,24 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class UrlEncodedQueryString implements UrlQueryString {
-    private String mUrl;
-    private URI mParsedUri;
+    private String mQueryPrefix;
     private UrlEncodedQueryStringBase mQueryString;
-    private boolean mHasPrefix;
+    private String mUrl;
 
     private UrlEncodedQueryString(String url) {
         if (url == null) {
             return;
         }
 
-        if (!Helpers.isValidUrl(url)) { // not full url
-            mUrl = "http://fakeurl.com?" + url;
+        mUrl = url;
+
+        if (Helpers.isValidUrl(url)) {
+            URI parsedUrl = getURI(url);
+            mQueryPrefix = String.format("%s://%s%s", parsedUrl.getScheme(), parsedUrl.getHost(), parsedUrl.getPath());
+            mQueryString = UrlEncodedQueryStringBase.parse(parsedUrl);
         } else {
-            mUrl = url;
-            mHasPrefix = true;
+            mQueryString = UrlEncodedQueryStringBase.parse(url);
         }
-
-        mParsedUri = getURI(mUrl);
-
-        mQueryString = UrlEncodedQueryStringBase.parse(mParsedUri);
     }
 
     private URI getURI(String url) {
@@ -86,17 +84,12 @@ public class UrlEncodedQueryString implements UrlQueryString {
     @NonNull
     @Override
     public String toString() {
-        String path = mParsedUri.getPath();
-        String host = mParsedUri.getHost();
-        String scheme = mParsedUri.getScheme();
-
-        if (!mHasPrefix) {
-            return mQueryString.toString();
-        }
-
-        return String.format("%s://%s%s?%s", scheme, host, path, mQueryString);
+        return mQueryPrefix != null ? String.format("%s?%s", mQueryPrefix, mQueryString) : mQueryString.toString();
     }
 
+    /**
+     * Check query string
+     */
     @Override
     public boolean isValid() {
         if (mUrl == null) {
