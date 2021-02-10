@@ -981,7 +981,7 @@ public final class Helpers {
         return outValue.resourceId;
     }
 
-    public static <T> T get(T obj, T defObj) {
+    public static <T> T firstNonNull(T obj, T defObj) {
         return obj != null ? obj : defObj;
     }
 
