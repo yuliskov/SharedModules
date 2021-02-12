@@ -6,6 +6,7 @@ import android.os.Build.VERSION;
 import android.os.Environment;
 import androidx.core.content.FileProvider;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -199,10 +200,33 @@ public class FileHelpers {
 
     /**
      * Converts with respect to charset encoding.<br/>
-     * Use alt methods carefully.<br/>
+     * More optimized than alt method below?<br/>
      * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
      */
     public static String toString(InputStream content) {
+        if (content == null) {
+            return null;
+        }
+
+        String result = null;
+
+        try {
+            result = IOUtils.toString(content, "UTF-8");
+            content.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts with respect to charset encoding.<br/>
+     * Use alt methods carefully.<br/>
+     * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
+     */
+    public static String toStringAlt(InputStream content) {
         if (content == null) {
             return null;
         }
