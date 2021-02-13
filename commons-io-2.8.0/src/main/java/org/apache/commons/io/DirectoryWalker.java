@@ -20,11 +20,11 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Objects;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Abstract class that walks through a directory hierarchy and provides

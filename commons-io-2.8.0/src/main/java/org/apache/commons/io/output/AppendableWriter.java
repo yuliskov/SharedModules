@@ -16,9 +16,10 @@
  */
 package org.apache.commons.io.output;
 
+import org.apache.commons.io.mod.Objects;
+
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Objects;
 
 /**
  * Writer implementation that writes the data to an {@link Appendable}

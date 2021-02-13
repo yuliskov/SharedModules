@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import org.apache.commons.io.mod.Objects;
+
 import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
@@ -27,7 +29,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.util.Objects;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -227,8 +228,7 @@ public class ReaderInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {
-        // MOD: old api fix
-        //Objects.requireNonNull(array, "array");
+        Objects.requireNonNull(array, "array");
         if (len < 0 || off < 0 || (off + len) > array.length) {
             throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + off + ", length=" + len);

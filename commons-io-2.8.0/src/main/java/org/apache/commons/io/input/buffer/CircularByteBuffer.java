@@ -16,9 +16,8 @@
  */
 package org.apache.commons.io.input.buffer;
 
-import java.util.Objects;
-
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.mod.Objects;
 
 /**
  * A buffer, which doesn't need reallocation of byte arrays, because it

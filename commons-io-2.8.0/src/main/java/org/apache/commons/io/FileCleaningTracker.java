@@ -24,7 +24,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated

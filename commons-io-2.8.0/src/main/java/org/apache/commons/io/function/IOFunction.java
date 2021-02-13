@@ -18,10 +18,11 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Like {@link Function} but throws {@link IOException}.

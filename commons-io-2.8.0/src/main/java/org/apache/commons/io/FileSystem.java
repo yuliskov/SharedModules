@@ -17,9 +17,10 @@
 
 package org.apache.commons.io;
 
+import org.apache.commons.io.mod.Objects;
+
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Abstracts an OS' file system details, currently supporting the single use case of converting a file name String to a

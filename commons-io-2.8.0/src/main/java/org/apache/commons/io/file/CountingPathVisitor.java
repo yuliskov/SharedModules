@@ -22,9 +22,9 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Counts files, directories, and sizes, as a visit proceeds.

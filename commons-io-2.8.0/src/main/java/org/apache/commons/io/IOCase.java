@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io;
 
-import java.util.Objects;
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Enumeration of IO case sensitivity.

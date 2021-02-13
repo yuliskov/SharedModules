@@ -16,8 +16,9 @@
  */
 package org.apache.commons.io.input;
 
+import org.apache.commons.io.mod.Objects;
+
 import java.io.InputStream;
-import java.util.Objects;
 
 import static java.lang.Math.min;
 

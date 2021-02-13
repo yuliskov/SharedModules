@@ -18,8 +18,9 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.function.Consumer;
+
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Like {@link Consumer} but throws {@link IOException}.

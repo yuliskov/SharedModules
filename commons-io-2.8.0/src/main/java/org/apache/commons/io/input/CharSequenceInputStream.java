@@ -17,6 +17,8 @@
 
 package org.apache.commons.io.input;
 
+import org.apache.commons.io.mod.Objects;
+
 import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
@@ -28,7 +30,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.util.Objects;
 
 /**
  * {@link InputStream} implementation that can read from String, StringBuffer,

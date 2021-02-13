@@ -16,9 +16,10 @@
  */
 package org.apache.commons.io.input.buffer;
 
+import org.apache.commons.io.mod.Objects;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
 
 /**

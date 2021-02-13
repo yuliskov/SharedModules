@@ -16,13 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import org.apache.commons.io.mod.Objects;
+
 import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * Provides the contents of multiple Readers in sequence.

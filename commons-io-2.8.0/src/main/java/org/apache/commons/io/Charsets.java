@@ -16,8 +16,9 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.mod.StandardCharsets;
+
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;

@@ -18,7 +18,8 @@
 package org.apache.commons.io.file;
 
 import java.math.BigInteger;
-import java.util.Objects;
+
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Provides counters for files, directories, and sizes, as a visit proceeds.

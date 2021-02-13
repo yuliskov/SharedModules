@@ -17,10 +17,11 @@
 
 package org.apache.commons.io.input;
 
+import org.apache.commons.io.mod.Objects;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.util.Objects;
 
 /**
  * Streams data from a {@link RandomAccessFile} starting at its current position.

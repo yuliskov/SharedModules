@@ -24,10 +24,10 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.mod.Objects;
 
 /**
  * Writer of files that allows the encoding to be set.
