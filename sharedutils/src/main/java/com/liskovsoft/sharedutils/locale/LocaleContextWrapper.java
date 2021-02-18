@@ -39,11 +39,9 @@ public class LocaleContextWrapper extends ContextWrapper {
             configuration.setLocales(localeList);
 
             context = context.createConfigurationContext(configuration);
-
         } else if (VERSION.SDK_INT >= 17) {
             configuration.setLocale(newLocale);
             context = context.createConfigurationContext(configuration);
-
         } else {
             configuration.locale = newLocale;
             res.updateConfiguration(configuration, res.getDisplayMetrics());
@@ -53,20 +51,20 @@ public class LocaleContextWrapper extends ContextWrapper {
     }
 
     @SuppressWarnings("deprecation")
-    public static void apply(Configuration configuration, Locale newLocale) {
-        if (newLocale == null || configuration == null) {
+    public static void apply(Context context, Locale newLocale) {
+        if (context == null || newLocale == null) {
             return;
         }
 
-        if (VERSION.SDK_INT >= 24) {
-            configuration.setLocale(newLocale);
-            LocaleList localeList = new LocaleList(newLocale);
-            LocaleList.setDefault(localeList);
-            configuration.setLocales(localeList);
-        } else if (VERSION.SDK_INT >= 17) {
-            configuration.setLocale(newLocale);
-        } else {
-            configuration.locale = newLocale;
+        Resources res = context.getResources();
+
+        if (res == null) {
+            return;
         }
+
+        Configuration configuration = res.getConfiguration();
+
+        configuration.locale = newLocale;
+        res.updateConfiguration(configuration, res.getDisplayMetrics());
     }
 }
