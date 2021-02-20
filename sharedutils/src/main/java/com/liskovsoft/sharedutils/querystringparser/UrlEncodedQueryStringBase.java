@@ -847,7 +847,7 @@ class UrlEncodedQueryStringBase {
 	/**
 	 * Helper method for append and set
 	 *
-	 * @param query
+	 * @param parameters
 	 *            <code>www-form-urlencoded</code> string
 	 * @param append
 	 *            whether to append (or set)
