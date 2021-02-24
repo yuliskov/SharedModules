@@ -5,8 +5,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class SharedPreferencesBase {
-    private final SharedPreferences mPrefs;
-    protected final Context mContext;
+    private SharedPreferences mPrefs;
+    protected Context mContext;
+
+    // For testing purposes
+    public SharedPreferencesBase() {
+    }
 
     public SharedPreferencesBase(Context context, String prefName) {
         mContext = context;
