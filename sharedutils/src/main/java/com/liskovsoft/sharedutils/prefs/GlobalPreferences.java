@@ -20,10 +20,6 @@ public class GlobalPreferences extends SharedPreferencesBase {
     public static final String PLAYLIST_TYPE_NONE = "playlist_type_none";
     private static final List<Runnable> sCallbacks = new ArrayList<>();
 
-    // For testing purposes
-    public GlobalPreferences() {
-    }
-
     private GlobalPreferences(Context context) {
         super(context, SHARED_PREFERENCES_NAME);
     }
