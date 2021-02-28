@@ -39,13 +39,17 @@ public class MessageHelpers {
     }
 
     public static void showMessage(final Context ctx, final String msg) {
+        showMessage(ctx, msg, true);
+    }
+
+    private static void showMessage(final Context ctx, final String msg, boolean cancelPrevious) {
         if (ctx == null) {
             return;
         }
 
         Runnable toast = () -> {
             try {
-                if (mCurrentToast != null) {
+                if (mCurrentToast != null && cancelPrevious) {
                     mCurrentToast.cancel();
                 }
 
@@ -92,7 +96,7 @@ public class MessageHelpers {
 
     public static void showLongMessage(Context ctx, String msg) {
         for (int i = 0; i < 3; i++) {
-            showMessage(ctx, msg);
+            showMessage(ctx, msg, false);
         }
     }
 

@@ -171,6 +171,10 @@ public final class Helpers {
         return FileHelpers.toString(content);
     }
 
+    public static String toString(Intent intent) {
+        return dumpIntent(intent);
+    }
+
     public static String toString(Object obj) {
         if (obj == null) {
             return null;
