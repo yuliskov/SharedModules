@@ -83,6 +83,19 @@ public class MessageHelpers {
     }
 
     /**
+     * Shows formatted toast message.<br/>
+     * Uses resource id as message.
+     * @param ctx context
+     * @param resId resource id
+     * @param formatArgs format arguments
+     */
+    public static void showMessage(Context ctx, int resId, Object... formatArgs) {
+        if (ctx != null) {
+            showMessage(ctx, ctx.getResources().getString(resId, formatArgs));
+        }
+    }
+
+    /**
      * Shows long toast message.<br/>
      * Uses resource id as message.
      * @param ctx context
