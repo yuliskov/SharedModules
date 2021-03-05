@@ -211,6 +211,8 @@ public class FileHelpers {
         String result = null;
 
         try {
+            //System.gc(); // OutOfMemoryError fix (simple wrapper)?
+            Runtime.getRuntime().gc(); // OutOfMemoryError fix?
             result = IOUtils.toString(content, "UTF-8");
             content.close();
         } catch (IOException e) {
