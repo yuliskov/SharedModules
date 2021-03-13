@@ -928,7 +928,7 @@ public final class Helpers {
         return sb.toString();
     }
 
-    public static void openLink(String url, Context context) {
+    public static void openLink(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
