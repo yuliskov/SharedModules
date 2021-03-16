@@ -30,6 +30,7 @@ import java.util.List;
  *
  * @since 2.7
  */
+@SuppressWarnings("unchecked")
 public class IOExceptionList extends IOException {
 
     private static final long serialVersionUID = 1L;

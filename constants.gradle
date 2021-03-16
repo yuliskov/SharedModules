@@ -29,7 +29,7 @@ project.ext {
     testRunnerVersion = '1.0.2'
     legacyExoplayerVersion = '2.9.6'
     // exoplayerVersionOld = '2.10.8'
-    exoplayerVersion = '2.13.1'
+    exoplayerVersion = '2.12.1'
     // amazonExoplayerVersionOld = '2.11.3'
     amazonExoplayerVersion = '2.10.6'
     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
