@@ -31,7 +31,7 @@ project.ext {
     // exoplayerVersionOld = '2.10.8'
     exoplayerVersion = '2.12.3'
     // amazonExoplayerVersionOld = '2.10.6'
-    amazonExoplayerVersion = '2.10.6'
+    amazonExoplayerVersion = '2.9.6'
     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
     espressoVersion = '3.2.0'
     retrofitVersion = '2.5.0'

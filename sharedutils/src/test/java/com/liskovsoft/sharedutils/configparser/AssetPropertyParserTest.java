@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class AssetPropertyParserTest {
     private AssetPropertyParser2 mParser;
 
+    @SuppressWarnings("deprecation")
     @Before
     public void setUp() throws Exception {
         mParser = new AssetPropertyParser2(RuntimeEnvironment.application, TestHelpers.openResource("test.properties"));
