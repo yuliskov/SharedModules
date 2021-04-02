@@ -13,11 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageHelpers {
-    private static long sExitMsgTimeMS = 0;
-    private static final int LONG_MSG_TIMEOUT = 5000;
-    private static final List<Toast> mToasts = new ArrayList<>();
-    private static final Runnable mCleanupContext = mToasts::clear;
-    private static final Handler mHandler = new Handler(Looper.getMainLooper());
+    private static final int LONG_MSG_TIMEOUT_MS = 5_000;
+    private static final int CLEANUP_TIMEOUT_MS = 10_000;
+    private static final List<Toast> sToasts = new ArrayList<>();
+    private static final Runnable sCleanupContext = sToasts::clear;
+    private static final Handler sHandler = new Handler(Looper.getMainLooper());
+    private static long sExitMsgTimeMS;
+    private static float sTextSize;
 
     public static void showMessage(final Context ctx, final String TAG, final Throwable ex) {
         showMessage(ctx, TAG, Helpers.toString(ex));
@@ -29,7 +31,7 @@ public class MessageHelpers {
 
     public static void showMessageThrottled(final Context ctx, final String msg) {
         // throttle msg calls
-        if (System.currentTimeMillis() - sExitMsgTimeMS < LONG_MSG_TIMEOUT) {
+        if (System.currentTimeMillis() - sExitMsgTimeMS < LONG_MSG_TIMEOUT_MS) {
             return;
         }
         sExitMsgTimeMS = System.currentTimeMillis();
@@ -49,7 +51,7 @@ public class MessageHelpers {
             try {
                 Toast currentToast = Toast.makeText(ctx, msg, Toast.LENGTH_LONG);
                 fixTextSize(currentToast, ctx);
-                saveToast(currentToast);
+                addAndCancelPrevIfNeeded(currentToast);
                 currentToast.show();
 
                 setupCleanup();
@@ -125,17 +127,20 @@ public class MessageHelpers {
     }
 
     private static void fixTextSize(Toast toast, Context context) {
-        float textSize = context.getResources().getDimension(R.dimen.dialog_text_size);
+        if (sTextSize == 0) {
+            // Maintain text size between app rebooting
+            sTextSize = context.getResources().getDimension(R.dimen.dialog_text_size);
+        }
 
         TextView messageTextView = extractMessageView(toast);
-        messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+        messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
     }
 
-    private static void saveToast(Toast newToast) {
-        mToasts.add(newToast);
+    private static void addAndCancelPrevIfNeeded(Toast newToast) {
+        sToasts.add(newToast);
         CharSequence originText = extractText(newToast);
 
-        for (Toast toast : mToasts) {
+        for (Toast toast : sToasts) {
             // Smart cancel only toasts that have different message
             // So remains possibility to long message to be displayed
             if (!extractText(toast).equals(originText)) {
@@ -155,7 +160,7 @@ public class MessageHelpers {
     }
 
     private static void setupCleanup() {
-        mHandler.removeCallbacks(mCleanupContext);
-        mHandler.postDelayed(mCleanupContext, 10_000);
+        sHandler.removeCallbacks(sCleanupContext);
+        sHandler.postDelayed(sCleanupContext, CLEANUP_TIMEOUT_MS);
     }
 }
