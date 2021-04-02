@@ -156,6 +156,6 @@ public class MessageHelpers {
 
     private static void setupCleanup() {
         mHandler.removeCallbacks(mCleanupContext);
-        mHandler.postDelayed(mCleanupContext, 5_000);
+        mHandler.postDelayed(mCleanupContext, 10_000);
     }
 }
