@@ -9,12 +9,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.liskovsoft.sharedutils.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MessageHelpers {
     private static long sExitMsgTimeMS = 0;
     private static final int LONG_MSG_TIMEOUT = 5000;
-    private static float mTextSize;
-    private static Toast mCurrentToast;
-    private static final Runnable mCleanupContext = () -> mCurrentToast = null;
+    private static final List<Toast> mToasts = new ArrayList<>();
+    private static final Runnable mCleanupContext = mToasts::clear;
     private static final Handler mHandler = new Handler(Looper.getMainLooper());
 
     public static void showMessage(final Context ctx, final String TAG, final Throwable ex) {
@@ -39,23 +41,16 @@ public class MessageHelpers {
     }
 
     public static void showMessage(final Context ctx, final String msg) {
-        showMessage(ctx, msg, true);
-    }
-
-    private static void showMessage(final Context ctx, final String msg, boolean cancelPrevious) {
         if (ctx == null) {
             return;
         }
 
         Runnable toast = () -> {
             try {
-                if (mCurrentToast != null && cancelPrevious) {
-                    mCurrentToast.cancel();
-                }
-
-                mCurrentToast = Toast.makeText(ctx, msg, Toast.LENGTH_LONG);
-                fixTextSize(mCurrentToast, ctx);
-                mCurrentToast.show();
+                Toast currentToast = Toast.makeText(ctx, msg, Toast.LENGTH_LONG);
+                fixTextSize(currentToast, ctx);
+                saveToast(currentToast);
+                currentToast.show();
 
                 setupCleanup();
             } catch (Exception ex) { // NPE fix
@@ -109,7 +104,7 @@ public class MessageHelpers {
 
     public static void showLongMessage(Context ctx, String msg) {
         for (int i = 0; i < 3; i++) {
-            showMessage(ctx, msg, false);
+            showMessage(ctx, msg);
         }
     }
 
@@ -130,13 +125,33 @@ public class MessageHelpers {
     }
 
     private static void fixTextSize(Toast toast, Context context) {
-        if (mTextSize == 0) {
-            mTextSize = context.getResources().getDimension(R.dimen.dialog_text_size);
-        }
+        float textSize = context.getResources().getDimension(R.dimen.dialog_text_size);
 
+        TextView messageTextView = extractMessageView(toast);
+        messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+    }
+
+    private static void saveToast(Toast newToast) {
+        mToasts.add(newToast);
+        CharSequence originText = extractText(newToast);
+
+        for (Toast toast : mToasts) {
+            // Smart cancel only toasts that have different message
+            // So remains possibility to long message to be displayed
+            if (!extractText(toast).equals(originText)) {
+                toast.cancel();
+            }
+        }
+    }
+
+    private static CharSequence extractText(Toast toast) {
+        TextView messageTextView = extractMessageView(toast);
+        return messageTextView.getText();
+    }
+
+    private static TextView extractMessageView(Toast toast) {
         ViewGroup group = (ViewGroup) toast.getView();
-        TextView messageTextView = (TextView) group.getChildAt(0);
-        messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        return (TextView) group.getChildAt(0);
     }
 
     private static void setupCleanup() {
