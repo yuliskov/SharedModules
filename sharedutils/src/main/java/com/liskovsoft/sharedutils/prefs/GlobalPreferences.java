@@ -5,6 +5,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GlobalPreferences extends SharedPreferencesBase {
     public static GlobalPreferences sInstance;
@@ -18,7 +19,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
     public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
     public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
     public static final String PLAYLIST_TYPE_NONE = "playlist_type_none";
-    private static final List<Runnable> sCallbacks = new ArrayList<>();
+    private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
         super(context, SHARED_PREFERENCES_NAME);
