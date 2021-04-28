@@ -41,7 +41,12 @@ public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public static void setOnInit(Runnable callback) {
-        sCallbacks.add(callback);
+        // Fix lost account after reboot bug
+        if (sInstance == null) {
+            sCallbacks.add(callback);
+        } else {
+            new Thread(callback).start(); // fix network on main thread exception
+        }
     }
 
     public void setRawAuthData(String data) {
