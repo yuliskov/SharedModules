@@ -52,9 +52,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1016,5 +1018,27 @@ public final class Helpers {
         }
 
         return result;
+    }
+
+    /**
+     * Creates map from string array resource. Uses '|' as delimiter.
+     * @return key/value map
+     */
+    public static Map<String, String> getMap(Context context, int arrayResId) {
+        return getMap(context.getResources().getStringArray(arrayResId), "|", new LinkedHashMap<>());
+    }
+
+    /**
+     * Creates map from string array. Uses any string as delimiter.
+     * @return key/value map
+     */
+    public static Map<String, String> getMap(String[] array, String delim, Map<String, String> defaultMap) {
+        for (String item : array) {
+            StringTokenizer tokenizer = new StringTokenizer(item, delim);
+            String key = tokenizer.nextToken();
+            String value = tokenizer.nextToken();
+            defaultMap.put(key, value);
+        }
+        return defaultMap;
     }
 }
