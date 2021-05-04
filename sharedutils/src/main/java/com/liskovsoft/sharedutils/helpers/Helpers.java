@@ -43,6 +43,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -763,7 +764,13 @@ public final class Helpers {
         try {
             Field f1 = getDeclaredField(these.getClass(), fieldName);
             if (f1 != null) {
+                // Change private modifier to public
                 f1.setAccessible(true);
+                // Remove final modifier
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(f1, f1.getModifiers() & ~Modifier.FINAL);
+                // Set field (at last)
                 f1.set(these, value);
             }
         } catch (Exception e) {
@@ -1040,5 +1047,21 @@ public final class Helpers {
             defaultMap.put(key, value);
         }
         return defaultMap;
+    }
+
+    public static int hashCode(Object... items) {
+        if (items == null || items.length == 0) {
+            return -1;
+        }
+
+        int hash = 0;
+
+        for (Object item : items) {
+            if (item != null) {
+                hash = 31 * hash + item.hashCode();
+            }
+        }
+
+        return hash;
     }
 }
