@@ -766,10 +766,10 @@ public final class Helpers {
             if (f1 != null) {
                 // Change private modifier to public
                 f1.setAccessible(true);
-                // Remove final modifier
-                Field modifiersField = Field.class.getDeclaredField("modifiers");
-                modifiersField.setAccessible(true);
-                modifiersField.setInt(f1, f1.getModifiers() & ~Modifier.FINAL);
+                // Remove final modifier (don't working!!!)
+                //Field modifiersField = Field.class.getDeclaredField("modifiers");
+                //modifiersField.setAccessible(true);
+                //modifiersField.setInt(f1, f1.getModifiers() & ~Modifier.FINAL);
                 // Set field (at last)
                 f1.set(these, value);
             }
