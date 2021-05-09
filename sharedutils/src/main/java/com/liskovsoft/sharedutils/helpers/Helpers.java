@@ -1049,6 +1049,9 @@ public final class Helpers {
         return defaultMap;
     }
 
+    /**
+     * Non-negative hash code generator.
+     */
     public static int hashCode(Object... items) {
         if (items == null || items.length == 0) {
             return -1;
@@ -1058,7 +1061,7 @@ public final class Helpers {
 
         for (Object item : items) {
             if (item != null) {
-                hash = 31 * hash + item.hashCode();
+                hash = 31 * hash + Math.abs(item.hashCode());
             }
         }
 
