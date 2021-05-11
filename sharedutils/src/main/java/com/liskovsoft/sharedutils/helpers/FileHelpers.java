@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import org.apache.commons.io.IOUtils;
@@ -306,11 +307,17 @@ public class FileHelpers {
     }
 
     // NOTE: Android 7.0 fix
+    @Nullable
     public static Uri getFileUri(Context context, String filePath) {
         // If your targetSdkVersion is 24 (Android 7.0) or higher, we have to use FileProvider class
         // https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
         if (VERSION.SDK_INT >= 24) {
-            return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".update_provider", new File(filePath));
+            try {
+                return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".update_provider", new File(filePath));
+            } catch (IllegalArgumentException e) {
+                // Failed to find configured root that contains /storage/emulated/0/Android/data/com.liskovsoft.smarttubetv.beta/cache/update.apk
+                return null;
+            }
         } else {
             return Uri.fromFile(new File(filePath));
         }

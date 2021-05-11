@@ -542,8 +542,13 @@ public final class Helpers {
             return;
         }
 
-        Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri file = FileHelpers.getFileUri(context, packagePath);
+
+        if (file == null) {
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(file, "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION); // without this flag android returned a intent error!
 
