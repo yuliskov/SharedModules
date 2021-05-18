@@ -36,10 +36,12 @@ public class UrlEncodedQueryString implements UrlQueryString {
             // Fix illegal character exception. E.g.
             // https://www.youtube.com/results?search_query=Джентльмены удачи
             // https://www.youtube.com/results?search_query=|FR|+Mrs.+Doubtfire
+            // https://youtu.be/wTw-jreMgCk\ (last char isn't valid)
             return new URI(url.length() > 100 ? // OOM fix
                     url : url
                       .replace(" ", "+")
                       .replace("|", "%7C")
+                      .replace("\\", "/")
             );
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
