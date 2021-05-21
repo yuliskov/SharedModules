@@ -86,7 +86,7 @@ public class AppDownloader extends AsyncTask<Uri[],Void,Void> {
 
                 if (destination != null) {
                     // It could be a web page instead of apk
-                    if (size > 1_000_000) {
+                    if (size > 5_000_000) {
                         path = destination.getPath();
                     } else { // do cleanup
                         FileHelpers.delete(destination.getPath());
