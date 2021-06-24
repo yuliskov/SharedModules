@@ -41,6 +41,7 @@ project.ext {
     okhttpVersion = '3.12.12' // Latest version with Android 4+ support
     okhttpLoggerVersion = '3.12.12' // Latest version with Android 4+ support
     okhttpProfilerVersion = '1.0.5'
+    okhttpBrotliVersion = '4.1.0'
     multiDexVersion = '2.0.0' // crashlytics fix on Android 4.4
     stethoVersion = '1.5.0' // Chrome Dev Tools
     glideVersion = '4.11.0'

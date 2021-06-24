@@ -45,6 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -1071,5 +1072,23 @@ public final class Helpers {
         }
 
         return hash;
+    }
+
+    public static String decode(String urlDecoded) {
+        try {
+            urlDecoded = URLDecoder.decode(urlDecoded, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return urlDecoded;
+    }
+
+    public static String encode(String anyString) {
+        try {
+            anyString = URLEncoder.encode(anyString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return anyString;
     }
 }

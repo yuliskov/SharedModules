@@ -35,6 +35,7 @@ import okio.ForwardingSource;
 import okio.Okio;
 import okio.Source;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,6 +70,7 @@ public final class DownloadManager {
     private InputStream mResponseStream;
     private int mTotalLen = 0;
     private Uri mFileUri;
+    private static final long MAX_DOWN_TIME_MS = 60 * 1_000; // 1 minute
 
     public DownloadManager(Context context) {
         mContext = context;
@@ -88,13 +90,34 @@ public final class DownloadManager {
             throw new IllegalStateException("Error: bad response");
         }
 
-        try {
-            // NOTE: actual downloading is going here (while reading a stream)
-            mResponseStream = new ByteArrayInputStream(response.body().bytes());
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
+        mResponseStream = new BufferedInputStream(response.body().byteStream());
+
+        if (mRequest.mDestinationUri != null) {
+            // NOTE: actual downloading is happen when reading the stream to file
+            mFileUri = streamToFile(mResponseStream, getDestination());
         }
     }
+
+    //private void doDownload() {
+    //    if (!isNetworkAvailable()) {
+    //        MessageHelpers.showMessage(mContext, "Internet connection not available!");
+    //    }
+    //
+    //    String url = mRequest.mDownloadUri.toString();
+    //
+    //    Response response = OkHttpHelpers.doOkHttpRequest(url, mClient);
+    //
+    //    if (response == null || response.body() == null) {
+    //        throw new IllegalStateException("Error: bad response");
+    //    }
+    //
+    //    try {
+    //        // NOTE: actual downloading is going here (while reading a stream)
+    //        mResponseStream = new ByteArrayInputStream(response.body().bytes());
+    //    } catch (IOException ex) {
+    //        throw new IllegalStateException(ex);
+    //    }
+    //}
 
     private void doDownload2() {
         if (!isNetworkAvailable()) {
@@ -148,6 +171,8 @@ public final class DownloadManager {
         FileOutputStream fos = null;
 
         try {
+            long downStartTimeMs = System.currentTimeMillis();
+
             fos = new FileOutputStream(destination.getPath());
 
             byte[] buffer = new byte[1024];
@@ -156,6 +181,12 @@ public final class DownloadManager {
             while ((len1 = is.read(buffer)) != -1) {
                 totalLen += len1;
                 fos.write(buffer, 0, len1);
+
+                if (System.currentTimeMillis() - downStartTimeMs > MAX_DOWN_TIME_MS) {
+                    // Oops. Downloading is taken too much time. Cancelling...
+                    totalLen = 0;
+                    break;
+                }
             }
 
             mTotalLen = totalLen;
@@ -168,6 +199,35 @@ public final class DownloadManager {
 
         return destination;
     }
+
+    //private Uri streamToFile(InputStream is, Uri destination) {
+    //    if (destination == null) {
+    //        return null;
+    //    }
+    //
+    //    FileOutputStream fos = null;
+    //
+    //    try {
+    //        fos = new FileOutputStream(destination.getPath());
+    //
+    //        byte[] buffer = new byte[1024];
+    //        int len1;
+    //        int totalLen = 0;
+    //        while ((len1 = is.read(buffer)) != -1) {
+    //            totalLen += len1;
+    //            fos.write(buffer, 0, len1);
+    //        }
+    //
+    //        mTotalLen = totalLen;
+    //    } catch (IOException ex) {
+    //        throw new IllegalStateException(ex);
+    //    } finally {
+    //        FileHelpers.closeStream(fos);
+    //        FileHelpers.closeStream(is);
+    //    }
+    //
+    //    return destination;
+    //}
 
     private Uri getDestination() {
         if (mRequest.mDestinationUri != null) {
@@ -191,12 +251,22 @@ public final class DownloadManager {
 
         doDownload();
 
-        if (mRequest.mDestinationUri != null) {
-            mFileUri = streamToFile(mResponseStream, getDestination());
-        }
-
         return mRequestId;
     }
+
+    //public long enqueue(MyRequest request) {
+    //    mFileUri = null;
+    //    mRequest = request;
+    //    mRequestId = new Random().nextLong();
+    //
+    //    doDownload();
+    //
+    //    if (mRequest.mDestinationUri != null) {
+    //        mFileUri = streamToFile(mResponseStream, getDestination());
+    //    }
+    //
+    //    return mRequestId;
+    //}
 
     public void remove(long downloadId) {
         mClient.dispatcher().cancelAll();
