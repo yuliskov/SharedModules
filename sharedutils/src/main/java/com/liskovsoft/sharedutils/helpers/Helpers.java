@@ -435,9 +435,12 @@ public final class Helpers {
     public static void makeActivityFullscreen(Activity activity) {
         activity.getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
 
+        View decorView = activity.getWindow().getDecorView();
+
         if (VERSION.SDK_INT >= 19) {
-            View decorView = activity.getWindow().getDecorView();
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        } else {
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
     }
 

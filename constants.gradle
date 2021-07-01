@@ -32,7 +32,8 @@ project.ext {
     // exoplayerVersion = '2.10.8' // Old
     exoplayerVersion = '2.12.3'
     // amazonExoplayerVersion = '2.10.6' // Old
-    amazonExoplayerVersion = '2.13.3'
+    // amazonExoplayerVersion = '2.13.3' // New
+    amazonExoplayerVersion = '2.10.6'
     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
     
     espressoVersion = '3.2.0'
