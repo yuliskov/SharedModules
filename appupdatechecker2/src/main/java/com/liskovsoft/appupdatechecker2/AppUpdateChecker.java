@@ -34,6 +34,9 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
         mVersionChecker = new AppVersionChecker(mContext, this);
         mDownloader = new AppDownloader(mContext, this);
         mSettingsManager = new SettingsManager(mContext);
+
+        //  Cleanup the storage. I don't want to accidentally install old version.
+        FileHelpers.delete(mSettingsManager.getApkPath());
     }
 
     /**
