@@ -766,6 +766,10 @@ public final class Helpers {
     }
 
     public static String replace(String content, Pattern oldVal, String newVal) {
+        if (content == null) {
+            return null;
+        }
+
         return oldVal.matcher(content).replaceFirst(newVal);
     }
 
