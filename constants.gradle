@@ -75,7 +75,7 @@ project.ext {
     firebaseCrashlyticsVersion = '17.2.1'
     
     //duktapeVersion = '1.4.0' // js interpreter
-    duktapeVersion = '1.2.0' // old one contains more *.so binaries
+    duktapeVersion = '1.1.0' // old one contains more *.so binaries and has smaller size than 1.2.0
     quickjsVersion = '0.9.0' // duktape fork?
     
     // My commons-io deps (Android 4.3 fix)
