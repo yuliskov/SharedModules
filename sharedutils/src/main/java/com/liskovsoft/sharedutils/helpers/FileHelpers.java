@@ -97,16 +97,10 @@ public class FileHelpers {
     }
 
     /**
-     * Deletes cache of app that belongs to the given context
-     * @param context app activity or context
+     * Deletes cache of the app
      */
     public static void deleteCache(Context context) {
-        try {
-            File dir = context.getCacheDir();
-            delete(dir);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        deleteContent(getCacheDir(context));
     }
 
     public static boolean delete(String filePath) {
@@ -114,15 +108,23 @@ public class FileHelpers {
     }
 
     public static boolean delete(File sourceLocation) {
+        return deleteRecursive(sourceLocation, true);
+    }
+
+    public static boolean deleteContent(File sourceLocation) {
+        return deleteRecursive(sourceLocation, false);
+    }
+
+    private static boolean deleteRecursive(File sourceLocation, boolean deleteRoot) {
         if (sourceLocation != null && sourceLocation.isDirectory()) {
             String[] children = sourceLocation.list();
             for (String child : children) {
-                boolean success = delete(new File(sourceLocation, child));
+                boolean success = deleteRecursive(new File(sourceLocation, child), true);
                 if (!success) {
                     return false;
                 }
             }
-            return sourceLocation.delete();
+            return deleteRoot ? sourceLocation.delete() : true;
         } else if (sourceLocation != null && sourceLocation.isFile()) {
             return sourceLocation.delete();
         } else {
