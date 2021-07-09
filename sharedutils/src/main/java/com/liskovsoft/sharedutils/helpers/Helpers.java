@@ -476,6 +476,21 @@ public final class Helpers {
         return first.contains(second) || second.contains(first);
     }
 
+    public static boolean startsWith(String word, String prefix) {
+        if (word == null && prefix == null) {
+            return true;
+        }
+
+        if (word == null || prefix == null) {
+            return false;
+        }
+
+        word = word.toLowerCase();
+        prefix = prefix.toLowerCase();
+
+        return word.startsWith(prefix);
+    }
+
     public static boolean isDash(String id) {
         if (!Helpers.isNumeric(id)) {
             return false;
