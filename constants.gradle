@@ -15,7 +15,7 @@ project.ext {
     appCompatXLibraryVersion = '1.0.0'
     leanbackXLibraryVersion = '1.0.0'
     annotationXLibraryVersion = '1.1.0'
-    coreXLibraryVersion = '1.1.0'
+    recyclerviewXLibraryVersion = '1.1.0'
     mediaXLibraryVersion = '1.2.0' // exoplayer fix
     constraintLayoutXVersion = '1.1.2'
     supportLibraryVersion = '28.0.0'
