@@ -118,10 +118,12 @@ public class FileHelpers {
     private static boolean deleteRecursive(File sourceLocation, boolean deleteRoot) {
         if (sourceLocation != null && sourceLocation.isDirectory()) {
             String[] children = sourceLocation.list();
-            for (String child : children) {
-                boolean success = deleteRecursive(new File(sourceLocation, child), true);
-                if (!success) {
-                    return false;
+            if (children != null) { // Android 4.4 fix
+                for (String child : children) {
+                    boolean success = deleteRecursive(new File(sourceLocation, child), true);
+                    if (!success) {
+                        return false;
+                    }
                 }
             }
             return deleteRoot ? sourceLocation.delete() : true;
