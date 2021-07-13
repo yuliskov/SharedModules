@@ -45,6 +45,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -1112,5 +1114,18 @@ public final class Helpers {
             e.printStackTrace();
         }
         return anyString;
+    }
+
+    public static String getHost(String url) {
+        String result = null;
+
+        try {
+            URI uri = new URI(url);
+            result = uri.getHost();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

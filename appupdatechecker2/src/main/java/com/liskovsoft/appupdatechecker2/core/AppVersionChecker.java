@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -79,7 +80,7 @@ public class AppVersionChecker {
      * URL pointing to a JSON file with the update list <br/>
      * @param versionListUrls url array, tests url by access, first worked is used
      */
-    public void checkForUpdates(String[] versionListUrls) {
+    public void checkForUpdates(Uri[] versionListUrls) {
         Log.d(TAG, "Checking for updates...");
 
         if (mInProgress) {
@@ -90,6 +91,8 @@ public class AppVersionChecker {
         if (versionListUrls == null || versionListUrls.length == 0) {
             Log.w(TAG, "Supplied url update list is null or empty");
         } else if (mJsonUpdateTask == null) {
+            mListener.processDownloadUrls(versionListUrls);
+
             mJsonUpdateTask = new GetVersionJsonTask();
             mJsonUpdateTask.execute(versionListUrls);
         } else {
@@ -136,6 +139,10 @@ public class AppVersionChecker {
         } else {
             String url = mVersionInfo.getString("downloadUrl");
             downloadUrls = new Uri[]{Uri.parse(url)};
+        }
+
+        if (downloadUrls != null) {
+            mListener.processDownloadUrls(downloadUrls);
         }
 
         if (mCurrentAppVersion > latestVersionNumber) {
@@ -209,7 +216,7 @@ public class AppVersionChecker {
 
     private GetVersionJsonTask mJsonUpdateTask;
 
-    private class GetVersionJsonTask extends AsyncTask<String[], Integer, JSONObject> {
+    private class GetVersionJsonTask extends AsyncTask<Uri[], Integer, JSONObject> {
         @Override
         protected void onProgressUpdate(Integer... values) {
             Log.d(TAG, "update check progress: " + values[0]);
@@ -217,16 +224,16 @@ public class AppVersionChecker {
         }
 
         @Override
-        protected JSONObject doInBackground(String[]... params) {
+        protected JSONObject doInBackground(Uri[]... params) {
             mInProgress = true;
             publishProgress(0);
 
-            final String[] urls = params[0];
+            final Uri[] urls = params[0];
             JSONObject jo = null;
 
             publishProgress(50);
 
-            for (String url : urls) {
+            for (Uri url : urls) {
                 jo = getJSON(url);
                 if (jo != null)
                     break;
@@ -235,11 +242,11 @@ public class AppVersionChecker {
             return jo;
         }
 
-        private JSONObject getJSON(String urlStr) {
+        private JSONObject getJSON(Uri urlStr) {
             JSONObject jo = null;
             try {
                 DownloadManager manager = new DownloadManager(mContext);
-                MyRequest request = new MyRequest(Uri.parse(urlStr));
+                MyRequest request = new MyRequest(urlStr);
                 long reqId = manager.enqueue(request);
 
                 InputStream content = manager.getStreamForDownloadedFile(reqId);

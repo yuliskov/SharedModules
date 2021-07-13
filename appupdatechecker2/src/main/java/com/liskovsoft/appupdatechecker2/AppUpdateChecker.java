@@ -11,6 +11,7 @@ import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloaderListener {
@@ -75,6 +76,18 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     private void checkForUpdatesInt(String[] updateManifestUrls) {
         if (!checkPostponed()) {
+            Uri[] uris = new Uri[updateManifestUrls.length];
+
+            for (int i = 0; i < updateManifestUrls.length; i++) {
+                uris[i] = Uri.parse(updateManifestUrls[i]);
+            }
+
+            checkForUpdatesInt(uris);
+        }
+    }
+
+    private void checkForUpdatesInt(Uri[] updateManifestUrls) {
+        if (!checkPostponed()) {
             mVersionChecker.checkForUpdates(updateManifestUrls);
         }
     }
@@ -131,6 +144,22 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
         mListener.onError(e);
     }
 
+    @Override
+    public void processDownloadUrls(Uri[] downloadUrls) {
+        String preferredHost = getPreferredHost();
+
+        Arrays.sort(downloadUrls, ((o1, o2) -> {
+            if (preferredHost == null) {
+                return 0;
+            }
+
+            boolean firstMatch = o1 != null && Helpers.equals(preferredHost, o1.getHost());
+            boolean secondMatch = o2 != null && Helpers.equals(preferredHost, o2.getHost());
+
+            return firstMatch == secondMatch ? 0 : firstMatch ? -1 : 1;
+        }));
+    }
+
     public void installUpdate() {
         Helpers.installPackage(mContext, mSettingsManager.getApkPath());
     }
@@ -141,5 +170,13 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     public boolean isUpdateCheckEnabled() {
         return mSettingsManager.getMinIntervalMs() > 0;
+    }
+
+    public void setPreferredHost(String host) {
+        mSettingsManager.setPreferredHost(host);
+    }
+
+    public String getPreferredHost() {
+        return mSettingsManager.getPreferredHost();
     }
 }

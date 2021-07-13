@@ -14,6 +14,7 @@ public class SettingsManager {
     private static final String PREF_APK_PATH = "apk_path";
     private static final String PREF_LATEST_VERSION_NAME = "latest_version_name";
     private static final String PREF_LATEST_VERSION_NUMBER = "latest_version_number";
+    private static final String PREF_MAIN_HOST = "main_host";
     private final Context mContext;
     private final SharedPreferences mPrefs;
 
@@ -68,5 +69,13 @@ public class SettingsManager {
 
     public void setMinIntervalMs(long milliseconds) {
         mPrefs.edit().putString(PREF_CHECK_INTERVAL_MS, String.valueOf(milliseconds)).apply();
+    }
+
+    public void setPreferredHost(String host) {
+        mPrefs.edit().putString(PREF_MAIN_HOST, host).apply();
+    }
+
+    public String getPreferredHost() {
+        return mPrefs.getString(PREF_MAIN_HOST, null);
     }
 }
