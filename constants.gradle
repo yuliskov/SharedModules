@@ -7,7 +7,7 @@ project.ext {
     // Possible fix is to set targetSdkVersion to 26.
     // More info: https://stackoverflow.com/questions/48072438/java-lang-illegalstateexception-only-fullscreen-opaque-activities-can-request-o
     targetSdkVersion = 26
-    compileSdkVersion = 28
+    compileSdkVersion = 29
 
     buildToolsVersion = '28.0.3'
     testSupportLibraryVersion = '0.5'
