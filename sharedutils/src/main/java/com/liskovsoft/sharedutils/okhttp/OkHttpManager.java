@@ -85,9 +85,28 @@ public class OkHttpManager {
         return doHeadOkHttpRequest(url, mClient);
     }
 
+    /**
+     * NOTE: default method is GET
+     */
     public Response doOkHttpRequest(String url, OkHttpClient client) {
         Request okHttpRequest = new Request.Builder()
                 .url(url)
+                .build();
+
+        return doOkHttpRequest(client, okHttpRequest);
+    }
+
+    /**
+     * NOTE: default method is GET
+     */
+    public Response doOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers) {
+        if (headers == null) {
+            headers = new HashMap<>();
+        }
+        
+        Request okHttpRequest = new Request.Builder()
+                .url(url)
+                .headers(Headers.of(headers))
                 .build();
 
         return doOkHttpRequest(client, okHttpRequest);

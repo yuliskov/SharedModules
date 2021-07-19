@@ -28,8 +28,18 @@ public class OkHttpHelpers {
         return mOkHttpManager.doHeadOkHttpRequest(url);
     }
 
+    /**
+     * NOTE: default method is GET
+     */
     public static Response doOkHttpRequest(String url, OkHttpClient client) {
         return mOkHttpManager.doOkHttpRequest(url, client);
+    }
+
+    /**
+     * NOTE: default method is GET
+     */
+    public static Response doOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers) {
+        return mOkHttpManager.doOkHttpRequest(url, client, headers);
     }
 
     public static OkHttpClient createOkHttpClient() {
