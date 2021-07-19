@@ -1,6 +1,5 @@
 package com.liskovsoft.appupdatechecker2.other.downloadmanager;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -60,12 +59,14 @@ public final class DownloadManager {
     private Uri mFileUri;
     private static final long MAX_DOWN_TIME_MS = 60 * 1_000; // 1 minute
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36";
+    private static final String ACCEPT_CONTENT = "*/*";
     private final Map<String, String> mHeaders = new HashMap<>();
 
     public DownloadManager(Context context) {
         mContext = context;
         mClient = createOkHttpClient();
         mHeaders.put("User-Agent", USER_AGENT);
+        mHeaders.put("Accept", ACCEPT_CONTENT);
     }
 
     private void doDownload() {
