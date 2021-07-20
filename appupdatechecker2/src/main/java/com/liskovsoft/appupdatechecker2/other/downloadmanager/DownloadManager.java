@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -75,6 +76,8 @@ public final class DownloadManager {
         }
 
         String url = mRequest.mDownloadUri.toString();
+
+        Log.d(TAG, "Starting download %s...", url);
 
         Response response = OkHttpHelpers.doOkHttpRequest(url, mClient, mHeaders);
 

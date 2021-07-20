@@ -148,11 +148,11 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     public void processDownloadUrls(Uri[] downloadUrls) {
         String preferredHost = getPreferredHost();
 
-        Arrays.sort(downloadUrls, ((o1, o2) -> {
-            if (preferredHost == null) {
-                return 0;
-            }
+        if (preferredHost == null) {
+            return;
+        }
 
+        Arrays.sort(downloadUrls, ((o1, o2) -> {
             boolean firstMatch = o1 != null && Helpers.equals(preferredHost, o1.getHost());
             boolean secondMatch = o2 != null && Helpers.equals(preferredHost, o2.getHost());
 
