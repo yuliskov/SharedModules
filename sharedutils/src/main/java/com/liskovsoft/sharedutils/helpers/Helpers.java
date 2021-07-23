@@ -22,6 +22,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
@@ -112,10 +113,20 @@ public final class Helpers {
         return String.format("%s (%s)", Build.MODEL, Build.PRODUCT);
     }
 
-    public static String getUserDeviceName() {
-        BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+    public static String getUserDeviceName(Context context) {
+        // No need special permissions
+        String bluetoothName = Settings.Secure.getString(context.getContentResolver(), "bluetooth_name");
 
-        return myDevice != null ? myDevice.getName() : Build.MODEL;
+        if (bluetoothName == null) {
+            // Require permission?
+            BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+            if (myDevice != null) {
+                bluetoothName = myDevice.getName();
+            }
+        }
+
+        // Revert to device name if needed
+        return bluetoothName != null ? bluetoothName : Build.MODEL;
     }
 
     public static String getAndroidVersion() {
