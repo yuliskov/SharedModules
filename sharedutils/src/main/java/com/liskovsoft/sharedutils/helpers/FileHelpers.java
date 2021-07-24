@@ -35,17 +35,38 @@ public class FileHelpers {
     }
 
     public static File getCacheDir(Context context) {
-        File cacheDir;
-
         // Android 6.0 fix (providers not supported)
-        cacheDir = context.getExternalCacheDir();
+        File cacheDir = getExternalCacheDir(context);
 
-        if (cacheDir == null || !cacheDir.canWrite()) { // no storage, try to use internal one
+        if (cacheDir == null) {
+            // Android 7.0 and above (supports install from internal dirs)
+            cacheDir = getInternalCacheDir(context);
+        }
+
+        return cacheDir;
+    }
+
+    public static File getInternalCacheDir(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        return context.getCacheDir();
+    }
+
+    public static File getExternalCacheDir(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        File cacheDir = context.getExternalCacheDir();
+
+        if (cacheDir == null || !cacheDir.canWrite()) {
+            // No storage, try to use internal one
             cacheDir = Environment.getExternalStorageDirectory();
 
             if (cacheDir == null || !cacheDir.canWrite()) {
-                // Android 7.0 and above (supports install from internal dirs)
-                cacheDir = context.getCacheDir();
+                cacheDir = null;
             }
         }
 
@@ -100,7 +121,8 @@ public class FileHelpers {
      * Deletes cache of the app
      */
     public static void deleteCache(Context context) {
-        deleteContent(getCacheDir(context));
+        deleteContent(getInternalCacheDir(context));
+        deleteContent(getExternalCacheDir(context));
     }
 
     public static boolean delete(String filePath) {
