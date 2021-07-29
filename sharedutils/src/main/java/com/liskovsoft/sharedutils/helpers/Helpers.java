@@ -671,6 +671,21 @@ public final class Helpers {
     }
 
     /**
+     * Don't work. Maybe need WRITE_SETTINGS permission?
+     */
+    public static void setBrightness(Activity context, float level) {
+        if (context == null) {
+            return;
+        }
+
+        context.runOnUiThread(() -> {
+            LayoutParams layoutParams = context.getWindow().getAttributes();
+            layoutParams.screenBrightness = level;
+            context.getWindow().setAttributes(layoutParams);
+        });
+    }
+
+    /**
      * Utility method to check if device is Amazon Fire TV device
      * @return {@code true} true if device is Amazon Fire TV device.
      */
