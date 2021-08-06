@@ -460,4 +460,18 @@ public class FileHelpers {
 
         return System.currentTimeMillis() - file.lastModified() < freshTimeMS;
     }
+
+    public static String getFileContents(File source) {
+        if (source == null) {
+            return null;
+        }
+
+        String result = null;
+        try {
+            result = toString(new FileInputStream(source));
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found: %s", source.getAbsolutePath());
+        }
+        return result;
+    }
 }
