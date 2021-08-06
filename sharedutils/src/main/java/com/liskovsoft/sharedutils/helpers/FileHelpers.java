@@ -73,6 +73,14 @@ public class FileHelpers {
         return cacheDir;
     }
 
+    public static File getExternalFilesDir(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        return context.getExternalFilesDir(null);
+    }
+
     /**
      * Note: we cannot use an application context here
      * @param context only Activity context is supported
@@ -223,6 +231,10 @@ public class FileHelpers {
             closeStream(fos);
             closeStream(is);
         }
+    }
+
+    public static void stringToFile(String is, File destination) {
+        streamToFile(toStream(is), destination);
     }
 
     /**
@@ -395,6 +407,14 @@ public class FileHelpers {
         }
 
         return new File(path).exists();
+    }
+
+    public static boolean isFileExists(File path) {
+        if (path == null) {
+            return false;
+        }
+
+        return path.exists();
     }
 
     public static void ensureFileExists(File file) {

@@ -816,6 +816,24 @@ public final class Helpers {
         return oldVal.matcher(content).replaceFirst(newVal);
     }
 
+    public static void setField(Object these, String fieldName, int value) {
+        try {
+            Field f1 = getDeclaredField(these.getClass(), fieldName);
+            if (f1 != null) {
+                // Change private modifier to public
+                f1.setAccessible(true);
+                // Remove final modifier (don't working!!!)
+                //Field modifiersField = Field.class.getDeclaredField("modifiers");
+                //modifiersField.setAccessible(true);
+                //modifiersField.setInt(f1, f1.getModifiers() & ~Modifier.FINAL);
+                // Set field (at last)
+                f1.setInt(these, value);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void setField(Object these, String fieldName, Object value) {
         try {
             Field f1 = getDeclaredField(these.getClass(), fieldName);
@@ -1106,7 +1124,7 @@ public final class Helpers {
     }
 
     /**
-     * Non-negative hash code generator.
+     * Positive hash code generator.
      */
     public static int hashCode(Object... items) {
         if (items == null || items.length == 0) {
@@ -1117,11 +1135,11 @@ public final class Helpers {
 
         for (Object item : items) {
             if (item != null) {
-                hash = 31 * hash + Math.abs(item.hashCode());
+                hash = 31 * hash + item.hashCode();
             }
         }
 
-        return hash;
+        return Math.abs(hash);
     }
 
     public static String decode(String urlDecoded) {
