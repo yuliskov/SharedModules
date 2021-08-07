@@ -411,6 +411,14 @@ public final class Helpers {
         return VERSION.SDK_INT >= 24 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
     }
 
+    public static boolean isTouchSupported(Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        return context.getPackageManager().hasSystemFeature("android.hardware.touchscreen");
+    }
+
     public static boolean isAndroidTV(Context context) {
         PackageManager pm = context.getPackageManager();
 
