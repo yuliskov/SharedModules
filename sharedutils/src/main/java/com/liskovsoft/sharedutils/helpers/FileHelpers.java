@@ -208,10 +208,16 @@ public class FileHelpers {
     }
 
     public static void streamToFile(InputStream is, File destination) {
+        if (is == null || destination == null) {
+            return;
+        }
+
         FileOutputStream fos = null;
 
         try {
-            destination.getParentFile().mkdirs(); // create dirs tree
+            if (destination.getParentFile() != null) {
+                destination.getParentFile().mkdirs(); // create dirs tree
+            }
             destination.createNewFile(); // create empty file
 
             fos = new FileOutputStream(destination);
