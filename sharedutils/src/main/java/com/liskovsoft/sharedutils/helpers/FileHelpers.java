@@ -221,12 +221,11 @@ public class FileHelpers {
             while ((len1 = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, len1);
             }
-        } catch (FileNotFoundException ex) { // fix: open failed: EACCES (Permission denied)
-            ex.printStackTrace();
-            throw new IllegalStateException(ex);
+        } catch (FileNotFoundException ex) {
+            Log.e(TAG, "Open file failed: Seemed EACCES (Permission denied): %s", ex.getMessage());
         } catch (IOException ex) {
             ex.printStackTrace();
-            throw new IllegalStateException(ex);
+            Log.e(TAG, ex.getMessage());
         } finally {
             closeStream(fos);
             closeStream(is);
