@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 public class SharedPreferencesBase {
     private final SharedPreferences mPrefs;
-    protected final Context mContext;
+    protected Context mContext;
 
     public SharedPreferencesBase(Context context, String prefName) {
         mContext = context;
@@ -33,6 +33,12 @@ public class SharedPreferencesBase {
 
     public Context getContext() {
         return mContext;
+    }
+
+    public void setContext(Context context) {
+        if (context != null) {
+            mContext = context;
+        }
     }
 
     public void putLong(String key, long val) {
