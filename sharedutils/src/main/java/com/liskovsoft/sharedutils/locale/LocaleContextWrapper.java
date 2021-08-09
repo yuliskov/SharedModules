@@ -51,10 +51,12 @@ public class LocaleContextWrapper extends ContextWrapper {
     }
 
     @SuppressWarnings("deprecation")
-    public static void apply(Context context, Locale newLocale) {
-        if (context == null || newLocale == null) {
+    public static void apply(Context context) {
+        if (context == null) {
             return;
         }
+
+        Locale newLocale = LangUpdater.getLocale(context);
 
         Resources res = context.getResources();
 

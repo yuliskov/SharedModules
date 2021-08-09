@@ -1,13 +1,14 @@
 package com.liskovsoft.sharedutils.prefs;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GlobalPreferences extends SharedPreferencesBase {
+    @SuppressLint("StaticFieldLeak")
     public static GlobalPreferences sInstance;
     private static final String SHARED_PREFERENCES_NAME = GlobalPreferences.class.getName();
     private final static String MESSAGE_AUTH_BODY = "message_auth_body";
@@ -15,6 +16,8 @@ public class GlobalPreferences extends SharedPreferencesBase {
     private final static String MEDIA_SERVICE_ACCOUNT_DATA = "media_service_account_data";
     private final static String MEDIA_SERVICE_DATA = "media_service_data";
     private static final String RECOMMENDED_PLAYLIST_TYPE = "recommended_playlist_type";
+    private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
+    private static final String PREFERRED_COUNTRY_DATA = "preferred_country_data";
     public static final String PLAYLIST_TYPE_RECOMMENDATIONS = "playlist_type_recommendations";
     public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
     public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
@@ -91,5 +94,21 @@ public class GlobalPreferences extends SharedPreferencesBase {
 
     public String getMediaServiceData() {
         return getString(MEDIA_SERVICE_DATA, null);
+    }
+
+    public void setPreferredLanguage(String langData) {
+        putString(PREFERRED_LANGUAGE_DATA, langData);
+    }
+
+    public String getPreferredLanguage() {
+        return getString(PREFERRED_LANGUAGE_DATA, null);
+    }
+
+    public void setPreferredCountry(String countryData) {
+        putString(PREFERRED_COUNTRY_DATA, countryData);
+    }
+
+    public String getPreferredCountry() {
+        return getString(PREFERRED_COUNTRY_DATA, null);
     }
 }

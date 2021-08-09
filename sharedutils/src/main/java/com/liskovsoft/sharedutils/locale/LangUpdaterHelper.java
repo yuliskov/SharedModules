@@ -5,17 +5,16 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.LocaleList;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-public class LangHelper {
+class LangUpdaterHelper {
     private static final String LOCALE_EN_US = "en_US";
     private static final String LOCALE_RU = "ru_RU";
-    private static String[] rusPackages = {"dkc.androidtv.tree", "dkc.video.fsbox", "dkc.video.hdbox", "dkc.video.uatv"};
+    private final static String[] rusPackages = {"dkc.androidtv.tree", "dkc.video.fsbox", "dkc.video.hdbox", "dkc.video.uatv"};
 
     public static String guessLocale(Context context) {
         if (isRussianPackagesInstalled(context)) {
