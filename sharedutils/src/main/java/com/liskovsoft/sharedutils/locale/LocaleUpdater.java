@@ -100,7 +100,7 @@ public class LocaleUpdater {
         return langCode;
     }
 
-    public static Locale getLocale(Context context) {
+    public static Locale getSavedLocale(Context context) {
         if (sCachedLocale == null) {
             LocaleUpdater updater = new LocaleUpdater(context);
             String langCode = updater.getUpdatedLocale();
@@ -116,7 +116,7 @@ public class LocaleUpdater {
             return;
         }
 
-        Locale newLocale = LocaleUpdater.getLocale(context);
+        Locale newLocale = LocaleUpdater.getSavedLocale(context);
 
         if (newLocale == null) {
             return;
