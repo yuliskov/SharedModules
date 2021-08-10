@@ -11,7 +11,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-class LangUpdaterHelper {
+class LocaleUpdaterHelper {
     private static final String LOCALE_EN_US = "en_US";
     private static final String LOCALE_RU = "ru_RU";
     private final static String[] rusPackages = {"dkc.androidtv.tree", "dkc.video.fsbox", "dkc.video.hdbox", "dkc.video.uatv"};

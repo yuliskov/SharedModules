@@ -39,7 +39,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
             // make callbacks garbage collected
             sCallbacks.clear();
         } else {
-            sInstance.setContext(context);
+            sInstance.setContext(context.getApplicationContext());
         }
 
         return sInstance;

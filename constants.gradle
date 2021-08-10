@@ -56,7 +56,7 @@ project.ext {
     stethoVersion = '1.5.0' // Chrome Dev Tools
     glideVersion = '4.11.0'
     rxAndroidVersion = '2.1.1'
-    rxJavaVersion = '2.2.21'
+    rxJavaVersion = '2.2.7'
     diskLruCacheVersion = '2.0.2'
     diskLruCacheDevVersion = '3e016356cfc7e5f9644a7a732fe0223e9742e024' // com.github.JakeWharton:DiskLruCache:
     dnsjavaVersion = '2.1.8'

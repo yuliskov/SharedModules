@@ -1,19 +1,21 @@
 package com.liskovsoft.sharedutils.locale;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-public class LangUpdater {
-    private static final String TAG = LangUpdater.class.getSimpleName();
+public class LocaleUpdater {
+    private static final String TAG = LocaleUpdater.class.getSimpleName();
     private static Locale sCachedLocale;
     private final GlobalPreferences mPrefs;
     private final Context mContext;
 
-    public LangUpdater(Context ctx) {
+    public LocaleUpdater(Context ctx) {
         mContext = ctx;
         mPrefs = GlobalPreferences.instance(ctx);
     }
@@ -23,11 +25,11 @@ public class LangUpdater {
 
         Log.d(TAG, "Updating locale to " + locale);
 
-        LangUpdaterHelper.forceLocale(mContext, locale);
+        LocaleUpdaterHelper.forceLocale(mContext, locale);
     }
 
     public String getUpdatedLocale() {
-        String locale = LangUpdaterHelper.guessLocale(mContext);
+        String locale = LocaleUpdaterHelper.guessLocale(mContext);
 
         String langCode = getPreferredLocale();
 
@@ -60,7 +62,7 @@ public class LangUpdater {
         String locale = getPreferredLocale();
 
         if (locale == null || locale.isEmpty()) {
-            locale = LangUpdaterHelper.getDefaultLocale();
+            locale = LocaleUpdaterHelper.getDefaultLocale();
         }
 
         return locale.replace("_", "-").toLowerCase();
@@ -100,11 +102,35 @@ public class LangUpdater {
 
     public static Locale getLocale(Context context) {
         if (sCachedLocale == null) {
-            LangUpdater updater = new LangUpdater(context);
+            LocaleUpdater updater = new LocaleUpdater(context);
             String langCode = updater.getUpdatedLocale();
-            sCachedLocale = LangUpdaterHelper.parseLangCode(langCode);
+            sCachedLocale = LocaleUpdaterHelper.parseLangCode(langCode);
         }
 
         return sCachedLocale;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void applySavedLocale(Context context) {
+        if (context == null) {
+            return;
+        }
+
+        Locale newLocale = LocaleUpdater.getLocale(context);
+
+        if (newLocale == null) {
+            return;
+        }
+
+        Resources res = context.getResources();
+
+        if (res == null) {
+            return;
+        }
+
+        Configuration configuration = res.getConfiguration();
+
+        configuration.locale = newLocale;
+        res.updateConfiguration(configuration, res.getDisplayMetrics());
     }
 }

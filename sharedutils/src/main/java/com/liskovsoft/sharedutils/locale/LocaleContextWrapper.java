@@ -49,24 +49,4 @@ public class LocaleContextWrapper extends ContextWrapper {
 
         return new ContextWrapper(context);
     }
-
-    @SuppressWarnings("deprecation")
-    public static void apply(Context context) {
-        if (context == null) {
-            return;
-        }
-
-        Locale newLocale = LangUpdater.getLocale(context);
-
-        Resources res = context.getResources();
-
-        if (res == null) {
-            return;
-        }
-
-        Configuration configuration = res.getConfiguration();
-
-        configuration.locale = newLocale;
-        res.updateConfiguration(configuration, res.getDisplayMetrics());
-    }
 }
