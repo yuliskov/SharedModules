@@ -44,7 +44,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -57,10 +56,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1179,5 +1180,26 @@ public final class Helpers {
         }
 
         return result;
+    }
+
+    public interface Filter<T> {
+        boolean test(T value);
+    }
+
+    /**
+     * Predicate replacement function for devices with Android 6.0 and below.
+     */
+    public static <T> boolean removeIf(List<T> collection, Filter<T> filter) {
+        Objects.requireNonNull(filter);
+        boolean removed = false;
+        final Iterator<T> each = collection.iterator();
+        while (each.hasNext()) {
+            if (filter.test(each.next())) {
+                each.remove();
+                removed = true;
+            }
+        }
+
+        return removed;
     }
 }
