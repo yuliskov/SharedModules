@@ -29,9 +29,11 @@ public class LocaleUpdater {
     }
 
     public String getUpdatedLocale() {
-        String locale = LocaleUpdaterHelper.guessLocale(mContext);
+        String locale = null;
 
-        String langCode = getPreferredLocale();
+        //locale = LocaleUpdaterHelper.guessLocale(mContext);
+
+        String langCode = getPreferredLanguage();
 
         langCode = appendCountry(langCode);
 
@@ -44,22 +46,12 @@ public class LocaleUpdater {
     }
 
     /**
-     * Get locale as lang code (e.g. zh, ru_RU etc)
-     * @return lang code
-     */
-    public String getPreferredLocale() {
-        String language = mPrefs.getPreferredLanguage();
-
-        return language != null ? language : "";
-    }
-
-    /**
      * Get locale in http format (e.g. zh, ru-RU etc)<br/>
      * Example: <code>ru,en-US;q=0.9,en;q=0.8,uk;q=0.7</code>
      * @return lang code
      */
     public String getPreferredBrowserLocale() {
-        String locale = getPreferredLocale();
+        String locale = getPreferredLanguage();
 
         if (locale == null || locale.isEmpty()) {
             locale = LocaleUpdaterHelper.getDefaultLocale();
@@ -69,10 +61,20 @@ public class LocaleUpdater {
     }
 
     /**
+     * Get locale as lang code (e.g. zh, ru_RU etc)
+     * @return lang code
+     */
+    public String getPreferredLanguage() {
+        String language = mPrefs.getPreferredLanguage();
+
+        return language != null ? language : "";
+    }
+
+    /**
      * E.g. ru, uk, en
      * @param langCode lang
      */
-    public void setPreferredLocale(String langCode) {
+    public void setPreferredLanguage(String langCode) {
         mPrefs.setPreferredLanguage(langCode);
     }
 
