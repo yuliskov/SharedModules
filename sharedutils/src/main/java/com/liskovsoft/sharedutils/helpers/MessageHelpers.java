@@ -43,7 +43,7 @@ public class MessageHelpers {
     }
 
     public static void showMessage(final Context ctx, final String msg) {
-        if (ctx == null) {
+        if (ctx == null || msg == null || msg.isEmpty()) {
             return;
         }
 
