@@ -58,10 +58,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -469,6 +471,20 @@ public final class Helpers {
     @SuppressLint("SourceLockedOrientationActivity")
     public static void makeActivityHorizontal(Activity activity) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    public static boolean equalsAny(String orig, String... arr) {
+        if (orig == null || arr == null) {
+            return false;
+        }
+
+        for (String item : arr) {
+            if (orig.equals(item)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean equals(String first, String second) {
@@ -1032,7 +1048,7 @@ public final class Helpers {
         }
     }
 
-    public static boolean contains(Object[] arr, Object item) {
+    public static boolean hasItem(Object[] arr, Object item) {
         if (arr == null || arr.length == 0) {
             return false;
         }
@@ -1046,7 +1062,7 @@ public final class Helpers {
         return false;
     }
 
-    public static boolean contains(int[] arr, int item) {
+    public static boolean hasItem(int[] arr, int item) {
         if (arr == null || arr.length == 0) {
             return false;
         }
@@ -1189,17 +1205,24 @@ public final class Helpers {
     /**
      * Predicate replacement function for devices with Android 6.0 and below.
      */
-    public static <T> boolean removeIf(List<T> collection, Filter<T> filter) {
+    public static <T> T removeIf(List<T> collection, Filter<T> filter) {
         Objects.requireNonNull(filter);
-        boolean removed = false;
+        T removed = null;
         final Iterator<T> each = collection.iterator();
         while (each.hasNext()) {
-            if (filter.test(each.next())) {
+            T next = each.next();
+            if (filter.test(next)) {
                 each.remove();
-                removed = true;
+                removed = next;
             }
         }
 
         return removed;
+    }
+
+    public static <T> void removeDuplicates(List<T> collection) {
+        Set<T> set = new LinkedHashSet<>(collection);
+        collection.clear();
+        collection.addAll(set);
     }
 }
