@@ -37,7 +37,7 @@ public class SharedPreferencesBase {
 
     public void setContext(Context context) {
         if (context != null) {
-            mContext = context;
+            mContext = context.getApplicationContext();
         }
     }
 
