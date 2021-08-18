@@ -16,6 +16,8 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.media.AudioManager;
+import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -35,6 +37,7 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,6 +57,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1205,8 +1209,11 @@ public final class Helpers {
     /**
      * Predicate replacement function for devices with Android 6.0 and below.
      */
-    public static <T> T removeIf(List<T> collection, Filter<T> filter) {
-        Objects.requireNonNull(filter);
+    public static <T> T removeIf(Collection<T> collection, Filter<T> filter) {
+        if (collection == null || filter == null) {
+            return null;
+        }
+
         T removed = null;
         final Iterator<T> each = collection.iterator();
         while (each.hasNext()) {
@@ -1220,9 +1227,60 @@ public final class Helpers {
         return removed;
     }
 
-    public static <T> void removeDuplicates(List<T> collection) {
-        Set<T> set = new LinkedHashSet<>(collection);
-        collection.clear();
-        collection.addAll(set);
+    public static <T> void removeDuplicates(List<T> list) {
+        Set<T> set = new LinkedHashSet<>(list);
+        list.clear();
+        list.addAll(set);
+    }
+
+    public static <T> T get(Collection<T> collection, int index) {
+        if (collection == null) {
+            return null;
+        }
+
+        T result = null;
+        int idx = 0;
+
+        for (T item : collection) {
+            if (idx == index) {
+                result = item;
+                break;
+            }
+
+            idx++;
+        }
+
+        return result;
+    }
+
+    public static boolean isVP9Supported() {
+        return isCodecSupported("video/x-vnd.on2.vp9");
+    }
+
+    /**
+     * <a href="https://developer.android.com/reference/android/media/MediaCodec">More info</a>
+     */
+    public static boolean isCodecSupported(String mimeType) {
+        if (VERSION.SDK_INT < 21) {
+            return false;
+        }
+
+        MediaCodecInfo[] codecInfos = new MediaCodecList(MediaCodecList.ALL_CODECS).getCodecInfos();
+
+        for (MediaCodecInfo codecInfo : codecInfos) {
+            if (codecInfo.isEncoder()) {
+                continue;
+            }
+
+            String[] types = codecInfo.getSupportedTypes();
+
+            for (String type : types) {
+                if (type.equalsIgnoreCase(mimeType)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

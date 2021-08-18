@@ -9,5 +9,5 @@ public interface AppUpdateCheckerListener {
      * @param changelog items what is changed
      */
     void onUpdateFound(String versionName, List<String> changelog, String apkPath);
-    void onError(Exception error);
+    void onUpdateError(Exception error);
 }

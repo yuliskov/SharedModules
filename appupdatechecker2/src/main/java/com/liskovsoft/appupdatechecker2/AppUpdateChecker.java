@@ -118,7 +118,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
             //  Cleanup the storage. I don't want to accidentally install old version.
             FileHelpers.delete(mSettingsManager.getApkPath());
 
-            mListener.onError(new IllegalStateException(AppUpdateCheckerListener.LATEST_VERSION));
+            mListener.onUpdateError(new IllegalStateException(AppUpdateCheckerListener.LATEST_VERSION));
         }
     }
 
@@ -136,12 +136,12 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     @Override
     public void onCheckError(Exception e) {
-        mListener.onError(e);
+        mListener.onUpdateError(e);
     }
 
     @Override
     public void onDownloadError(Exception e) {
-        mListener.onError(e);
+        mListener.onUpdateError(e);
     }
 
     @Override
