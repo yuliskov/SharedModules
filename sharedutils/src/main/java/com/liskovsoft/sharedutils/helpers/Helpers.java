@@ -813,12 +813,23 @@ public final class Helpers {
                url.startsWith("youtube://");
     }
 
-    public static void showKeyboard(Context context){
+    /**
+     * https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
+     */
+    public static void showKeyboard(@Nullable Context context) {
+        if (context == null) {
+            return;
+        }
+
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-    public static void hideKeyboard(Context context, View view){
+    public static void hideKeyboard(@Nullable Context context, View view) {
+        if (context == null) {
+            return;
+        }
+
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
