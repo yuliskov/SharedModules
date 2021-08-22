@@ -1268,7 +1268,7 @@ public final class Helpers {
         MediaCodecInfo[] codecInfos = new MediaCodecList(MediaCodecList.ALL_CODECS).getCodecInfos();
 
         for (MediaCodecInfo codecInfo : codecInfos) {
-            if (codecInfo.isEncoder()) {
+            if (codecInfo.isEncoder() || !isHardwareAccelerated(codecInfo.getName())) {
                 continue;
             }
 
@@ -1282,5 +1282,24 @@ public final class Helpers {
         }
 
         return false;
+    }
+
+    /**
+     * <a href="https://github.com/google/ExoPlayer/issues/4757">More info</a>
+     * @param videoCodecName name from CodecInfo
+     * @return is accelerated
+     */
+    public static boolean isHardwareAccelerated(String videoCodecName) {
+        if (videoCodecName == null) {
+            return false;
+        }
+
+        for (String name : new String[]{"omx.google.", "c2.android."}) {
+            if (videoCodecName.toLowerCase().startsWith(name)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
