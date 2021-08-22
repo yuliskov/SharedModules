@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build.VERSION;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 @TargetApi(16)
@@ -29,29 +30,29 @@ public class PermissionHelpers {
      * Required for the {@link Context#getExternalCacheDir()}<br/>
      * NOTE: runs async<br/>
      *
-     * @param activity to apply permissions to
+     * @param context to apply permissions to
      */
-    public static void verifyStoragePermissions(Context activity) {
-        requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+    public static void verifyStoragePermissions(Context context) {
+        requestPermissions(context, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
     }
 
-    public static void verifyMicPermissions(Context activity) {
-        requestPermissions(activity, PERMISSIONS_MIC, REQUEST_MIC);
+    public static void verifyMicPermissions(Context context) {
+        requestPermissions(context, PERMISSIONS_MIC, REQUEST_MIC);
     }
 
     /**
      * Only check. There is no prompt.
-     * @param activity to apply permissions to
+     * @param context to apply permissions to
      * @return whether permission already granted
      */
-    public static boolean hasStoragePermissions(Context activity) {
+    public static boolean hasStoragePermissions(Context context) {
         // Check if we have write permission
-        return hasPermissions(activity, PERMISSIONS_STORAGE);
+        return hasPermissions(context, PERMISSIONS_STORAGE);
     }
 
-    public static boolean hasMicPermissions(Context activity) {
+    public static boolean hasMicPermissions(Context context) {
         // Check if we have mic permission
-        return hasPermissions(activity, PERMISSIONS_MIC);
+        return hasPermissions(context, PERMISSIONS_MIC);
     }
 
     // Utils
@@ -75,13 +76,17 @@ public class PermissionHelpers {
 
     /**
      * Only check. There is no prompt.
-     * @param activity to apply permissions to
+     * @param context to apply permissions to
      * @return whether permission already granted
      */
-    private static boolean hasPermissions(Context activity, String... permissions) {
+    private static boolean hasPermissions(@Nullable Context context, String... permissions) {
+        if (context == null) {
+            return false;
+        }
+
         if (VERSION.SDK_INT >= 23) {
             for (String permission : permissions) {
-                int result = ActivityCompat.checkSelfPermission(activity, permission);
+                int result = ActivityCompat.checkSelfPermission(context, permission);
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     return false;
                 }
@@ -89,5 +94,14 @@ public class PermissionHelpers {
         }
 
         return true;
+    }
+
+    public static boolean hasPermission(@Nullable Context context, String permission) {
+        if (context == null) {
+            return false;
+        }
+
+        return PackageManager.PERMISSION_GRANTED == context.getPackageManager().checkPermission(
+                permission, context.getPackageName());
     }
 }
