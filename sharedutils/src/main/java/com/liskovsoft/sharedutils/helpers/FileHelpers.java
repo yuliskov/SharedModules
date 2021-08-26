@@ -107,6 +107,10 @@ public class FileHelpers {
         return new File(Environment.getExternalStorageDirectory(), String.format("data/%s", context.getPackageName()));
     }
 
+    public static boolean isEmpty(File dir) {
+        return dir == null || listFileTree(dir).size() == 0;
+    }
+
     public static Collection<File> listFileTree(File dir) {
         Set<File> fileTree = new HashSet<>();
 
