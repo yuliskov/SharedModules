@@ -20,6 +20,7 @@ import java.io.File;
  */
 public class AppDownloader extends AsyncTask<Uri[],Void,Void> {
     private static final String TAG = AppDownloader.class.getSimpleName();
+    private static final int MIN_APK_SIZE_BYTES = 5_000_000;
     private final Context mContext;
     private boolean mInProgress;
     private final AppDownloaderListener mListener;
@@ -86,7 +87,7 @@ public class AppDownloader extends AsyncTask<Uri[],Void,Void> {
 
                 if (destination != null) {
                     // It could be a web page instead of apk
-                    if (size > 1_000_000) {
+                    if (size > MIN_APK_SIZE_BYTES) {
                         path = destination.getPath();
                     } else { // do cleanup
                         FileHelpers.delete(destination.getPath());
