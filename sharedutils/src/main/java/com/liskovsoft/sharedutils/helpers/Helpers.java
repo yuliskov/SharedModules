@@ -1182,6 +1182,26 @@ public final class Helpers {
         return Math.abs(hash);
     }
 
+    /**
+     * Positive hash code generator.
+     */
+    public static int hashCodeAny(Object... items) {
+        if (items == null || items.length == 0) {
+            return -1;
+        }
+
+        int hash = 0;
+
+        for (Object item : items) {
+            if (item != null) {
+                hash = 31 * hash + item.hashCode();
+                break;
+            }
+        }
+
+        return Math.abs(hash);
+    }
+
     public static String decode(String urlDecoded) {
         try {
             urlDecoded = URLDecoder.decode(urlDecoded, "UTF-8");
