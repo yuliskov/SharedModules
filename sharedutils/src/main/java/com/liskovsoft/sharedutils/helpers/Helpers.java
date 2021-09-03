@@ -69,6 +69,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +79,7 @@ public final class Helpers {
     private static final String LEGACY_ARRAY_DELIM = "|";
     private static final String LEGACY_OBJECT_DELIM = ",";
     public static final int REMOVE_PACKAGE_CODE = 521;
+    private static final String TAG = Helpers.class.getSimpleName();
     private static HashMap<String, List<String>> sCache = new HashMap<>();
 
     /**
@@ -1279,6 +1281,18 @@ public final class Helpers {
             }
 
             idx++;
+        }
+
+        return result;
+    }
+
+    public static <T> T get(Callable<T> callable) {
+        T result = null;
+
+        try {
+            result = callable.call();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
 
         return result;
