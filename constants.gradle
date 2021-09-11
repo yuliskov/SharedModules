@@ -23,7 +23,7 @@ project.ext {
     mockitoVersion = '1.9.5'
     junitVersion = '4.12'
     truthVersion = '0.39'
-    robolectricVersion = '4.3.1'
+    robolectricVersion = '4.6.1'
     autoValueVersion = '1.6'
     checkerframeworkVersion = '2.5.0'
     testRunnerVersion = '1.0.2'
