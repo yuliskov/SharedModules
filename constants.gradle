@@ -46,7 +46,7 @@ project.ext {
     // okhttpVersion = '4.9.1'
     okhttpLoggerVersion = '3.12.12' // Latest version with Android 4+ support
     // okhttpLoggerVersion = '4.9.1'
-    okhttpProfilerVersion = '1.0.7'
+    okhttpProfilerVersion = '1.0.7' // Android 5+!!! (fix: force global okhttp)
     okhttpBrotliVersion = '4.1.0' // Latest version with Android 4+ support
     // okhttpBrotliVersion = '4.9.1'
     okioVersion = '2.10.0' // Old
