@@ -1,5 +1,6 @@
 package com.liskovsoft.sharedutils.okhttp;
 
+import android.os.Build.VERSION;
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor;
 import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -8,6 +9,7 @@ import okhttp3.ConnectionSpec;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -202,7 +204,33 @@ public class OkHttpManager {
         return setupBuilder(builder).build();
     }
 
+    //public OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
+    //    ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
+    //            .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
+    //            .cipherSuites(
+    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA)
+    //            .build();
+    //
+    //    builder
+    //        .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
+    //        .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)
+    //        .writeTimeout(WRITE_TIMEOUT_S, TimeUnit.SECONDS)
+    //        .connectionSpecs(Collections.singletonList(spec));
+    //
+    //    return enableTls12OnPreLollipop(builder);
+    //}
+
     public OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
+        setupConnectionFix(builder);
+        setupConnectionParams(builder);
+
+        return builder;
+    }
+
+    private void setupConnectionSpec(OkHttpClient.Builder builder) {
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
                 .cipherSuites(
@@ -212,13 +240,37 @@ public class OkHttpManager {
                         CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA)
                 .build();
 
-        builder
-            .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
-            .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)
-            .writeTimeout(WRITE_TIMEOUT_S, TimeUnit.SECONDS)
-            .connectionSpecs(Collections.singletonList(spec));
+        builder.connectionSpecs(Collections.singletonList(spec));
+    }
 
-        return enableTls12OnPreLollipop(builder);
+    private void setupConnectionParams(OkHttpClient.Builder builder) {
+        builder
+                .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
+                .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)
+                .writeTimeout(WRITE_TIMEOUT_S, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Fixing SSL handshake timed out (probably provider issues in some countries)
+     */
+    private void setupConnectionFix(Builder okBuilder) {
+        // Already enabled on pre Lollipop (fallback to TLS 1.0)
+        if (VERSION.SDK_INT <= 19) {
+            return;
+        }
+
+        ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
+                .tlsVersions(TlsVersion.TLS_1_2)
+                .cipherSuites(
+                        // TODO: test. Commented ciphers may not work.
+                        //CipherSuite.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
+                        //CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+                )
+                .build();
+        okBuilder.connectionSpecs(Collections.singletonList(cs));
     }
 
     private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder builder) {
