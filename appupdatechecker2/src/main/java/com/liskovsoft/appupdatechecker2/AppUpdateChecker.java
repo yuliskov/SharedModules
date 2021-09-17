@@ -63,6 +63,8 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     public void checkForUpdates(String[] updateManifestUrls) {
         if (isUpdateCheckEnabled() && isStale()) {
             checkForUpdatesInt(updateManifestUrls);
+        } else {
+            mListener.onUpdateError(new IllegalStateException(AppUpdateCheckerListener.UPDATE_CHECK_DISABLED));
         }
     }
 

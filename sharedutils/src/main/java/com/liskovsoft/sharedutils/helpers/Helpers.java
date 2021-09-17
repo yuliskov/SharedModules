@@ -479,12 +479,12 @@ public final class Helpers {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
-    public static boolean equalsAny(String orig, String... arr) {
+    public static boolean equalsAny(Object orig, Object... arr) {
         if (orig == null || arr == null) {
             return false;
         }
 
-        for (String item : arr) {
+        for (Object item : arr) {
             if (orig.equals(item)) {
                 return true;
             }
