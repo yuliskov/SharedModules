@@ -80,14 +80,8 @@ public final class OkHttpCommons {
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
     public static void setupConnectionFixNew2(Builder okBuilder) {
-        // TLS 1.2 not supported on pre Lollipop (fallback to TLS 1.0)
-        // Note, TLS 1.0 doesn't have SNI support. So, fix should work.
-        //if (VERSION.SDK_INT <= 19) {
-        //    return;
-        //}
-
+        // Restrict cipher list
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                //.tlsVersions(TlsVersion.TLS_1_2)
                 .cipherSuites(
                         CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
                         CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
@@ -101,6 +95,7 @@ public final class OkHttpCommons {
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
     public static void setupConnectionFix(Builder okBuilder) {
+        // Restrict cipher list
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .cipherSuites(APPROVED_CIPHER_SUITES)
                 .build();
