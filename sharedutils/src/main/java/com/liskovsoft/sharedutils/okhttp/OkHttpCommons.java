@@ -59,6 +59,8 @@ public final class OkHttpCommons {
             // Banned in Russia
             //CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
             CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
+            // Newly added from old fix below
+            //CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
     };
 
     public static void setupConnectionParams(OkHttpClient.Builder okBuilder) {
@@ -77,6 +79,27 @@ public final class OkHttpCommons {
     /**
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
+    public static void setupConnectionFixNew2(Builder okBuilder) {
+        // TLS 1.2 not supported on pre Lollipop (fallback to TLS 1.0)
+        // Note, TLS 1.0 doesn't have SNI support. So, fix should work.
+        //if (VERSION.SDK_INT <= 19) {
+        //    return;
+        //}
+
+        ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                //.tlsVersions(TlsVersion.TLS_1_2)
+                .cipherSuites(
+                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+                )
+                .build();
+        okBuilder.connectionSpecs(Arrays.asList(cs, ConnectionSpec.CLEARTEXT));
+    }
+
+    /**
+     * Fixing SSL handshake timed out (probably provider issues in some countries)
+     */
     public static void setupConnectionFix(Builder okBuilder) {
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .cipherSuites(APPROVED_CIPHER_SUITES)
@@ -88,7 +111,8 @@ public final class OkHttpCommons {
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
     public static void setupConnectionFixOld(Builder okBuilder) {
-        // Already enabled on pre Lollipop (fallback to TLS 1.0)
+        // TLS 1.2 not supported on pre Lollipop (fallback to TLS 1.0)
+        // Note, TLS 1.0 doesn't have SNI support. So, fix should work.
         if (VERSION.SDK_INT <= 19) {
             return;
         }
@@ -96,9 +120,6 @@ public final class OkHttpCommons {
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
                 .cipherSuites(
-                        // TODO: test. Commented ciphers may not work.
-                        //CipherSuite.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
-                        //CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
                         CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
                         CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
                         CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
