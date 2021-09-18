@@ -33,7 +33,7 @@ public final class OkHttpCommons {
     // This is nearly equal to the cipher suites supported in Chrome 51, current as of 2016-05-25.
     // All of these suites are available on Android 7.0; earlier releases support a subset of these
     // suites. https://github.com/square/okhttp/issues/1972
-    private static final CipherSuite[] APPROVED_CIPHER_SUITES = new CipherSuite[] {
+    private static final CipherSuite[] APPROVED_CIPHER_SUITES_ALT = new CipherSuite[] {
             // TLSv1.3
             CipherSuite.TLS_AES_128_GCM_SHA256,
             CipherSuite.TLS_AES_256_GCM_SHA384,
@@ -56,11 +56,15 @@ public final class OkHttpCommons {
             CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
             CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
             CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
-            // Banned in Russia
-            //CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
+            CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA, // should be commented out?
             CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
-            // Newly added from old fix below
-            //CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+
+            // Change TLS fingerprint by altering default cipher list
+            // From original fix
+            CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
+            // From NewPipe Downloader
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
     };
 
     public static void setupConnectionParams(OkHttpClient.Builder okBuilder) {
@@ -79,25 +83,10 @@ public final class OkHttpCommons {
     /**
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
-    public static void setupConnectionFixNew2(Builder okBuilder) {
-        // Restrict cipher list
-        ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                .cipherSuites(
-                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                        CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
-                )
-                .build();
-        okBuilder.connectionSpecs(Arrays.asList(cs, ConnectionSpec.CLEARTEXT));
-    }
-
-    /**
-     * Fixing SSL handshake timed out (probably provider issues in some countries)
-     */
     public static void setupConnectionFix(Builder okBuilder) {
-        // Restrict cipher list
+        // Alter cipher list to create unique TLS fingerprint
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                .cipherSuites(APPROVED_CIPHER_SUITES)
+                .cipherSuites(APPROVED_CIPHER_SUITES_ALT)
                 .build();
         okBuilder.connectionSpecs(Arrays.asList(cs, ConnectionSpec.CLEARTEXT));
     }
@@ -105,7 +94,7 @@ public final class OkHttpCommons {
     /**
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
-    public static void setupConnectionFixOld(Builder okBuilder) {
+    public static void setupConnectionFixOrigin(Builder okBuilder) {
         // TLS 1.2 not supported on pre Lollipop (fallback to TLS 1.0)
         // Note, TLS 1.0 doesn't have SNI support. So, fix should work.
         if (VERSION.SDK_INT <= 19) {
