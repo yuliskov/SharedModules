@@ -1028,16 +1028,24 @@ public final class Helpers {
     }
 
     private static String[] split(String delim, String data) {
-        if (data == null || data.isEmpty()) {
+        if (data == null) {
             return null;
+        }
+
+        if (data.isEmpty()) {
+            return new String[]{};
         }
 
         return data.split(Pattern.quote(delim));
     }
 
     private static String merge(String delim, Object... params) {
-        if (params == null || params.length == 0) {
+        if (params == null) {
             return null;
+        }
+
+        if (params.length == 0) {
+            return "";
         }
 
         StringBuilder sb = new StringBuilder();
