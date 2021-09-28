@@ -135,4 +135,8 @@ public class LocaleUpdater {
         configuration.locale = newLocale;
         res.updateConfiguration(configuration, res.getDisplayMetrics());
     }
+
+    public static void clearCache() {
+        sCachedLocale = null;
+    }
 }
