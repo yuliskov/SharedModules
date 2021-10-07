@@ -1318,20 +1318,24 @@ public final class Helpers {
             return false;
         }
 
-        MediaCodecInfo[] codecInfos = new MediaCodecList(MediaCodecList.ALL_CODECS).getCodecInfos();
+        try {
+            MediaCodecInfo[] codecInfos = new MediaCodecList(MediaCodecList.ALL_CODECS).getCodecInfos();
 
-        for (MediaCodecInfo codecInfo : codecInfos) {
-            if (codecInfo.isEncoder() || !isHardwareAccelerated(codecInfo.getName())) {
-                continue;
-            }
+            for (MediaCodecInfo codecInfo : codecInfos) {
+                if (codecInfo.isEncoder() || !isHardwareAccelerated(codecInfo.getName())) {
+                    continue;
+                }
 
-            String[] types = codecInfo.getSupportedTypes();
+                String[] types = codecInfo.getSupportedTypes();
 
-            for (String type : types) {
-                if (type.equalsIgnoreCase(mimeType)) {
-                    return true;
+                for (String type : types) {
+                    if (type.equalsIgnoreCase(mimeType)) {
+                        return true;
+                    }
                 }
             }
+        } catch (RuntimeException e) {
+            // cannot get MediaCodecList
         }
 
         return false;
