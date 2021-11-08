@@ -1359,4 +1359,17 @@ public final class Helpers {
 
         return true;
     }
+
+    /**
+     * Binary values check utility
+     */
+    public static boolean check(int origin, int... values) {
+        int combined = 0;
+
+        for (int value : values) {
+            combined |= value;
+        }
+
+        return (origin & combined) == combined;
+    }
 }
