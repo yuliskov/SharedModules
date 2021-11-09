@@ -122,15 +122,34 @@ public final class Helpers {
         return String.format("%s (%s)", Build.MODEL, Build.PRODUCT);
     }
 
+    /**
+     * Source: https://stackoverflow.com/questions/16704597/how-do-you-get-the-user-defined-device-name-in-android
+     */
     public static String getUserDeviceName(Context context) {
-        // No need special permissions
-        String bluetoothName = Settings.Secure.getString(context.getContentResolver(), "bluetooth_name");
+        // 1) No need special permissions
+        String bluetoothName = Settings.System.getString(context.getContentResolver(), "bluetooth_name");
 
         if (bluetoothName == null) {
-            // Require permission?
-            BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
-            if (myDevice != null) {
-                bluetoothName = myDevice.getName();
+            // 2) No need special permissions
+            bluetoothName = Settings.Secure.getString(context.getContentResolver(), "bluetooth_name");
+
+            if (bluetoothName == null) {
+                // 3) Require permission
+                BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+
+                if (myDevice != null) {
+                    bluetoothName = myDevice.getName();
+                }
+
+                if (bluetoothName == null) {
+                    // 4)
+                    bluetoothName = Settings.System.getString(context.getContentResolver(), "device_name");
+
+                    if (bluetoothName == null) {
+                        // 5)
+                        bluetoothName = Settings.Secure.getString(context.getContentResolver(), "lock_screen_owner_info");
+                    }
+                }
             }
         }
 
