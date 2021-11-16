@@ -483,4 +483,23 @@ public class FileHelpers {
         }
         return result;
     }
+
+    /**
+     * Gets size in bytes!
+     */
+    public static long getDirSize(File dir) {
+        if (dir == null) {
+            return 0;
+        }
+
+        long size = 0;
+        for (File file : dir.listFiles()) {
+            if (file != null && file.isDirectory()) {
+                size += getDirSize(file);
+            } else if (file != null && file.isFile()) {
+                size += file.length();
+            }
+        }
+        return size;
+    }
 }
