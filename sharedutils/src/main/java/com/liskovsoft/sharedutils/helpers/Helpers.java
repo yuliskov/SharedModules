@@ -1391,4 +1391,12 @@ public final class Helpers {
 
         return (origin & combined) == combined;
     }
+
+    public static String abbreviate(String title, int maxLength) {
+        if (title == null || maxLength <= 0 || title.length() <= maxLength) {
+            return title;
+        }
+
+        return title.substring(0, maxLength) + "\u2026"; // ...
+    }
 }
