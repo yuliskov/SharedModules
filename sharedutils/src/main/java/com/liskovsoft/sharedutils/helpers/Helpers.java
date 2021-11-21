@@ -1269,19 +1269,21 @@ public final class Helpers {
     /**
      * Predicate replacement function for devices with Android 6.0 and below.
      */
-    public static <T> T removeIf(Collection<T> collection, Filter<T> filter) {
+    public static <T> List<T> removeIf(Collection<T> collection, Filter<T> filter) {
         if (collection == null || filter == null) {
             return null;
         }
 
-        T removed = null;
+        List<T> removed = null;
         final Iterator<T> each = collection.iterator();
         while (each.hasNext()) {
             T next = each.next();
             if (filter.test(next)) {
                 each.remove();
-                removed = next;
-                break;
+                if (removed == null) {
+                    removed = new ArrayList<>();
+                }
+                removed.add(next);
             }
         }
 
