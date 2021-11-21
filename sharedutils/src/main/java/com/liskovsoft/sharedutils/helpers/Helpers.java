@@ -1281,10 +1281,25 @@ public final class Helpers {
             if (filter.test(next)) {
                 each.remove();
                 removed = next;
+                break;
             }
         }
 
         return removed;
+    }
+
+    public static <T> T findFirst(Collection<T> collection, Filter<T> filter) {
+        if (collection == null || filter == null) {
+            return null;
+        }
+
+        for (T next : collection) {
+            if (filter.test(next)) {
+                return next;
+            }
+        }
+
+        return null;
     }
 
     public static <T> void removeDuplicates(List<T> list) {
