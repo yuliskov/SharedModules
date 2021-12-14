@@ -492,8 +492,14 @@ public class FileHelpers {
             return 0;
         }
 
+        File[] files = dir.listFiles();
+
+        if (files == null) {
+            return 0;
+        }
+
         long size = 0;
-        for (File file : dir.listFiles()) {
+        for (File file : files) {
             if (file != null && file.isDirectory()) {
                 size += getDirSize(file);
             } else if (file != null && file.isFile()) {
