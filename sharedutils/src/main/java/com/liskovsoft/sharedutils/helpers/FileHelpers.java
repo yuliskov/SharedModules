@@ -150,11 +150,18 @@ public class FileHelpers {
     }
 
     private static boolean deleteRecursive(File sourceLocation, boolean deleteRoot) {
+        return deleteRecursive(sourceLocation, deleteRoot, 0);
+    }
+
+    /**
+     * Use level to prevent StackOverflowError
+     */
+    private static boolean deleteRecursive(File sourceLocation, boolean deleteRoot, int level) {
         if (sourceLocation != null && sourceLocation.isDirectory()) {
             String[] children = sourceLocation.list();
-            if (children != null) { // Android 4.4 fix
+            if (children != null && level < 10) { // Android 4.4 fix, prevent stack overflow
                 for (String child : children) {
-                    boolean success = deleteRecursive(new File(sourceLocation, child), true);
+                    boolean success = deleteRecursive(new File(sourceLocation, child), true, level + 1);
                     if (!success) {
                         return false;
                     }
