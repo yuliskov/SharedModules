@@ -126,6 +126,12 @@ public class MessageHelpers {
         }
     }
 
+    public static void cancelToasts() {
+        for (Toast toast : sToasts) {
+            toast.cancel();
+        }
+    }
+
     private static void fixTextSize(Toast toast, Context context) {
         if (sTextSize == 0) {
             // Maintain text size between app rebooting
