@@ -46,8 +46,10 @@ public class UrlEncodedQueryString implements UrlQueryString {
                       .replace("#", "")
             );
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     public static UrlEncodedQueryString parse(String url) {
