@@ -52,6 +52,10 @@ public class GlobalPreferences extends SharedPreferencesBase {
         }
     }
 
+    public static boolean isInitialized() {
+        return sInstance != null && sInstance.getContext() != null;
+    }
+
     public void setRawAuthData(String data) {
         if (Helpers.isAndroidTV(mContext)) {
             putString(MESSAGE_AUTH_BODY, data);
