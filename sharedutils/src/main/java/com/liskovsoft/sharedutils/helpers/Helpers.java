@@ -57,6 +57,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -107,6 +108,13 @@ public final class Helpers {
 
     public static InputStream appendStream(InputStream first, InputStream second) {
         return FileHelpers.appendStream(first, second);
+    }
+    
+    public static <T> T[] appendArray(T[] first, T[] second) {
+        T[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+
+        return result;
     }
 
     public static String encodeURI(byte[] data) {
