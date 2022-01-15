@@ -1227,7 +1227,7 @@ public final class Helpers {
             return -1;
         }
 
-        int hash = 0;
+        int hash = -1;
 
         for (Object item : items) {
             if (item != null) {
@@ -1236,7 +1236,7 @@ public final class Helpers {
             }
         }
 
-        return Math.abs(hash);
+        return hash != -1 ? Math.abs(hash) : -1;
     }
 
     public static String decode(String urlDecoded) {
