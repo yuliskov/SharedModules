@@ -532,6 +532,20 @@ public final class Helpers {
         return first.equals(second);
     }
 
+    public static boolean containsAny(String first, String... second) {
+        if (second == null) {
+            return false;
+        }
+
+        for (String item : second) {
+            if (contains(first, item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static boolean contains(String first, String second) {
         if (first == null && second == null) {
             return true;
