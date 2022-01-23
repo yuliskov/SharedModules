@@ -1290,6 +1290,7 @@ public final class Helpers {
 
     /**
      * Predicate replacement function for devices with Android 6.0 and below.
+     * @return removed items (if any) or null (if nothing removed)
      */
     public static <T> List<T> removeIf(Collection<T> collection, Filter<T> filter) {
         if (collection == null || filter == null) {
@@ -1310,6 +1311,24 @@ public final class Helpers {
         }
 
         return removed;
+    }
+    
+    public static <T> List<T> filter(Collection<T> collection, Filter<T> filter) {
+        if (collection == null || filter == null) {
+            return null;
+        }
+
+        List<T> result = null;
+        for (T next : collection) {
+            if (filter.test(next)) {
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
+                result.add(next);
+            }
+        }
+
+        return result;
     }
 
     public static <T> T findFirst(Collection<T> collection, Filter<T> filter) {
