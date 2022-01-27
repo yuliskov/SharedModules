@@ -6,10 +6,8 @@ project.ext {
     // Error happen only on Android 8.0 (api 26) when you set activity orientation in manifest.
     // Possible fix is to set targetSdkVersion to 26.
     // More info: https://stackoverflow.com/questions/48072438/java-lang-illegalstateexception-only-fullscreen-opaque-activities-can-request-o
-    // targetSdkVersion = 26
-    // compileSdkVersion = 29
-    // buildToolsVersion = '29.0.3'
-    targetSdkVersion = 30 // target sdk>=30 needed to support manifest queries tag
+    // NOTE: target sdk >= 28 cause weird behavior on Android 9 (slow text scroll speed etc)
+    targetSdkVersion = 25 // NOTE: target sdk >= 30 needed to support manifest queries tag
     compileSdkVersion = 30
     buildToolsVersion = '30.0.3'
     
