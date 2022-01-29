@@ -186,6 +186,26 @@ public class FileHelpers {
         }
     }
 
+    public static void deleteByPrefix(File directory, String prefix) {
+        if (directory == null) {
+            return;
+        }
+
+        File[] files = directory.listFiles();
+
+        if (files == null) {
+            return;
+        }
+
+        for (File file : files) {
+            if (file != null && file.isDirectory()) {
+                deleteByPrefix(file, prefix);
+            } else if (file != null && file.isFile() && file.getName().startsWith(prefix)) {
+                file.delete();
+            }
+        }
+    }
+
     public static void copy(File sourceLocation, File targetLocation) {
         if (sourceLocation.isDirectory()) {
             copyDirectory(sourceLocation, targetLocation);
