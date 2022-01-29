@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -218,6 +217,8 @@ public class AppVersionChecker {
     private GetVersionJsonTask mJsonUpdateTask;
 
     private class GetVersionJsonTask extends AsyncTask<Uri[], Integer, JSONObject> {
+        private Exception mLastException;
+
         @Override
         protected void onProgressUpdate(Integer... values) {
             Log.d(TAG, "update check progress: " + values[0]);
@@ -254,7 +255,7 @@ public class AppVersionChecker {
                 jo = new JSONObject(StreamUtils.inputStreamToString(content));
             } catch (final IllegalStateException | JSONException | SocketTimeoutException ex) {
                 Log.e(TAG, ex.getMessage(), ex);
-                mListener.onCheckError(ex);
+                mLastException = ex;
             } catch (final Exception ex) {
                 throw new IllegalStateException(ex);
             } finally {
@@ -274,6 +275,8 @@ public class AppVersionChecker {
                     Log.e(TAG, msg, e);
                     mListener.onCheckError(new IllegalStateException(msg));
                 }
+            } else {
+                mListener.onCheckError(mLastException != null ? mLastException : new Exception("Unknown error. JSON content is null"));
             }
 
             mInProgress = false;
