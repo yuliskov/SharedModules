@@ -78,7 +78,18 @@ public class FileHelpers {
             return null;
         }
 
-        return context.getExternalFilesDir(null);
+        File filesDir = context.getExternalFilesDir(null);
+
+        if (filesDir == null || !filesDir.canWrite()) {
+            // No storage, try to use internal one
+            filesDir = Environment.getExternalStorageDirectory();
+
+            if (filesDir == null || !filesDir.canWrite()) {
+                filesDir = null;
+            }
+        }
+
+        return filesDir;
     }
 
     /**
