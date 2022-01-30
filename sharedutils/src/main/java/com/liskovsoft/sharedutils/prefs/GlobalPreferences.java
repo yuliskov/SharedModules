@@ -18,6 +18,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
     private static final String RECOMMENDED_PLAYLIST_TYPE = "recommended_playlist_type";
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String PREFERRED_COUNTRY_DATA = "preferred_country_data";
+    private static final String ENABLE_CHANNELS_SERVICE = "enable_channels_service";
     public static final String PLAYLIST_TYPE_RECOMMENDATIONS = "playlist_type_recommendations";
     public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
     public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
@@ -112,5 +113,13 @@ public class GlobalPreferences extends SharedPreferencesBase {
 
     public String getPreferredCountry() {
         return getString(PREFERRED_COUNTRY_DATA, null);
+    }
+
+    public void enableChannelsService(boolean enable) {
+        putBoolean(ENABLE_CHANNELS_SERVICE, enable);
+    }
+
+    public boolean isChannelsServiceEnabled() {
+        return getBoolean(ENABLE_CHANNELS_SERVICE, true);
     }
 }

@@ -1073,7 +1073,8 @@ public final class Helpers {
             return null;
         }
 
-        if (data.isEmpty()) {
+        // NOTE: empty array/object represented by space
+        if (data.trim().isEmpty()) {
             return new String[]{};
         }
 
@@ -1086,7 +1087,7 @@ public final class Helpers {
         }
 
         if (params.length == 0) {
-            return "";
+            return " "; // NOTE: empty array/object represented by space
         }
 
         StringBuilder sb = new StringBuilder();
