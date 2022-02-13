@@ -520,6 +520,20 @@ public final class Helpers {
         return false;
     }
 
+    public static boolean equalsAny(int orig, int... arr) {
+        if (arr == null) {
+            return false;
+        }
+
+        for (int item : arr) {
+            if (orig == item) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static boolean equals(String first, String second) {
         if (first == null && second == null) {
             return true;
@@ -1113,34 +1127,6 @@ public final class Helpers {
         } catch (Exception e) {
             // NOP
         }
-    }
-
-    public static boolean hasItem(Object[] arr, Object item) {
-        if (arr == null || arr.length == 0) {
-            return false;
-        }
-
-        for (Object elem : arr) {
-            if (elem.equals(item)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean hasItem(int[] arr, int item) {
-        if (arr == null || arr.length == 0) {
-            return false;
-        }
-
-        for (int elem : arr) {
-            if (elem == item) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static int getResourceId(String resourceName, String resourceType, Context context) {
