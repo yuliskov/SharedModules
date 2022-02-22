@@ -182,7 +182,7 @@ public final class OkHttpCommons {
     }
 
     //Setting testMode configuration. If set as testMode, the connection will skip certification check
-    private void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
+    public static void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
         Log.w(TAG, "Ignore Ssl Certificate");
         try {
 
@@ -210,15 +210,10 @@ public final class OkHttpCommons {
             final SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
             // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            final SSLSocketFactory sslSocketFactory = new Tls12SocketFactory(sslContext.getSocketFactory());
 
             builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+            builder.hostnameVerifier((hostname, session) -> true);
         } catch (Exception e) {
             Log.w(TAG, "Exception while configuring IgnoreSslCertificate: " + e, e);
         }
