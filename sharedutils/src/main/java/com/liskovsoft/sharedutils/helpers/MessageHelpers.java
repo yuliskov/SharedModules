@@ -47,10 +47,12 @@ public class MessageHelpers {
             return;
         }
 
+        final Context context = ctx.getApplicationContext(); // memory leak fix
+
         Runnable toast = () -> {
             try {
-                Toast currentToast = Toast.makeText(ctx, msg, Toast.LENGTH_LONG);
-                fixTextSize(currentToast, ctx);
+                Toast currentToast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+                fixTextSize(currentToast, context);
                 addAndCancelPrevIfNeeded(currentToast);
                 currentToast.show();
 

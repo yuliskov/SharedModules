@@ -45,7 +45,7 @@ project.ext {
     jsonPathVersion = '2.4.0'
     
     ottoVersion = '1.3.8'
-    okhttpVersion = '3.12.12' // Latest version with Android 4+ support
+    okhttpVersion = '3.12.13' // Latest version with Android 4+ support
     // okhttpVersion = '4.9.1'
     okhttpProfilerVersion = '1.0.7' // Android 5+!!! (fix: force global okhttp)
     okhttpBrotliVersion = '4.1.0' // Latest version with Android 4+ support
