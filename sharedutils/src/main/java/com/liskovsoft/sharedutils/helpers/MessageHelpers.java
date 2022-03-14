@@ -43,6 +43,10 @@ public class MessageHelpers {
     }
 
     public static void showMessage(final Context ctx, final String msg) {
+        showMessage(ctx, msg, false);
+    }
+
+    public static void showMessage(final Context ctx, final String msg, final boolean isLong) {
         if (ctx == null || msg == null || msg.isEmpty()) {
             return;
         }
@@ -53,7 +57,7 @@ public class MessageHelpers {
             try {
                 Toast currentToast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
                 fixTextSize(currentToast, context);
-                addAndCancelPrevIfNeeded(currentToast);
+                addAndCancelPrevIfNeeded(currentToast, isLong);
                 currentToast.show();
 
                 setupCleanup();
@@ -114,7 +118,7 @@ public class MessageHelpers {
         sToasts.clear();
 
         for (int i = 0; i < 3; i++) {
-            showMessage(ctx, msg);
+            showMessage(ctx, msg, true);
         }
     }
 
@@ -126,7 +130,7 @@ public class MessageHelpers {
         sToasts.clear();
 
         for (int i = 0; i < 3; i++) {
-            showMessage(ctx, template, params);
+            showMessage(ctx, String.format(template, params), true);
         }
     }
 
@@ -156,19 +160,20 @@ public class MessageHelpers {
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
     }
 
-    private static void addAndCancelPrevIfNeeded(Toast newToast) {
-        sToasts.add(newToast);
+    private static void addAndCancelPrevIfNeeded(Toast newToast, boolean isLong) {
         CharSequence originText = extractText(newToast);
 
         Helpers.removeIf(sToasts, toast -> {
             // Smart cancel only toasts that have different message
             // So remains possibility to long message to be displayed
-            boolean doRemove = !extractText(toast).equals(originText);
+            boolean doRemove = !isLong || !extractText(toast).equals(originText);
             if (doRemove) {
                 toast.cancel();
             }
             return doRemove;
         });
+
+        sToasts.add(newToast);
     }
 
     private static CharSequence extractText(Toast toast) {
