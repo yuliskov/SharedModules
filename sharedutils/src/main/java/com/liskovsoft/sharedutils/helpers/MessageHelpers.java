@@ -107,12 +107,24 @@ public class MessageHelpers {
     }
 
     public static void showLongMessage(Context ctx, String msg) {
+        // Fix infinite msg displaying
+        for (Toast toast : sToasts) {
+            toast.cancel();
+        }
+        sToasts.clear();
+
         for (int i = 0; i < 3; i++) {
             showMessage(ctx, msg);
         }
     }
 
     public static void showLongMessage(Context ctx, String template, Object... params) {
+        // Fix infinite msg displaying
+        for (Toast toast : sToasts) {
+            toast.cancel();
+        }
+        sToasts.clear();
+
         for (int i = 0; i < 3; i++) {
             showMessage(ctx, template, params);
         }
