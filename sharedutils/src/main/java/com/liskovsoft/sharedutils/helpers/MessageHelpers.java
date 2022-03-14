@@ -148,13 +148,15 @@ public class MessageHelpers {
         sToasts.add(newToast);
         CharSequence originText = extractText(newToast);
 
-        for (Toast toast : sToasts) {
+        Helpers.removeIf(sToasts, toast -> {
             // Smart cancel only toasts that have different message
             // So remains possibility to long message to be displayed
-            if (!extractText(toast).equals(originText)) {
+            boolean doRemove = !extractText(toast).equals(originText);
+            if (doRemove) {
                 toast.cancel();
             }
-        }
+            return doRemove;
+        });
     }
 
     private static CharSequence extractText(Toast toast) {
