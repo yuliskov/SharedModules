@@ -590,6 +590,20 @@ public final class Helpers {
         return word.startsWith(prefix);
     }
 
+    public static boolean startsWithAny(String word, String... prefixes) {
+        if (word == null || prefixes == null) {
+            return false;
+        }
+
+        for (String prefix : prefixes) {
+            if (startsWith(word, prefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static boolean isDash(String id) {
         if (!Helpers.isNumeric(id)) {
             return false;
