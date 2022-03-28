@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -1283,6 +1284,10 @@ public final class Helpers {
         }
 
         return result;
+    }
+
+    public static boolean isUrl(String link) {
+        return link != null && Patterns.WEB_URL.matcher(link).matches();
     }
 
     public interface Filter<T> {

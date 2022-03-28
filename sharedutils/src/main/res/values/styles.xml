@@ -20,6 +20,7 @@
         <!-- Unselected radio color -->
         <item name="android:textColorSecondary">@color/dialog_text_color</item>
 
+        <item name="buttonBarNeutralButtonStyle">@style/AppDialogButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/AppDialogButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/AppDialogButtonStyle</item>
     </style>
