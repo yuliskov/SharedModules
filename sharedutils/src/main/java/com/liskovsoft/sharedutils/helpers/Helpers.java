@@ -1182,7 +1182,7 @@ public final class Helpers {
     }
 
     public static int[] range(int start, int end, int step) {
-        int size = (Math.abs(start) + Math.abs(end)) / step + 1;
+        int size = (end - start) / step + 1;
         int[] result = new int[size];
         int value = start;
 

@@ -1,6 +1,7 @@
 package com.liskovsoft.sharedutils.rx;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -58,5 +59,20 @@ public class RxUtils {
                         period -> callback.run(),
                         error -> Log.e(TAG, "startInterval error: %s", error.getMessage())
                 );
+    }
+
+    public static Disposable runAsync(Runnable callback) {
+        return Completable.fromAction(callback::run)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe();
+    }
+
+    public static Disposable runAsync(Runnable callback, long delayMs) {
+        return Completable.fromAction(callback::run)
+                .delaySubscription(delayMs, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe();
     }
 }
