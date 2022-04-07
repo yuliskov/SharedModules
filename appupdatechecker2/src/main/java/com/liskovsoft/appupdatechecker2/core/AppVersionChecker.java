@@ -10,6 +10,7 @@ import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager.My
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import edu.mit.mobile.android.utils.StreamUtils;
+import okhttp3.internal.http2.StreamResetException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -253,7 +254,7 @@ public class AppVersionChecker {
 
                 InputStream content = manager.getStreamForDownloadedFile(reqId);
                 jo = new JSONObject(StreamUtils.inputStreamToString(content));
-            } catch (final IllegalStateException | JSONException | SocketTimeoutException ex) {
+            } catch (final IllegalStateException | JSONException | SocketTimeoutException | StreamResetException ex) {
                 Log.e(TAG, ex.getMessage(), ex);
                 mLastException = ex;
             } catch (final Exception ex) {
