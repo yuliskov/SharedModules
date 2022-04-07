@@ -12,6 +12,7 @@
     <application>
 
     <!-- Read more: https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed -->
+    <!-- Usage: see com.liskovsoft.sharedutils.helpers.FileHelpers.getFileUri(Context, String) -->
     <provider
         android:name="com.liskovsoft.appupdatechecker2.other.GenericFileProvider"
         android:authorities="${applicationId}.update_provider"
