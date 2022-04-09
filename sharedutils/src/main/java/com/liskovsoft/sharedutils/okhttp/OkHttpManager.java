@@ -208,6 +208,7 @@ public class OkHttpManager {
     public OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
         OkHttpCommons.setupConnectionFix(builder);
         OkHttpCommons.setupConnectionParams(builder);
+        OkHttpCommons.configureToIgnoreCertificate(builder);
 
         return builder;
     }

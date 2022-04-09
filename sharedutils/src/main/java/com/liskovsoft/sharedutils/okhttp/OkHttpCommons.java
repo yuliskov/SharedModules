@@ -179,8 +179,16 @@ public final class OkHttpCommons {
         return builder;
     }
 
-    //Setting testMode configuration. If set as testMode, the connection will skip certification check
+    /**
+     * Fix github updates on Android 4<br/>
+     * Setting testMode configuration. If set as testMode, the connection will skip certification check
+     */
+    @SuppressWarnings("deprecation")
     public static void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
+        if (VERSION.SDK_INT > 19) {
+            return;
+        }
+
         Log.w(TAG, "Ignore Ssl Certificate");
         try {
 
@@ -205,13 +213,15 @@ public final class OkHttpCommons {
             };
 
             // Install the all-trusting trust manager
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            //final SSLContext sslContext = SSLContext.getInstance("SSL");
+            final SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
             // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = new Tls12SocketFactory(sslContext.getSocketFactory());
 
-            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-            builder.hostnameVerifier((hostname, session) -> true);
+            //builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+            builder.sslSocketFactory(sslSocketFactory);
+            //builder.hostnameVerifier((hostname, session) -> true);
         } catch (Exception e) {
             Log.w(TAG, "Exception while configuring IgnoreSslCertificate: " + e, e);
         }
