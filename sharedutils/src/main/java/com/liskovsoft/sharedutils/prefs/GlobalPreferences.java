@@ -25,7 +25,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String ENABLE_CHANNELS_SERVICE = "enable_channels_service";
     private static final String PREFER_IPV_4_DNS = "prefer_ipv4_dns";
     private static final String ENABLE_DNS_OVER_HTTPS = "enable_dns_over_https";
-    private static final String VISITOR_INFO_LIVE = "visitor_info_live";
+    private static final String VISITOR_COOKIE = "visitor_cookie";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
@@ -60,13 +60,13 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         return sInstance != null && sInstance.getContext() != null;
     }
 
-    public static String getVisitorInfoLive() {
-        return isInitialized() ? sInstance.getString(VISITOR_INFO_LIVE, null) : null;
+    public static String getVisitorCookie() {
+        return isInitialized() ? sInstance.getString(VISITOR_COOKIE, null) : null;
     }
 
-    public static void setVisitorInfoLive(String visitorInfoLive) {
+    public static void setVisitorCookie(String visitorCookie) {
         if (isInitialized()) {
-            sInstance.putString(VISITOR_INFO_LIVE, visitorInfoLive);
+            sInstance.putString(VISITOR_COOKIE, visitorCookie);
         }
     }
 
