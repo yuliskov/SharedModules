@@ -1318,6 +1318,20 @@ public final class Helpers {
 
         return removed;
     }
+
+    public static <T> boolean containsIf(Collection<T> collection, Filter<T> filter) {
+        if (collection == null || filter == null) {
+            return false;
+        }
+
+        for (T next : collection) {
+            if (filter.test(next)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     
     public static <T> List<T> filter(Collection<T> collection, Filter<T> filter) {
         if (collection == null || filter == null) {

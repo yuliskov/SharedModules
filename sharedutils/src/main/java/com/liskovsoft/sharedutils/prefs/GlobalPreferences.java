@@ -7,7 +7,11 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GlobalPreferences extends SharedPreferencesBase {
+final public class GlobalPreferences extends SharedPreferencesBase {
+    public static final String PLAYLIST_TYPE_RECOMMENDATIONS = "playlist_type_recommendations";
+    public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
+    public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
+    public static final String PLAYLIST_TYPE_NONE = "playlist_type_none";
     @SuppressLint("StaticFieldLeak")
     public static GlobalPreferences sInstance;
     private static final String SHARED_PREFERENCES_NAME = GlobalPreferences.class.getName();
@@ -21,10 +25,7 @@ public class GlobalPreferences extends SharedPreferencesBase {
     private static final String ENABLE_CHANNELS_SERVICE = "enable_channels_service";
     private static final String PREFER_IPV_4_DNS = "prefer_ipv4_dns";
     private static final String ENABLE_DNS_OVER_HTTPS = "enable_dns_over_https";
-    public static final String PLAYLIST_TYPE_RECOMMENDATIONS = "playlist_type_recommendations";
-    public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
-    public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
-    public static final String PLAYLIST_TYPE_NONE = "playlist_type_none";
+    private static final String VISITOR_INFO_LIVE = "visitor_info_live";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
@@ -57,6 +58,16 @@ public class GlobalPreferences extends SharedPreferencesBase {
 
     public static boolean isInitialized() {
         return sInstance != null && sInstance.getContext() != null;
+    }
+
+    public static String getVisitorInfoLive() {
+        return isInitialized() ? sInstance.getString(VISITOR_INFO_LIVE, null) : null;
+    }
+
+    public static void setVisitorInfoLive(String visitorInfoLive) {
+        if (isInitialized()) {
+            sInstance.putString(VISITOR_INFO_LIVE, visitorInfoLive);
+        }
     }
 
     public void setRawAuthData(String data) {
