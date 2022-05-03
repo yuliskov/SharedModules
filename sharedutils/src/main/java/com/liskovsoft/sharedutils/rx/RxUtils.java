@@ -9,6 +9,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * <a href="https://medium.com/android-news/rxjava-schedulers-what-when-and-how-to-use-it-6cfc27293add">Info about schedulers</a>
+ */
 public class RxUtils {
     private static final String TAG = RxUtils.class.getSimpleName();
 
@@ -26,10 +29,22 @@ public class RxUtils {
 
     public static <T> Disposable execute(Observable<T> observable) {
         return observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         obj -> {}, // ignore result
                         error -> Log.e(TAG, "Execute error: %s", error.getMessage())
+                );
+    }
+
+    public static <T> Disposable execute(Observable<T> observable, Runnable onFinish) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        obj -> {}, // ignore result
+                        error -> Log.e(TAG, "Execute error: %s", error.getMessage()),
+                        onFinish::run
                 );
     }
 
