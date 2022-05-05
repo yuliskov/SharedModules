@@ -48,6 +48,17 @@ public class RxUtils {
                 );
     }
 
+    public static <T> Disposable execute(Observable<T> observable, Runnable onError, Runnable onFinish) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        obj -> {}, // ignore result
+                        error -> onError.run(),
+                        onFinish::run
+                );
+    }
+
     /**
      * NOTE: Don't use it to check that action in completed inside other action (scrollEnd bug).
      */
