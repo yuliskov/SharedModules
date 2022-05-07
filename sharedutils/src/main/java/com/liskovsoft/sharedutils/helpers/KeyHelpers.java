@@ -109,7 +109,8 @@ public class KeyHelpers {
     }
 
     /**
-     * G20s fix (Enter mapped to OK): show soft keyboard on textview click
+     * G20s fix (Enter mapped to OK): show soft keyboard on textview click<br/>
+     * More info: https://stackoverflow.com/questions/1489852/android-handle-enter-in-an-edittext
      */
     public static void fixEnterKey(EditText editField) {
         if (editField == null) {
