@@ -2,6 +2,7 @@ package com.liskovsoft.sharedutils.helpers;
 
 import android.app.Activity;
 import android.view.KeyEvent;
+import android.widget.EditText;
 
 public class KeyHelpers {
     // Philips ambilight button
@@ -105,5 +106,23 @@ public class KeyHelpers {
 
     public static boolean isTogglePlaybackKey(int keyCode) {
         return keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+    }
+
+    /**
+     * G20s fix (Enter mapped to OK): show soft keyboard on textview click
+     */
+    public static void fixEnterKey(EditText editField) {
+        if (editField == null) {
+            return;
+        }
+
+        editField.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
+                // Perform action on key press
+                Helpers.showKeyboard(v.getContext());
+            }
+            return false;
+        });
     }
 }
