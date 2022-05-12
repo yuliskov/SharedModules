@@ -26,6 +26,10 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String PREFER_IPV_4_DNS = "prefer_ipv4_dns";
     private static final String ENABLE_DNS_OVER_HTTPS = "enable_dns_over_https";
     private static final String VISITOR_COOKIE = "visitor_cookie";
+    private static final String HIDE_SHORTS_FROM_SUBSCRIPTIONS = "hide_shorts_from_subscriptions";
+    private static final String HIDE_SHORTS_FROM_HOME = "hide_shorts_from_home";
+    private static final String HIDE_SHORTS_FROM_HISTORY = "hide_shorts_from_history";
+    private static final String HIDE_UPCOMING = "hide_upcoming";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
@@ -150,5 +154,37 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isDnsOverHttpsEnabled() {
         return getBoolean(ENABLE_DNS_OVER_HTTPS, false);
+    }
+
+    public void hideShortsFromSubscriptions(boolean enable) {
+        putBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, enable);
+    }
+
+    public boolean isHideShortsFromSubscriptionsEnabled() {
+        return getBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, false);
+    }
+
+    public void hideShortsFromHome(boolean enable) {
+        putBoolean(HIDE_SHORTS_FROM_HOME, enable);
+    }
+
+    public boolean isHideShortsFromHomeEnabled() {
+        return getBoolean(HIDE_SHORTS_FROM_HOME, false);
+    }
+
+    public void hideShortsFromHistory(boolean enable) {
+        putBoolean(HIDE_SHORTS_FROM_HISTORY, enable);
+    }
+
+    public boolean isHideShortsFromHistoryEnabled() {
+        return getBoolean(HIDE_SHORTS_FROM_HISTORY, false);
+    }
+
+    public void hideUpcoming(boolean enable) {
+        putBoolean(HIDE_UPCOMING, enable);
+    }
+
+    public boolean isHideUpcomingEnabled() {
+        return getBoolean(HIDE_UPCOMING, false);
     }
 }

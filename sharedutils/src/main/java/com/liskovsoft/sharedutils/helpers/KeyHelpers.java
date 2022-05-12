@@ -112,18 +112,20 @@ public class KeyHelpers {
      * G20s fix (Enter mapped to OK): show soft keyboard on textview click<br/>
      * More info: https://stackoverflow.com/questions/1489852/android-handle-enter-in-an-edittext
      */
-    public static void fixEnterKey(EditText editField) {
-        if (editField == null) {
+    public static void fixEnterKey(EditText... editFields) {
+        if (editFields == null || editFields.length == 0) {
             return;
         }
 
-        editField.setOnKeyListener((v, keyCode, event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
-                // Perform action on key press
-                Helpers.showKeyboard(v.getContext());
-            }
-            return false;
-        });
+        for (EditText editField : editFields) {
+            editField.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
+                    // Perform action on key press
+                    Helpers.showKeyboard(v.getContext(), v);
+                }
+                return false;
+            });
+        }
     }
 }
