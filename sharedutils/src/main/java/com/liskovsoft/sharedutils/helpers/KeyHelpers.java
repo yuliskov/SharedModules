@@ -122,7 +122,7 @@ public class KeyHelpers {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
                     // Perform action on key press
-                    Helpers.showKeyboard(v.getContext(), v);
+                    Helpers.toggleKeyboard(v.getContext());
                 }
                 return false;
             });
