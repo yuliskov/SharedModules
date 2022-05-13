@@ -885,9 +885,10 @@ public final class Helpers {
     }
 
     /**
+     * Works in most of the cases.<br/>
      * https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
      */
-    public static void toggleKeyboard(@Nullable Context context) {
+    public static void showKeyboard(@Nullable Context context) {
         if (context == null) {
             return;
         }
@@ -896,7 +897,10 @@ public final class Helpers {
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-    public static void showKeyboard(@Nullable Context context, View view) {
+    /**
+     * Works less often than method above
+     */
+    public static void showKeyboardAlt(@Nullable Context context, View view) {
         if (context == null) {
             return;
         }
