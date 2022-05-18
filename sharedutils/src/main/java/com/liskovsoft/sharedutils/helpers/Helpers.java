@@ -898,7 +898,7 @@ public final class Helpers {
     }
 
     /**
-     * Works less often than method above
+     * Sometimes doesn't work. IDK why.
      */
     public static void showKeyboardAlt(@Nullable Context context, View view) {
         if (context == null) {

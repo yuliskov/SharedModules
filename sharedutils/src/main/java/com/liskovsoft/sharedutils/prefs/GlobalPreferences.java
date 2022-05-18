@@ -30,6 +30,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String HIDE_SHORTS_FROM_HOME = "hide_shorts_from_home";
     private static final String HIDE_SHORTS_FROM_HISTORY = "hide_shorts_from_history";
     private static final String HIDE_UPCOMING = "hide_upcoming";
+    private static final String CONTENT_BLOCK_ALT_SERVER = "content_block_alt_server";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
@@ -186,5 +187,13 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isHideUpcomingEnabled() {
         return getBoolean(HIDE_UPCOMING, false);
+    }
+
+    public void enableContentBlockAltServer(boolean enable) {
+        putBoolean(CONTENT_BLOCK_ALT_SERVER, enable);
+    }
+
+    public boolean isContentBlockAltServerEnabled() {
+        return getBoolean(CONTENT_BLOCK_ALT_SERVER, false);
     }
 }
