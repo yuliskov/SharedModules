@@ -123,6 +123,7 @@ public class KeyHelpers {
                         (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
                     // Perform action on key press
                     Helpers.showKeyboard(v.getContext());
+                    return true; // disable default action (text auto commit)
                 }
                 return false;
             });
