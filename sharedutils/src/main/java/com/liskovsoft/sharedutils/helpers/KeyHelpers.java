@@ -119,10 +119,11 @@ public class KeyHelpers {
 
         for (EditText editField : editFields) {
             editField.setOnKeyListener((v, keyCode, event) -> {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
                     // Perform action on key press
-                    Helpers.showKeyboard(v.getContext());
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        Helpers.showKeyboard(v.getContext());
+                    }
                     return true; // disable default action (text auto commit)
                 }
                 return false;
