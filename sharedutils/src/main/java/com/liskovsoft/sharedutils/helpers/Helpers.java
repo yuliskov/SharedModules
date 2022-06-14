@@ -1267,6 +1267,20 @@ public final class Helpers {
         return hash != -1 ? Math.abs(hash) : -1;
     }
 
+    public static boolean allNulls(Object... items) {
+        if (items == null || items.length == 0) {
+            return true;
+        }
+
+        for (Object item : items) {
+            if (item != null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static String decode(String urlDecoded) {
         try {
             urlDecoded = URLDecoder.decode(urlDecoded, "UTF-8");
