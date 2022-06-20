@@ -157,20 +157,20 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         return getBoolean(ENABLE_DNS_OVER_HTTPS, false);
     }
 
-    public void hideShortsFromSubscriptions(boolean enable) {
-        putBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, enable);
-    }
-
-    public boolean isHideShortsFromSubscriptionsEnabled() {
-        return getBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, false);
-    }
-
     public void hideShortsFromHome(boolean enable) {
         putBoolean(HIDE_SHORTS_FROM_HOME, enable);
     }
 
     public boolean isHideShortsFromHomeEnabled() {
-        return getBoolean(HIDE_SHORTS_FROM_HOME, false);
+        return getBoolean(HIDE_SHORTS_FROM_HOME, true);
+    }
+
+    public void hideShortsFromSubscriptions(boolean enable) {
+        putBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, enable);
+    }
+
+    public boolean isHideShortsFromSubscriptionsEnabled() {
+        return getBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, true);
     }
 
     public void hideShortsFromHistory(boolean enable) {
@@ -178,7 +178,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public boolean isHideShortsFromHistoryEnabled() {
-        return getBoolean(HIDE_SHORTS_FROM_HISTORY, false);
+        return getBoolean(HIDE_SHORTS_FROM_HISTORY, true);
     }
 
     public void hideUpcoming(boolean enable) {
