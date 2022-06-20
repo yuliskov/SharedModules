@@ -91,6 +91,11 @@ public class LocaleUpdater {
         if (langCode != null && !langCode.isEmpty()) {
             String preferredCountry = getPreferredCountry();
 
+            // Change language independently from the system country setting
+            if (preferredCountry == null || preferredCountry.isEmpty()) {
+                preferredCountry = LocaleUtility.getCurrentLocale(mContext).getCountry();
+            }
+
             if (preferredCountry != null && !preferredCountry.isEmpty()) {
                 StringTokenizer tokenizer = new StringTokenizer(langCode, "_");
                 String lang = tokenizer.nextToken();
