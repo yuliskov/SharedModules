@@ -29,20 +29,7 @@ public class LocaleUpdater {
     }
 
     public String getUpdatedLocale() {
-        String locale = null;
-
-        //locale = LocaleUpdaterHelper.guessLocale(mContext);
-
-        String langCode = getPreferredLanguage();
-
-        langCode = appendCountry(langCode);
-
-        // not set or default language selected
-        if (langCode != null && !langCode.isEmpty()) {
-            locale = langCode;
-        }
-
-        return locale;
+        return createLocale();
     }
 
     /**
@@ -87,24 +74,35 @@ public class LocaleUpdater {
         mPrefs.setPreferredCountry(countryCode);
     }
 
-    private String appendCountry(String langCode) {
-        if (langCode != null && !langCode.isEmpty()) {
-            String preferredCountry = getPreferredCountry();
+    private String createLocale() {
+        String langCode = getPreferredLanguage();
+        String countryCode = getPreferredCountry();
 
-            // Change language independently from the system country setting
-            if (preferredCountry == null || preferredCountry.isEmpty()) {
-                preferredCountry = LocaleUtility.getCurrentLocale(mContext).getCountry();
-            }
+        boolean isLangCodeEmpty = langCode == null || langCode.isEmpty();
+        boolean isCountryCodeEmpty = countryCode == null || countryCode.isEmpty();
 
-            if (preferredCountry != null && !preferredCountry.isEmpty()) {
-                StringTokenizer tokenizer = new StringTokenizer(langCode, "_");
-                String lang = tokenizer.nextToken();
-
-                langCode = String.format("%s_%s", lang, preferredCountry);
-            }
+        if (isLangCodeEmpty && isCountryCodeEmpty) {
+            return null;
         }
 
-        return langCode;
+        Locale currentLocale = null;
+
+        if (isLangCodeEmpty || isCountryCodeEmpty) {
+            currentLocale  = LocaleUtility.getCurrentLocale(mContext);
+        }
+
+        if (isCountryCodeEmpty) {
+            countryCode = currentLocale.getCountry();
+        }
+
+        if (isLangCodeEmpty) {
+            langCode = currentLocale.getLanguage();
+        } else {
+            StringTokenizer tokenizer = new StringTokenizer(langCode, "_");
+            langCode = tokenizer.nextToken();
+        }
+
+        return String.format("%s_%s", langCode, countryCode);
     }
 
     public static Locale getSavedLocale(Context context) {
