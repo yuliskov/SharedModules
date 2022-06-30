@@ -90,7 +90,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public String getRecommendedPlaylistType() {
-        return getString(RECOMMENDED_PLAYLIST_TYPE, PLAYLIST_TYPE_SUBSCRIPTIONS);
+        return getString(RECOMMENDED_PLAYLIST_TYPE, PLAYLIST_TYPE_RECOMMENDATIONS);
     }
 
     public void setMediaServiceRefreshToken(String token) {
