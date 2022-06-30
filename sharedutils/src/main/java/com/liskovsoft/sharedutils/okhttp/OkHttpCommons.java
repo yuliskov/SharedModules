@@ -7,6 +7,7 @@ import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
+import okhttp3.Protocol;
 import okhttp3.TlsVersion;
 
 import javax.net.ssl.SSLContext;
@@ -225,5 +226,16 @@ public final class OkHttpCommons {
         } catch (Exception e) {
             Log.w(TAG, "Exception while configuring IgnoreSslCertificate: " + e, e);
         }
+    }
+
+    /**
+     * Fix for {@link okhttp3.internal.http2.StreamResetException}: stream was reset: CANCEL<br/>
+     * Force HTTP 1.1 protocol<br/>
+     * Happen when frequently do interrupt/create stream<br/>
+     * https://stackoverflow.com/questions/53648852/how-to-solve-okhttp3-internal-http2-streamresetexception-stream-was-reset-refu<br/>
+     * https://github.com/square/okhttp/issues/3955
+     */
+    public static void fixStreamResetError(Builder okBuilder) {
+        okBuilder.protocols(Collections.singletonList(Protocol.HTTP_1_1));
     }
 }

@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,13 +19,56 @@ public class RxUtils {
     public static void disposeActions(Disposable... actions) {
         if (actions != null) {
             for (Disposable action : actions) {
-                boolean updateInProgress = action != null && !action.isDisposed();
-
-                if (updateInProgress) {
+                if (isActionRunning(action)) {
                     action.dispose();
                 }
             }
         }
+    }
+
+    public static void disposeActions(List<Disposable> actions) {
+        if (actions != null) {
+            for (Disposable action : actions) {
+                if (isActionRunning(action)) {
+                    action.dispose();
+                }
+            }
+            actions.clear();
+        }
+    }
+
+    /**
+     * NOTE: Don't use it to check that action in completed inside other action (scrollEnd bug).
+     */
+    public static boolean isAnyActionRunning(Disposable... actions) {
+        if (actions != null) {
+            for (Disposable action : actions) {
+                if (isActionRunning(action)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * NOTE: Don't use it to check that action in completed inside other action (scrollEnd bug).
+     */
+    public static boolean isAnyActionRunning(List<Disposable> actions) {
+        if (actions != null) {
+            for (Disposable action : actions) {
+                if (isActionRunning(action)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isActionRunning(Disposable action) {
+        return action != null && !action.isDisposed();
     }
 
     public static <T> Disposable execute(Observable<T> observable) {
@@ -57,21 +101,6 @@ public class RxUtils {
                         error -> onError.run(),
                         onFinish::run
                 );
-    }
-
-    /**
-     * NOTE: Don't use it to check that action in completed inside other action (scrollEnd bug).
-     */
-    public static boolean isAnyActionRunning(Disposable... actions) {
-        if (actions != null) {
-            for (Disposable action : actions) {
-                if (action != null && !action.isDisposed()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     public static Disposable startInterval(Runnable callback, int periodSec) {
