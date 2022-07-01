@@ -162,7 +162,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public boolean isHideShortsFromHomeEnabled() {
-        return getBoolean(HIDE_SHORTS_FROM_HOME, true);
+        return getBoolean(HIDE_SHORTS_FROM_HOME, false);
     }
 
     public void hideShortsFromSubscriptions(boolean enable) {
@@ -178,7 +178,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public boolean isHideShortsFromHistoryEnabled() {
-        return getBoolean(HIDE_SHORTS_FROM_HISTORY, true);
+        return getBoolean(HIDE_SHORTS_FROM_HISTORY, false);
     }
 
     public void hideUpcoming(boolean enable) {
