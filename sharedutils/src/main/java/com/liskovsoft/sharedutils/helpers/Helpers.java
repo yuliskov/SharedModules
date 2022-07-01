@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaCodecInfo;
+import android.media.MediaCodecInfo.CodecCapabilities;
 import android.media.MediaCodecList;
 import android.net.Uri;
 import android.os.Build;
@@ -27,6 +28,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
+import android.util.Range;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -75,13 +77,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Helpers {
+    private static final String TAG = Helpers.class.getSimpleName();
+    public static final int REMOVE_PACKAGE_CODE = 521;
     private static final String ARRAY_DELIM = "%AR%";
     private static final String OBJECT_DELIM = "%OB%";
     private static final String LEGACY_ARRAY_DELIM = "|";
     private static final String LEGACY_OBJECT_DELIM = ",";
-    public static final int REMOVE_PACKAGE_CODE = 521;
-    private static final String TAG = Helpers.class.getSimpleName();
+    private static final String MIME_VP9 = "video/x-vnd.on2.vp9";
+    private static final String MIME_AV1 = "video/av01";
     private static HashMap<String, List<String>> sCache = new HashMap<>();
+    private static Boolean sIsVP9Supported;
+    private static Boolean sIsAV1Supported;
+    private static int sVP9MaxHeight;
+    private static int sAV1MaxHeight;
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
@@ -1430,15 +1438,50 @@ public final class Helpers {
     }
 
     public static boolean isVP9Supported() {
-        return isCodecSupported("video/x-vnd.on2.vp9");
+        if (sIsVP9Supported == null) {
+            sIsVP9Supported = getCodecMaxHeight(MIME_VP9) != -1;
+        }
+        return sIsVP9Supported;
+    }
+
+    public static boolean isAV1Supported() {
+        if (sIsAV1Supported == null) {
+            // Not tested yet!!!
+            sIsAV1Supported = getCodecMaxHeight(MIME_AV1) != -1;
+        }
+        return sIsAV1Supported;
+    }
+
+    public static boolean isVP9ResolutionSupported(int height) {
+        if (height <= 0) {
+            return false;
+        }
+
+        if (sVP9MaxHeight == 0) {
+            sVP9MaxHeight = getCodecMaxHeight(MIME_VP9);
+        }
+
+        return height <= sVP9MaxHeight;
+    }
+
+    public static boolean isAV1ResolutionSupported(int height) {
+        if (height <= 0) {
+            return false;
+        }
+
+        if (sAV1MaxHeight == 0) {
+            sAV1MaxHeight = getCodecMaxHeight(MIME_AV1);
+        }
+
+        return height <= sAV1MaxHeight;
     }
 
     /**
      * <a href="https://developer.android.com/reference/android/media/MediaCodec">More info</a>
      */
-    public static boolean isCodecSupported(String mimeType) {
+    private static int getCodecMaxHeight(String mimeType) {
         if (VERSION.SDK_INT < 21) {
-            return false;
+            return -1;
         }
 
         try {
@@ -1453,7 +1496,9 @@ public final class Helpers {
 
                 for (String type : types) {
                     if (type.equalsIgnoreCase(mimeType)) {
-                        return true;
+                        CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(type);
+                        Range<Integer> heights = capabilities.getVideoCapabilities().getSupportedHeights();
+                        return heights.getUpper();
                     }
                 }
             }
@@ -1461,7 +1506,7 @@ public final class Helpers {
             // cannot get MediaCodecList
         }
 
-        return false;
+        return -1;
     }
 
     /**
