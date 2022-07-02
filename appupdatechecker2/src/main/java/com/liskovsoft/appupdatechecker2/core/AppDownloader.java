@@ -88,12 +88,12 @@ public class AppDownloader {
                 return null;
             }
             File outputFile = new File(cacheDir, CURRENT_APK);
+            // Backup current file for manual install later
+            FileHelpers.copy(outputFile, new File(cacheDir, BACKUP_APK));
             String path = null;
             try {
                 DownloadManager manager = new DownloadManager(mContext);
                 MyRequest request = new MyRequest(Uri.parse(uri));
-                // Backup current file for manual install later
-                FileHelpers.copy(outputFile, new File(cacheDir, BACKUP_APK));
                 request.setDestinationUri(Uri.fromFile(outputFile));
                 try {
                     long id = manager.enqueue(request);
