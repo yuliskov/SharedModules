@@ -21,6 +21,8 @@ import java.io.File;
 public class AppDownloader {
     private static final String TAG = AppDownloader.class.getSimpleName();
     private static final int MIN_APK_SIZE_BYTES = 15_000_000;
+    private static final String CURRENT_APK = "update.apk";
+    private static final String BACKUP_APK = "update_bak.apk";
     private final Context mContext;
     private boolean mInProgress;
     private final AppDownloaderListener mListener;
@@ -85,11 +87,13 @@ public class AppDownloader {
             if (cacheDir == null) {
                 return null;
             }
-            File outputFile = new File(cacheDir, "update.apk");
+            File outputFile = new File(cacheDir, CURRENT_APK);
             String path = null;
             try {
                 DownloadManager manager = new DownloadManager(mContext);
                 MyRequest request = new MyRequest(Uri.parse(uri));
+                // Backup current file for manual install later
+                FileHelpers.copy(outputFile, new File(cacheDir, BACKUP_APK));
                 request.setDestinationUri(Uri.fromFile(outputFile));
                 try {
                     long id = manager.enqueue(request);
