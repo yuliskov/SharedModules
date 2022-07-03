@@ -5,8 +5,10 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 public class UrlEncodedQueryString implements UrlQueryString {
+    private static final Pattern VALIDATION_PATTERN = Pattern.compile("[^\\/?&]+=[^\\/&]+");
     private String mQueryPrefix;
     private UrlEncodedQueryStringBase mQueryString;
     private String mUrl;
@@ -102,7 +104,7 @@ public class UrlEncodedQueryString implements UrlQueryString {
             return false;
         }
 
-        return Helpers.matchAll(mUrl, "[^\\/?&]+=[^\\/&]+");
+        return Helpers.matchAll(mUrl, VALIDATION_PATTERN);
     }
 
     @Override

@@ -7,16 +7,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Overview: http://myurl.com/key/value/key2/value2/key3/value3<br/>
+ * Example: http://myurl.com/key1/value1/key2/value2/key3/value3<br/>
+ * Should contain at least one key/value pair: http://myurl.com/key/value/<br/>
  * Regex: \/key\/([^\/]*)
  */
 public class PathQueryString implements UrlQueryString {
-    private static final Pattern VALIDATION_PATTERN_1 = Pattern.compile("^[^&=]*$");
-    private static final Pattern VALIDATION_PATTERN_2 = Pattern.compile("\\/[^\\/]+\\/[^\\/]+");
+    private static final Pattern VALIDATION_PATTERN = Pattern.compile("\\/[^\\/]+\\/[^\\/]+\\/[^\\/]+");
+    private static final Pattern ENDING_PATTERN = Pattern.compile("\\?.*");
     private String mUrl;
 
     public PathQueryString(String url) {
-        mUrl = url;
+        mUrl = Helpers.replace(url, ENDING_PATTERN, "");
     }
 
     @Override
@@ -110,7 +111,7 @@ public class PathQueryString implements UrlQueryString {
             return false;
         }
 
-        return Helpers.matchAll(mUrl, VALIDATION_PATTERN_1, VALIDATION_PATTERN_2);
+        return Helpers.matchAll(mUrl, VALIDATION_PATTERN);
     }
 
     @Override

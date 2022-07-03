@@ -18,19 +18,23 @@ public class UrlQueryStringFactory {
         return parse(Helpers.toString(urlContent));
     }
 
+    //public static UrlQueryString parse(String url) {
+    //    UrlQueryString pathQueryString = PathQueryString.parse(url);
+    //
+    //    if (pathQueryString.isValid()) {
+    //        return pathQueryString;
+    //    }
+    //
+    //    UrlQueryString urlQueryString = UrlEncodedQueryString.parse(url);
+    //
+    //    if (urlQueryString.isValid()) {
+    //        return urlQueryString;
+    //    }
+    //
+    //    return NullQueryString.parse(url);
+    //}
+
     public static UrlQueryString parse(String url) {
-        UrlQueryString queryString = UrlEncodedQueryString.parse(url);
-
-        if (queryString.isValid()) {
-            return queryString;
-        }
-
-        queryString = PathQueryString.parse(url);
-
-        if (queryString.isValid()) {
-            return queryString;
-        }
-
-        return NullQueryString.parse(url);
+        return CombinedQueryString.parse(url);
     }
 }
