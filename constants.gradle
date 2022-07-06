@@ -11,6 +11,8 @@ project.ext {
     targetSdkVersion = 26 // set target api = 26 to fix Android 8.0 error: "Only fullscreen opaque activities can request orientation"
     compileSdkVersion = 30
     buildToolsVersion = '30.0.3'
+    kotlinVersion = '1.5.30'
+    kotlinCoreVersion = '1.6.0'
     
     testSupportLibraryVersion = '0.5'
     testXSupportLibraryVersion = '1.1.0'
@@ -86,10 +88,10 @@ project.ext {
     junitPioneerVersion = '1.3.0'
     mockitoVersion = '3.7.7'
     // End My commons-io deps (Android 4.3 fix)
+    
     workVersion = '2.5.0'
     liveDataVersion = '2.1.0'
     browserXVersion = '1.3.0'
 
-    kotlinVersion = '1.5.30'
-    kotlinCoreVersion = '1.6.0'
+    chatkitVersion = 'v0.4.1'
 }
