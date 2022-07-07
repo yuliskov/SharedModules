@@ -1458,9 +1458,9 @@ public final class Helpers {
         }
 
         if (sVP9MaxHeight == 0) {
-            // TV capabilities limited to the screen resolution not real decoder support
-            switch (Helpers.getDeviceName()) {
-                case "MiTV-AXSO0 (dangal)": // FHD tv
+            // TV capabilities sometimes are limited to the screen resolution not real decoder support
+            switch (Build.MODEL) {
+                case "MiTV-AXSO0": // FHD tv
                     sVP9MaxHeight = 2160;
                     break;
                 default:
