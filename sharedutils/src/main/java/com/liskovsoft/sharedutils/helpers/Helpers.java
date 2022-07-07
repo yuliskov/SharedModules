@@ -1458,7 +1458,15 @@ public final class Helpers {
         }
 
         if (sVP9MaxHeight == 0) {
-            sVP9MaxHeight = getCodecMaxHeight(MIME_VP9);
+            // TV capabilities limited to the screen resolution not real decoder support
+            switch (Helpers.getDeviceName()) {
+                case "MiTV-AXSO0 (dangal)": // FHD tv
+                    sVP9MaxHeight = 2160;
+                    break;
+                default:
+                    sVP9MaxHeight = getCodecMaxHeight(MIME_VP9);
+                    break;
+            }
         }
 
         return height <= sVP9MaxHeight;
