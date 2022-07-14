@@ -170,7 +170,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public boolean isHideShortsFromSubscriptionsEnabled() {
-        return getBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, true);
+        return getBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, false);
     }
 
     public void hideShortsFromHistory(boolean enable) {

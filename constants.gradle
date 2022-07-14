@@ -16,7 +16,7 @@ project.ext {
     
     testSupportLibraryVersion = '0.5'
     testXSupportLibraryVersion = '1.1.0'
-    appCompatXLibraryVersion = '1.0.0'
+    appCompatXLibraryVersion = '1.2.0' // old: 1.0.0
     leanbackXLibraryVersion = '1.0.0'
     annotationXLibraryVersion = '1.1.0'
     recyclerviewXLibraryVersion = '1.1.0'

@@ -91,15 +91,21 @@ public class LocaleUpdater {
             currentLocale  = LocaleUtility.getCurrentLocale(mContext);
         }
 
-        if (isCountryCodeEmpty) {
-            countryCode = currentLocale.getCountry();
-        }
-
         if (isLangCodeEmpty) {
             langCode = currentLocale.getLanguage();
         } else {
             StringTokenizer tokenizer = new StringTokenizer(langCode, "_");
             langCode = tokenizer.nextToken();
+        }
+
+        if (isCountryCodeEmpty) {
+            countryCode = currentLocale.getCountry();
+        } else {
+            StringTokenizer tokenizer = new StringTokenizer(countryCode, "_");
+            countryCode = tokenizer.nextToken();
+            if (tokenizer.hasMoreTokens()) {
+                countryCode = tokenizer.nextToken(); // E.g. fr_BE
+            }
         }
 
         return String.format("%s_%s", langCode, countryCode);
