@@ -1556,4 +1556,15 @@ public final class Helpers {
 
         return title.substring(0, maxLength) + "\u2026"; // ...
     }
+
+    /**
+     * Trim with respect of &nbsp; charater
+     */
+    public static String trim(String text) {
+        if (text == null) {
+            return null;
+        }
+
+        return text.replace("\u00a0", " ").trim(); // &nbsp;
+    }
 }

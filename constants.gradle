@@ -94,4 +94,5 @@ project.ext {
     browserXVersion = '1.3.0'
 
     chatkitVersion = 'v0.4.1'
+    gotevSpeechVersion = '1.1.2'
 }
