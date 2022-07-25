@@ -1463,7 +1463,6 @@ public final class Helpers {
                 // FHD tvs capable 4K
                 case "MiTV-AXSO0":
                 case "VIDAA_TV":
-                case "MiTV4-ANSM0":
                     sVP9MaxHeight = 2160;
                     break;
                 default:
