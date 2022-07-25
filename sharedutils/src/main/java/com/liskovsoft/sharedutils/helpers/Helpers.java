@@ -1460,7 +1460,10 @@ public final class Helpers {
         if (sVP9MaxHeight == 0) {
             // TV capabilities sometimes are limited to the screen resolution not real decoder support
             switch (Build.MODEL) {
-                case "MiTV-AXSO0": // FHD tv
+                // FHD tvs capable 4K
+                case "MiTV-AXSO0":
+                case "VIDAA_TV":
+                case "MiTV4-ANSM0":
                     sVP9MaxHeight = 2160;
                     break;
                 default:
