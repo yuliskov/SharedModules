@@ -103,7 +103,7 @@ public class UrlEncodedQueryString implements UrlQueryString {
     @Override
     public String toString() {
         if (mQueryString == null) {
-            return "";
+            return mUrl != null ? mUrl : "";
         }
 
         return mQueryPrefix != null ? String.format("%s?%s", mQueryPrefix, mQueryString) : mQueryString.toString();

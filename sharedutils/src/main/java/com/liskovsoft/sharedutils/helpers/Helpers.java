@@ -1333,7 +1333,7 @@ public final class Helpers {
      * @return removed items (if any) or null (if nothing removed)
      */
     public static <T> List<T> removeIf(Collection<T> collection, Filter<T> filter) {
-        if (collection == null || filter == null) {
+        if (collection == null || filter == null || collection.getClass().getName().contains("UnmodifiableList")) {
             return null;
         }
 
