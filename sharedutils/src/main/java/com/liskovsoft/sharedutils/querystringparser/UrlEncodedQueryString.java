@@ -1,6 +1,7 @@
 package com.liskovsoft.sharedutils.querystringparser;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.net.URI;
@@ -9,7 +10,9 @@ import java.util.regex.Pattern;
 
 public class UrlEncodedQueryString implements UrlQueryString {
     private static final Pattern VALIDATION_PATTERN = Pattern.compile("[^\\/?&]+=[^\\/&]+");
+    @Nullable
     private String mQueryPrefix;
+    @Nullable
     private UrlEncodedQueryStringBase mQueryString;
     private String mUrl;
 
@@ -22,13 +25,16 @@ public class UrlEncodedQueryString implements UrlQueryString {
 
         if (Helpers.isValidUrl(url)) {
             URI parsedUrl = getURI(url);
-            mQueryPrefix = String.format("%s://%s%s", parsedUrl.getScheme(), parsedUrl.getHost(), parsedUrl.getPath());
-            mQueryString = UrlEncodedQueryStringBase.parse(parsedUrl);
+            if (parsedUrl != null) {
+                mQueryPrefix = String.format("%s://%s%s", parsedUrl.getScheme(), parsedUrl.getHost(), parsedUrl.getPath());
+                mQueryString = UrlEncodedQueryStringBase.parse(parsedUrl);
+            }
         } else {
             mQueryString = UrlEncodedQueryStringBase.parse(url);
         }
     }
 
+    @Nullable
     private URI getURI(String url) {
         if (url == null) {
             return null;
@@ -60,12 +66,14 @@ public class UrlEncodedQueryString implements UrlQueryString {
 
     @Override
     public void remove(String key) {
-        mQueryString.remove(key);
+        if (mQueryString != null) {
+            mQueryString.remove(key);
+        }
     }
 
     @Override
     public String get(String key) {
-        return mQueryString.get(key);
+        return mQueryString != null ? mQueryString.get(key) : null;
     }
 
     @Override
@@ -76,7 +84,9 @@ public class UrlEncodedQueryString implements UrlQueryString {
 
     @Override
     public void set(String key, String value) {
-        mQueryString.set(key, value);
+        if (mQueryString != null) {
+            mQueryString.set(key, value);
+        }
     }
 
     @Override
@@ -92,6 +102,10 @@ public class UrlEncodedQueryString implements UrlQueryString {
     @NonNull
     @Override
     public String toString() {
+        if (mQueryString == null) {
+            return "";
+        }
+
         return mQueryPrefix != null ? String.format("%s?%s", mQueryPrefix, mQueryString) : mQueryString.toString();
     }
 
@@ -114,6 +128,6 @@ public class UrlEncodedQueryString implements UrlQueryString {
 
     @Override
     public boolean contains(String key) {
-        return mQueryString.contains(key);
+        return mQueryString != null && mQueryString.contains(key);
     }
 }
