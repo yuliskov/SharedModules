@@ -966,6 +966,24 @@ public final class Helpers {
         }
     }
 
+    public static void setField(Object these, String fieldName, long value) {
+        try {
+            Field f1 = getDeclaredField(these.getClass(), fieldName);
+            if (f1 != null) {
+                // Change private modifier to public
+                f1.setAccessible(true);
+                // Remove final modifier (don't working!!!)
+                //Field modifiersField = Field.class.getDeclaredField("modifiers");
+                //modifiersField.setAccessible(true);
+                //modifiersField.setInt(f1, f1.getModifiers() & ~Modifier.FINAL);
+                // Set field (at last)
+                f1.setLong(these, value);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void setField(Object these, String fieldName, Object value) {
         try {
             Field f1 = getDeclaredField(these.getClass(), fieldName);
