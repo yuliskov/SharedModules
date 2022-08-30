@@ -13,6 +13,9 @@ project.ext {
     buildToolsVersion = '30.0.3'
     kotlinVersion = '1.5.30'
     kotlinCoreVersion = '1.6.0'
+    // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
+    gradleVersion = '6.9.1'
+    androidGradleVersion = '4.0.0+' // last version compatible with IntellJ 2020.3
     
     testSupportLibraryVersion = '0.5'
     testXSupportLibraryVersion = '1.1.0'
@@ -32,6 +35,8 @@ project.ext {
     autoValueVersion = '1.6'
     checkerframeworkVersion = '2.5.0'
     testRunnerVersion = '1.0.2'
+    materialVersion = '1.2.1'
+    flexboxVersion = '1.0.0'
     
     legacyExoplayerVersion = '2.9.6'
     // exoplayerVersion = '2.10.8' // Old
