@@ -63,6 +63,7 @@ project.ext {
     multiDexVersion = '2.0.0' // crashlytics fix on Android 4.4
     stethoVersion = '1.5.0' // Chrome Dev Tools
     glideVersion = '4.11.0'
+    webpDecoderVersion = '2.0.' + glideVersion // should end with glide version
     rxAndroidVersion = '2.1.1'
     rxJavaVersion = '2.2.21'
     diskLruCacheVersion = '2.0.2'
