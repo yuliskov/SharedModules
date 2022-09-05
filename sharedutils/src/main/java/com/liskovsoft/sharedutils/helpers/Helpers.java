@@ -1588,4 +1588,8 @@ public final class Helpers {
 
         return text.replace("\u00a0", " ").trim(); // &nbsp;
     }
+
+    public static int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
 }
