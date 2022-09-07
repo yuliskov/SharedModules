@@ -70,6 +70,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
@@ -90,6 +91,7 @@ public final class Helpers {
     private static Boolean sIsAV1Supported;
     private static int sVP9MaxHeight;
     private static int sAV1MaxHeight;
+    private static Random sRandom;
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
@@ -1589,7 +1591,23 @@ public final class Helpers {
         return text.replace("\u00a0", " ").trim(); // &nbsp;
     }
 
+    public static int getRandomIndex(int size) {
+        if (size <= 0) {
+            return size;
+        }
+
+        if (sRandom == null) {
+            sRandom = new Random();
+        }
+
+        return sRandom.nextInt(size);
+    }
+
     public static int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
+        if (sRandom == null) {
+            sRandom = new Random();
+        }
+
+        return sRandom.nextInt((max - min) + 1) + min;
     }
 }
