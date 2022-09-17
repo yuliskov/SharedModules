@@ -3,6 +3,7 @@ package com.liskovsoft.sharedutils.locale;
 import android.content.Context;
 import android.os.Build;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -768,5 +769,33 @@ public class LocaleUtility {
 
     public static String getCurrentLanguage(Context context) {
         return getCurrentLocale(context).getLanguage().toLowerCase();
+    }
+
+    public static boolean is24HourLocale(Context context) {
+        Locale currentLocale = LocaleUtility.getCurrentLocale(context);
+
+        // Fix weird locale like en_RO
+        for (Locale locale : Locale.getAvailableLocales()) {
+            if (locale.getCountry().equals(currentLocale.getCountry())) {
+                currentLocale = locale;
+                break;
+            }
+        }
+
+        java.text.DateFormat natural =
+                java.text.DateFormat.getTimeInstance(
+                        java.text.DateFormat.LONG, currentLocale);
+
+        if (natural instanceof SimpleDateFormat) {
+            SimpleDateFormat sdf = (SimpleDateFormat) natural;
+            String pattern = sdf.toPattern();
+            if (pattern.indexOf('H') >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 }
