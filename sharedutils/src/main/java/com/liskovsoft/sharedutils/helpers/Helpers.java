@@ -1419,6 +1419,22 @@ public final class Helpers {
         return null;
     }
 
+    public static <T> T findLast(Collection<T> collection, Filter<T> filter) {
+        if (collection == null || filter == null) {
+            return null;
+        }
+
+        T result = null;
+
+        for (T next : collection) {
+            if (filter.test(next)) {
+                result = next;
+            }
+        }
+
+        return result;
+    }
+
     public static <T> void removeDuplicates(List<T> list) {
         Set<T> set = new LinkedHashSet<>(list);
         list.clear();
