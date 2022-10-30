@@ -1,6 +1,6 @@
 package com.liskovsoft.sharedutils.okhttp;
 
-import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor;
+import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import okhttp3.CipherSuite;
