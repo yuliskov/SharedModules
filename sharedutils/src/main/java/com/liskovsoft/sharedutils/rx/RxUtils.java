@@ -1,5 +1,6 @@
 package com.liskovsoft.sharedutils.rx;
 
+import androidx.annotation.Nullable;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -117,17 +118,39 @@ public class RxUtils {
     }
 
     public static Disposable runAsync(Runnable callback) {
-        return Completable.fromAction(callback::run)
+        return Completable.fromRunnable(callback)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe();
     }
 
     public static Disposable runAsync(Runnable callback, long delayMs) {
-        return Completable.fromAction(callback::run)
+        return Completable.fromRunnable(callback)
                 .delaySubscription(delayMs, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe();
+    }
+
+    public static Disposable runAsyncUser(Runnable callback) {
+        return runAsyncUser(callback, null, null);
+    }
+
+    public static Disposable runAsyncUser(Runnable callback, @Nullable OnError onError, @Nullable Runnable onFinish) {
+        return Completable.fromRunnable(callback)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            if (onFinish != null) {
+                                onFinish.run();
+                            }
+                        },
+                        error -> {
+                            if (onError != null) {
+                                onError.onError(error);
+                            }
+                        }
+                );
     }
 }
