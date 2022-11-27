@@ -1626,4 +1626,9 @@ public final class Helpers {
 
         return sRandom.nextInt((max - min) + 1) + min;
     }
+
+    public static <T extends Comparable<T>> T[] sortNatural(T[] stringArray) {
+        Arrays.sort(stringArray, T::compareTo);
+        return stringArray;
+    }
 }
