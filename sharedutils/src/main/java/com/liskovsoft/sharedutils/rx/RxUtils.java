@@ -167,6 +167,10 @@ public class RxUtils {
             if (e instanceof UndeliverableException) {
                 e = e.getCause();
             }
+            if ((e instanceof IllegalStateException) && (e.getCause() instanceof SocketException)) {
+                // network problems
+                e = e.getCause();
+            }
             if (e instanceof IOException) {
                 // fine, irrelevant network problem or API that throws on cancellation
                 return;
