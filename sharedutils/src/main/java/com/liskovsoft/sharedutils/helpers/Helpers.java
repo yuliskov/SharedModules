@@ -1620,23 +1620,42 @@ public final class Helpers {
             return size;
         }
 
-        if (sRandom == null) {
-            sRandom = new Random();
-        }
-
-        return sRandom.nextInt(size);
+        return getRandom().nextInt(size);
     }
 
     public static int getRandomNumber(int min, int max) {
-        if (sRandom == null) {
-            sRandom = new Random();
-        }
-
-        return sRandom.nextInt((max - min) + 1) + min;
+        return getRandom().nextInt((max - min) + 1) + min;
     }
 
     public static <T extends Comparable<T>> T[] sortNatural(T[] stringArray) {
         Arrays.sort(stringArray, T::compareTo);
         return stringArray;
+    }
+
+    /**
+     * Implementing Fisher–Yates shuffle
+     */
+    public static <T> T[] shuffleArray(T[] arr) {
+        if (arr == null || arr.length == 0) {
+            return arr;
+        }
+
+        for (int i = arr.length - 1; i > 0; i--) {
+            int index = getRandom().nextInt(i + 1);
+            // Simple swap
+            T item = arr[index];
+            arr[index] = arr[i];
+            arr[i] = item;
+        }
+
+        return arr;
+    }
+
+    private static Random getRandom() {
+        if (sRandom == null) {
+            sRandom = new Random();
+        }
+
+        return sRandom;
     }
 }

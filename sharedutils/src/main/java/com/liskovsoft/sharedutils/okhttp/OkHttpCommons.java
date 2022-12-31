@@ -1,6 +1,7 @@
 package com.liskovsoft.sharedutils.okhttp;
 
 import android.os.Build.VERSION;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionPool;
@@ -32,7 +33,7 @@ public final class OkHttpCommons {
     // This is nearly equal to the cipher suites supported in Chrome 51, current as of 2016-05-25.
     // All of these suites are available on Android 7.0; earlier releases support a subset of these
     // suites. https://github.com/square/okhttp/issues/1972
-    private static final CipherSuite[] APPROVED_CIPHER_SUITES_ALT = new CipherSuite[] {
+    private static final CipherSuite[] APPROVED_CIPHER_SUITES = Helpers.shuffleArray(new CipherSuite[] {
             // TLSv1.3
             CipherSuite.TLS_AES_128_GCM_SHA256,
             CipherSuite.TLS_AES_256_GCM_SHA384,
@@ -66,7 +67,7 @@ public final class OkHttpCommons {
             // From NewPipe Downloader
             CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
             CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
-    };
+    });
 
     public static void setupConnectionParams(OkHttpClient.Builder okBuilder) {
         // Setup default timeout
@@ -88,7 +89,7 @@ public final class OkHttpCommons {
     public static void setupConnectionFix(Builder okBuilder) {
         // Alter cipher list to create unique TLS fingerprint
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                .cipherSuites(APPROVED_CIPHER_SUITES_ALT)
+                .cipherSuites(APPROVED_CIPHER_SUITES)
                 .build();
         okBuilder.connectionSpecs(Arrays.asList(cs, ConnectionSpec.CLEARTEXT));
     }

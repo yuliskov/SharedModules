@@ -4,8 +4,11 @@ import androidx.annotation.Nullable;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.exceptions.OnErrorNotImplementedException;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
@@ -13,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -193,5 +197,49 @@ public class RxUtils {
             }
             Log.e(TAG, "Undeliverable exception received, not sure what to do", e);
         });
+    }
+
+    public static <T> Observable<T> create(ObservableOnSubscribe<T> source) {
+        return Observable.create(source)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static <T> Observable<T> fromCallable(Callable<T> supplier) {
+        return Observable.fromCallable(supplier)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<Void> fromVoidable(Runnable callback) {
+        return create(emitter -> {
+            callback.run();
+            emitter.onComplete();
+        });
+    }
+
+    public static <T> Observable<T> fromNullable(Callable<T> callback) {
+        return create(emitter -> {
+            T result = callback.call();
+
+            if (result != null) {
+                emitter.onNext(result);
+                emitter.onComplete();
+            } else {
+                // Be aware of OnErrorNotImplementedException exception if error handler not implemented!
+                // Essential part to notify about problems. Don't remove!
+                onError(emitter, "fromNullable result is null");
+                Log.e(TAG, "fromNullable result is null");
+            }
+        });
+    }
+
+    /**
+     * Fix fall back on the global error handler.
+     * <a href="https://stackoverflow.com/questions/44420422/crash-when-sending-exception-through-rxjava">More info</a><br/>
+     * Be aware of {@link OnErrorNotImplementedException} exception if error handler not implemented inside subscribe clause!
+     */
+    public static <T> void onError(ObservableEmitter<T> emitter, String msg) {
+        emitter.tryOnError(new IllegalStateException(msg));
     }
 }
