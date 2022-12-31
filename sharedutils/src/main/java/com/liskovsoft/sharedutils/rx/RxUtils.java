@@ -211,6 +211,12 @@ public class RxUtils {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public static <T> Observable<T> fromIterable(Iterable<T> source) {
+        return Observable.fromIterable(source)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public static Observable<Void> fromVoidable(Runnable callback) {
         return create(emitter -> {
             callback.run();
