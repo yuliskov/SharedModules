@@ -92,6 +92,9 @@ public final class Helpers {
     private static int sVP9MaxHeight;
     private static int sAV1MaxHeight;
     private static Random sRandom;
+    // https://unicode-table.com/en/
+    public static final String THUMB_UP = "\uD83D\uDC4D";
+    public static final String HOURGLASS = "⌛";
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
