@@ -93,8 +93,10 @@ public final class Helpers {
     private static int sAV1MaxHeight;
     private static Random sRandom;
     // https://unicode-table.com/en/
+    // https://www.compart.com/en/unicode/
     public static final String THUMB_UP = "\uD83D\uDC4D";
-    public static final String HOURGLASS = "⌛";
+    //public static final String HOURGLASS = "⌛";
+    public static final String HOURGLASS = "\u231B";
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
