@@ -81,9 +81,7 @@ public class RxHelper {
     }
 
     public static <T> Disposable execute(Observable<T> observable) {
-        return observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        return setup(observable)
                 .subscribe(
                         obj -> {}, // ignore result
                         error -> Log.e(TAG, "Execute error: %s", error.getMessage())
@@ -91,9 +89,7 @@ public class RxHelper {
     }
 
     public static <T> Disposable execute(Observable<T> observable, Runnable onFinish) {
-        return observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        return setup(observable)
                 .subscribe(
                         obj -> {}, // ignore result
                         error -> Log.e(TAG, "Execute error: %s", error.getMessage()),
@@ -102,9 +98,7 @@ public class RxHelper {
     }
 
     public static <T> Disposable execute(Observable<T> observable, Runnable onError, Runnable onFinish) {
-        return observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        return setup(observable)
                 .subscribe(
                         obj -> {}, // ignore result
                         error -> onError.run(),
@@ -113,12 +107,7 @@ public class RxHelper {
     }
 
     public static Disposable startInterval(Runnable callback, int periodSec) {
-        Observable<Long> playbackProgressObservable =
-                Observable.interval(periodSec, TimeUnit.SECONDS);
-
-        return playbackProgressObservable
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+        return interval(periodSec, TimeUnit.SECONDS)
                 .subscribe(
                         period -> callback.run(),
                         error -> Log.e(TAG, "startInterval error: %s", error.getMessage())
