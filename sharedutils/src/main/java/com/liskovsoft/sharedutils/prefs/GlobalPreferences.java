@@ -27,6 +27,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String ENABLE_DNS_OVER_HTTPS = "enable_dns_over_https";
     private static final String VISITOR_COOKIE = "visitor_cookie";
     private static final String HIDE_SHORTS_FROM_SUBSCRIPTIONS = "hide_shorts_from_subscriptions";
+    private static final String HIDE_STREAMS_FROM_SUBSCRIPTIONS = "hide_streams_from_subscriptions";
     private static final String HIDE_SHORTS_FROM_HOME = "hide_shorts_from_home";
     private static final String HIDE_SHORTS_FROM_HISTORY = "hide_shorts_from_history";
     private static final String HIDE_UPCOMING = "hide_upcoming";
@@ -171,6 +172,14 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isHideShortsFromSubscriptionsEnabled() {
         return getBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, false);
+    }
+
+    public void hideStreamsFromSubscriptions(boolean enable) {
+        putBoolean(HIDE_STREAMS_FROM_SUBSCRIPTIONS, enable);
+    }
+
+    public boolean isHideStreamsFromSubscriptionsEnabled() {
+        return getBoolean(HIDE_STREAMS_FROM_SUBSCRIPTIONS, false);
     }
 
     public void hideShortsFromHistory(boolean enable) {
