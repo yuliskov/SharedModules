@@ -1,9 +1,9 @@
 package com.liskovsoft.sharedutils.okhttp
 
-import android.os.Build
 import com.liskovsoft.sharedutils.BuildConfig
 import com.liskovsoft.sharedutils.helpers.Helpers
 import com.liskovsoft.sharedutils.okhttp.DohProviders.buildGoogle
+import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor
 import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import okhttp3.Dns
@@ -15,22 +15,14 @@ import java.net.InetAddress
 
 object OkHttpClientHelper {
     @JvmStatic
+    var enableProfiler: Boolean = true
+
+    @JvmStatic
     fun createOkHttpClient(): OkHttpClient {
         val okBuilder = OkHttpClient.Builder()
 
-        //if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
-        //    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
-        //    preferIPv4Dns(okBuilder);
-        //}
-        OkHttpCommons.setupConnectionFix(okBuilder)
-        OkHttpCommons.setupConnectionParams(okBuilder)
-        OkHttpCommons.configureToIgnoreCertificate(okBuilder)
-        OkHttpCommons.fixStreamResetError(okBuilder)
-        addCommonHeaders(okBuilder)
-        enableDecompression(okBuilder)
+        setupBuilder(okBuilder)
 
-        //disableCache(okBuilder);
-        debugSetup(okBuilder)
         var client = okBuilder.build()
 
         //if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isDnsOverHttpsEnabled()) {
@@ -44,6 +36,26 @@ object OkHttpClientHelper {
         //}
 
         return client
+    }
+
+    @JvmStatic
+    fun setupBuilder(okBuilder: OkHttpClient.Builder): OkHttpClient.Builder {
+        //if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
+        //    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
+        //    preferIPv4Dns(okBuilder);
+        //}
+        OkHttpCommons.setupConnectionFix(okBuilder)
+        OkHttpCommons.setupConnectionParams(okBuilder)
+        OkHttpCommons.configureToIgnoreCertificate(okBuilder)
+        OkHttpCommons.fixStreamResetError(okBuilder)
+        addCommonHeaders(okBuilder)
+        enableDecompression(okBuilder)
+        //enableRateLimiter(okBuilder)
+
+        //disableCache(okBuilder);
+        debugSetup(okBuilder)
+
+        return okBuilder
     }
 
     private fun disableCache(okBuilder: OkHttpClient.Builder) {
@@ -77,14 +89,18 @@ object OkHttpClientHelper {
         builder.addInterceptor(UnzippingInterceptor())
     }
 
+    private fun enableRateLimiter(builder: OkHttpClient.Builder) {
+        builder.addInterceptor(RateLimitInterceptor())
+    }
+
     private fun debugSetup(okBuilder: OkHttpClient.Builder) {
         if (BuildConfig.DEBUG) {
-            // Force enable for unit tests.
+            // Profiler could cause OutOfMemoryError when testing.
+            // Also outputs to logcat tons of info.
             // If you enable it to all requests - expect slowdowns.
-            //if (sForceEnableProfiler) {
-            //    addProfiler(okBuilder);
-            //}
-            addProfiler(okBuilder)
+            if (enableProfiler) {
+                addProfiler(okBuilder)
+            }
             addLogger(okBuilder)
         }
     }

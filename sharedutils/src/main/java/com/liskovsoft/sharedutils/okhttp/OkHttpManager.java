@@ -1,20 +1,13 @@
 package com.liskovsoft.sharedutils.okhttp;
 
-import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptorOld;
-import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
-import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import okhttp3.CipherSuite;
-import okhttp3.ConnectionSpec;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.TlsVersion;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +16,9 @@ public class OkHttpManager {
     private static final int NUM_TRIES = 3;
     private static OkHttpManager sInstance;
     private final OkHttpClient mClient;
-    private final boolean mEnableProfilerWhenDebugging;
 
-    private OkHttpManager(boolean enableProfilerWhenDebugging) {
-        // Profiler could cause OutOfMemoryError when testing.
-        // Also outputs to logcat tons of info.
-        mEnableProfilerWhenDebugging = enableProfilerWhenDebugging;
-
+    private OkHttpManager(boolean enableProfiler) {
+        OkHttpClientHelper.setEnableProfiler(enableProfiler);
         mClient = OkHttpClientHelper.createOkHttpClient();
     }
 
@@ -37,9 +26,9 @@ public class OkHttpManager {
         return instance(true); // profiler is enabled by default
     }
 
-    public static OkHttpManager instance(boolean enableProfilerWhenDebugging) {
+    public static OkHttpManager instance(boolean enableProfiler) {
         if (sInstance == null) {
-            sInstance = new OkHttpManager(enableProfilerWhenDebugging);
+            sInstance = new OkHttpManager(enableProfiler);
         }
 
         return sInstance;
@@ -140,10 +129,6 @@ public class OkHttpManager {
     }
 
     private Response doOkHttpRequest(OkHttpClient client, Request okHttpRequest) {
-        if (client == null) {
-            client = createOkHttpClient();
-        }
-
         Response okHttpResponse = null;
         Exception lastEx = null;
 
@@ -168,63 +153,6 @@ public class OkHttpManager {
         }
 
         return okHttpResponse;
-    }
-
-    private OkHttpClient createOkHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        // Profiler could cause OutOfMemoryError when testing.
-        // Also outputs to logcat tons of info.
-        if (BuildConfig.DEBUG && mEnableProfilerWhenDebugging) {
-            builder.addInterceptor(new OkHttpProfilerInterceptor());
-        }
-
-        builder.addInterceptor(new RateLimitInterceptor());
-        builder.addInterceptor(new UnzippingInterceptorOld());
-
-        //configureToIgnoreCertificate(builder);
-
-        return setupBuilder(builder).build();
-    }
-
-    //public OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
-    //    ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
-    //            .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
-    //            .cipherSuites(
-    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
-    //                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA)
-    //            .build();
-    //
-    //    builder
-    //        .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
-    //        .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)
-    //        .writeTimeout(WRITE_TIMEOUT_S, TimeUnit.SECONDS)
-    //        .connectionSpecs(Collections.singletonList(spec));
-    //
-    //    return enableTls12OnPreLollipop(builder);
-    //}
-
-    public OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
-        OkHttpCommons.setupConnectionFix(builder);
-        OkHttpCommons.setupConnectionParams(builder);
-        OkHttpCommons.configureToIgnoreCertificate(builder);
-
-        return builder;
-    }
-
-    private void setupConnectionSpec(OkHttpClient.Builder builder) {
-        ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
-                .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
-                .cipherSuites(
-                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                        CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
-                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA)
-                .build();
-
-        builder.connectionSpecs(Collections.singletonList(spec));
     }
 
     public OkHttpClient getOkHttpClient() {

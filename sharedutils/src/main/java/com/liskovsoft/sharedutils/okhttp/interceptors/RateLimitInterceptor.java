@@ -1,4 +1,4 @@
-package com.liskovsoft.sharedutils.okhttp;
+package com.liskovsoft.sharedutils.okhttp.interceptors;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 import okhttp3.Interceptor;

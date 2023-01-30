@@ -43,7 +43,7 @@ public class OkHttpHelpers {
     }
 
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
-        return getOkHttpManager().setupBuilder(builder);
+        return OkHttpClientHelper.setupBuilder(builder);
     }
 
     public static OkHttpClient getOkHttpClient() {
