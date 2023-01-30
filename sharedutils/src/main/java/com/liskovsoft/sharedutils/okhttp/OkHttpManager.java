@@ -1,5 +1,6 @@
 package com.liskovsoft.sharedutils.okhttp;
 
+import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptorOld;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -29,7 +30,7 @@ public class OkHttpManager {
         // Also outputs to logcat tons of info.
         mEnableProfilerWhenDebugging = enableProfilerWhenDebugging;
 
-        mClient = createOkHttpClient();
+        mClient = OkHttpClientHelper.createOkHttpClient();
     }
 
     public static OkHttpManager instance() {
@@ -169,7 +170,7 @@ public class OkHttpManager {
         return okHttpResponse;
     }
 
-    public OkHttpClient createOkHttpClient() {
+    private OkHttpClient createOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         // Profiler could cause OutOfMemoryError when testing.
@@ -179,7 +180,7 @@ public class OkHttpManager {
         }
 
         builder.addInterceptor(new RateLimitInterceptor());
-        builder.addInterceptor(new UnzippingInterceptor());
+        builder.addInterceptor(new UnzippingInterceptorOld());
 
         //configureToIgnoreCertificate(builder);
 

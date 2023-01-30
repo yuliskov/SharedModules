@@ -1,4 +1,4 @@
-package com.liskovsoft.sharedutils.okhttp;
+package com.liskovsoft.sharedutils.okhttp.interceptors;
 
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -9,7 +9,7 @@ import okio.Okio;
 
 import java.io.IOException;
 
-class UnzippingInterceptor implements Interceptor {
+public class UnzippingInterceptorOld implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());

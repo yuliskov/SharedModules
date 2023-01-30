@@ -25,7 +25,7 @@ public class PermissionHelpers {
     };
 
     /**
-     * Checks if the app has permission to write to device storage<br/>
+     * Checks if the app has permission to access device storage<br/>
      * If the app does not has permission then the user will be prompted to grant permissions<br/>
      * Required for the {@link Context#getExternalCacheDir()}<br/>
      * NOTE: runs async<br/>

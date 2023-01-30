@@ -118,10 +118,16 @@ public class FileHelpers {
         return new File(Environment.getExternalStorageDirectory(), String.format("data/%s", context.getPackageName()));
     }
 
+    /**
+     * NOTE: App should have permission to access device storage
+     */
     public static boolean isEmpty(File dir) {
         return dir == null || listFileTree(dir).size() == 0;
     }
 
+    /**
+     * NOTE: App should have permission to access device storage
+     */
     public static Collection<File> listFileTree(File dir) {
         Set<File> fileTree = new HashSet<>();
 

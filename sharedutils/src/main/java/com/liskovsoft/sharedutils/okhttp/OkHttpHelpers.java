@@ -6,51 +6,55 @@ import okhttp3.Response;
 import java.util.Map;
 
 public class OkHttpHelpers {
-    private static final OkHttpManager mOkHttpManager = OkHttpManager.instance();
+    private static OkHttpManager sOkHttpManager;
 
     public static Response doOkHttpRequest(String url) {
-        return mOkHttpManager.doOkHttpRequest(url);
+        return getOkHttpManager().doOkHttpRequest(url);
     }
 
     public static Response doGetOkHttpRequest(String url, Map<String, String> headers) {
-        return mOkHttpManager.doGetOkHttpRequest(url, headers);
+        return getOkHttpManager().doGetOkHttpRequest(url, headers);
     }
 
     public static Response doPostOkHttpRequest(String url, Map<String, String> headers, String postBody, String contentType) {
-        return mOkHttpManager.doPostOkHttpRequest(url, headers, postBody, contentType);
+        return getOkHttpManager().doPostOkHttpRequest(url, headers, postBody, contentType);
     }
 
     public static Response doGetOkHttpRequest(String url) {
-        return mOkHttpManager.doGetOkHttpRequest(url);
+        return getOkHttpManager().doGetOkHttpRequest(url);
     }
 
     public static Response doHeadOkHttpRequest(String url) {
-        return mOkHttpManager.doHeadOkHttpRequest(url);
+        return getOkHttpManager().doHeadOkHttpRequest(url);
     }
 
     /**
      * NOTE: default method is GET
      */
     public static Response doOkHttpRequest(String url, OkHttpClient client) {
-        return mOkHttpManager.doOkHttpRequest(url, client);
+        return getOkHttpManager().doOkHttpRequest(url, client);
     }
 
     /**
      * NOTE: default method is GET
      */
     public static Response doOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers) {
-        return mOkHttpManager.doOkHttpRequest(url, client, headers);
-    }
-
-    public static OkHttpClient createOkHttpClient() {
-        return mOkHttpManager.createOkHttpClient();
+        return getOkHttpManager().doOkHttpRequest(url, client, headers);
     }
 
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
-        return mOkHttpManager.setupBuilder(builder);
+        return getOkHttpManager().setupBuilder(builder);
     }
 
     public static OkHttpClient getOkHttpClient() {
-        return mOkHttpManager.getOkHttpClient();
+        return getOkHttpManager().getOkHttpClient();
+    }
+
+    private static OkHttpManager getOkHttpManager() {
+        if (sOkHttpManager == null) {
+            sOkHttpManager = OkHttpManager.instance();
+        }
+
+        return sOkHttpManager;
     }
 }

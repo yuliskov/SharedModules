@@ -1,4 +1,5 @@
 apply from: '../constants.gradle'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.android.library'
 
 android {
@@ -47,6 +48,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
 
     implementation 'com.squareup.okhttp3:okhttp:' + okhttpVersion
+    implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:' + okhttpVersion
+    implementation 'com.squareup.okhttp3:logging-interceptor:' + okhttpVersion
+    implementation 'com.squareup.okhttp3:okhttp-brotli:' + okhttpBrotliVersion
     implementation('com.localebro:okhttpprofiler:' + okhttpProfilerVersion) {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp' // force global okhttp version
     }
@@ -56,4 +60,12 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
     implementation 'com.jakewharton:disklrucache:' + diskLruCacheVersion
+
+    // Add modern TLS ciphers to HttpUrlConnection
+    // https://stackoverflow.com/questions/16299531/how-to-override-the-cipherlist-sent-to-the-server-by-android-when-using-httpsurl
+    implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
+
+    // Add kotlin support libs
+    implementation 'androidx.core:core-ktx:' + kotlinCoreVersion
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
 }
