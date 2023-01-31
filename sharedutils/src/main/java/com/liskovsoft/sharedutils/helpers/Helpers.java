@@ -941,6 +941,26 @@ public final class Helpers {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    /**
+     * https://stackoverflow.com/questions/4745988/how-do-i-detect-if-software-keyboard-is-visible-on-android-device-or-not
+     */
+    public static boolean isKeyboardShown(@Nullable Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        try {
+            Object height =
+                    InputMethodManager.class.getMethod("getInputMethodWindowVisibleHeight").invoke(inputMethodManager);
+            return height != null && ((int) height) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static int getDeviceRam(Context context) {
         if (context == null || VERSION.SDK_INT < 16) {
             return -1;
