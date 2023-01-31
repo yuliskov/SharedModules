@@ -11,19 +11,12 @@ object DefaultHeaders {
     /**
      * NOTE: Possible OOM exception!!! Uses more RAM because of decompression.
      */
-    private const val ACCEPT_ENCODING_COMPRESSED = "gzip, deflate, br" // NOTE: Old format live streams won't work with compression.
+    private const val ACCEPT_ENCODING_COMPRESSED = "gzip, deflate, br" // NOTE: HttpUrlConnection won't work with compression
 
     /**
      * No compression. Optimal RAM usage!
      */
-    private const val ACCEPT_ENCODING_IDENTITY = "identity"
-
-    private const val API_KEY_OLD = "AIzaSyDCU8hByM-4DrUqRUYnGn-3llEO78bcxq8"
-    private const val API_KEY_NEW = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
-
-    private const val JSON_POST_DATA_TEMPLATE = "{\"context\":{\"client\":{\"tvAppInfo\":{\"zylonLeftNav\":true},\"clientName\":\"%s\",\"clientVersion\":\"%s\"," +
-            "\"clientScreen\":\"%s\",\"webpSupport\":false,\"animatedWebpSupport\":true,\"acceptLanguage\":\"%%s\",\"acceptRegion\":\"%%s\"," +
-            "\"utcOffsetMinutes\":\"%%s\",\"visitorData\":\"%%s\"},\"user\":{\"enableSafetyMode\":false,\"lockedSafetyMode\":false}},\"racyCheckOk\":true,\"contentCheckOk\":true,%%s}"
+    private const val ACCEPT_ENCODING_DEFAULT = "identity"
 
     const val USER_AGENT_SAMSUNG =
         "Mozilla/5.0 (Linux; Tizen 2.3; SmartHub; SMART-TV; SmartTV; U; Maple2012) AppleWebKit/538.1+ (KHTML, like Gecko) TV Safari/538.1+"
@@ -57,5 +50,5 @@ object DefaultHeaders {
     @JvmField
     val APP_USER_AGENT = USER_AGENT_ATV_COMBINED
 
-    const val ACCEPT_ENCODING_DEFAULT = ACCEPT_ENCODING_COMPRESSED
+    const val ACCEPT_ENCODING = ACCEPT_ENCODING_COMPRESSED
 }

@@ -70,7 +70,7 @@ object OkHttpClientHelper {
             requestBuilder.header("User-Agent", DefaultHeaders.APP_USER_AGENT)
 
             // Enable compression in production
-            requestBuilder.header("Accept-Encoding", DefaultHeaders.ACCEPT_ENCODING_DEFAULT)
+            requestBuilder.header("Accept-Encoding", DefaultHeaders.ACCEPT_ENCODING)
 
             // Emulate browser request
             //requestBuilder.header("Connection", "keep-alive");

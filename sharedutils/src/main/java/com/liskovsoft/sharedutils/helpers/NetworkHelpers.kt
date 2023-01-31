@@ -12,8 +12,8 @@ object NetworkHelpers {
     @JvmStatic
     fun getHttpsURLConnection(url: URL): HttpURLConnection {
         // Original value
-        //HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        return NetCipher.getHttpsURLConnection(url)
+        return url.openConnection() as HttpURLConnection
+        //return NetCipher.getHttpsURLConnection(url)
     }
 
     /**
