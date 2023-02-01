@@ -79,7 +79,8 @@ public final class OkHttpCommons {
         // Imitate 'keepAlive' = false
         // https://stackoverflow.com/questions/63047533/connection-pool-okhttp
         // NOTE: SocketTimeoutException fix: setup connection pool with 0 (!) idle connections!
-        okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
+        //okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
+
         //okBuilder.protocols(listOf(Protocol.HTTP_1_1));
     }
 
