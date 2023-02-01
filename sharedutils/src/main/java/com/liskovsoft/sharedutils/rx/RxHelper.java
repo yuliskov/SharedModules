@@ -245,6 +245,8 @@ public class RxHelper {
      * https://stackoverflow.com/questions/33370339/what-is-the-difference-between-schedulers-io-and-schedulers-computation
      */
     private static <T> Observable<T> setup(Observable<T> observable) {
+        // NOTE: Schedulers.io() reuses blocked threads in RxJava 2
+        // https://github.com/ReactiveX/RxJava/issues/6542
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -255,8 +257,11 @@ public class RxHelper {
      * https://stackoverflow.com/questions/33370339/what-is-the-difference-between-schedulers-io-and-schedulers-computation
      */
     private static <T> Observable<T> setupLong(Observable<T> observable) {
+        // NOTE: Schedulers.io() reuses blocked threads in RxJava 2
+        // https://github.com/ReactiveX/RxJava/issues/6542
+        // fix blocking (e.g. SponsorBlock not responding)
         return observable
-                .subscribeOn(Schedulers.newThread()) // fix blocking (e.g. SponsorBlock not responding)
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }
