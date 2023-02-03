@@ -12,8 +12,14 @@ object NetworkHelpers {
     @JvmStatic
     fun getHttpsURLConnection(url: URL): HttpURLConnection {
         // Original value
-        return url.openConnection() as HttpURLConnection
-        //return NetCipher.getHttpsURLConnection(url)
+        val conn = url.openConnection() as HttpURLConnection
+        //val conn = NetCipher.getHttpsURLConnection(url)
+
+        // Imitate 'keepAlive' = false
+        // https://stackoverflow.com/questions/3352424/httpurlconnection-openconnection-fails-second-time/3943820#3943820
+        conn.setRequestProperty("connection", "close")
+
+        return conn
     }
 
     /**
