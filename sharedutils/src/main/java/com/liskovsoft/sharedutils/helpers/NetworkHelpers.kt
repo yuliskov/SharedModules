@@ -17,7 +17,7 @@ object NetworkHelpers {
 
         // Imitate 'keepAlive' = false
         // https://stackoverflow.com/questions/3352424/httpurlconnection-openconnection-fails-second-time/3943820#3943820
-        conn.setRequestProperty("connection", "close")
+        //conn.setRequestProperty("connection", "close")
 
         return conn
     }
