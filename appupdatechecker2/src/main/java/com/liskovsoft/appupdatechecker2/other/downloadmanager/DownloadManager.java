@@ -152,10 +152,10 @@ public final class DownloadManager {
             }
         };
 
-        Builder builder = new Builder()
+        Builder builder = OkHttpHelpers.createBuilder()
                 .addNetworkInterceptor(intercept);
 
-        return OkHttpHelpers.setupBuilder(builder).build();
+        return builder.build();
     }
 
     private Uri streamToFile(InputStream is, Uri destination) {

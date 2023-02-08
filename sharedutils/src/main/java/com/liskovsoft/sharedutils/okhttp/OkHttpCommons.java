@@ -1,20 +1,30 @@
 package com.liskovsoft.sharedutils.okhttp;
 
 import android.os.Build.VERSION;
+import com.liskovsoft.sharedutils.BuildConfig;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor;
+import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
+import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
+import okhttp3.Dns;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 import okhttp3.Protocol;
+import okhttp3.Request;
 import okhttp3.TlsVersion;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -28,6 +38,11 @@ public final class OkHttpCommons {
     public static final long CONNECT_TIMEOUT_MS = 30_000;
     public static final long READ_TIMEOUT_MS = 30_000;
     public static final long WRITE_TIMEOUT_MS = 30_000;
+    public static boolean enableProfiler = true;
+
+    private OkHttpCommons() {
+        
+    }
 
     // This is nearly equal to the cipher suites supported in Chrome 51, current as of 2016-05-25.
     // All of these suites are available on Android 7.0; earlier releases support a subset of these
@@ -68,7 +83,7 @@ public final class OkHttpCommons {
             CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
     };
 
-    public static void setupConnectionParams(OkHttpClient.Builder okBuilder) {
+    private static void setupConnectionParams(OkHttpClient.Builder okBuilder) {
         // Setup default timeout
         // https://stackoverflow.com/questions/39219094/sockettimeoutexception-in-retrofit
         okBuilder.connectTimeout(CONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
@@ -85,7 +100,7 @@ public final class OkHttpCommons {
     /**
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
-    public static void setupConnectionFix(Builder okBuilder) {
+    private static void setupConnectionFix(Builder okBuilder) {
         // Alter cipher list to create unique TLS fingerprint
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .cipherSuites(APPROVED_CIPHER_SUITES)
@@ -96,7 +111,7 @@ public final class OkHttpCommons {
     /**
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
-    public static void setupConnectionFixOrigin(Builder okBuilder) {
+    private static void setupConnectionFixOrigin(Builder okBuilder) {
         // TLS 1.2 not supported on pre Lollipop (fallback to TLS 1.0)
         // Note, TLS 1.0 doesn't have SNI support. So, fix should work.
         if (VERSION.SDK_INT <= 19) {
@@ -114,7 +129,7 @@ public final class OkHttpCommons {
         okBuilder.connectionSpecs(Collections.singletonList(cs));
     }
 
-    private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder builder) {
+    private static OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder builder) {
         //if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
         //    return custom builder;
         //}
@@ -141,7 +156,7 @@ public final class OkHttpCommons {
         return builder;
     }
 
-    private OkHttpClient.Builder enableTls12OnPreLollipop2(OkHttpClient.Builder builder) {
+    private static OkHttpClient.Builder enableTls12OnPreLollipop2(OkHttpClient.Builder builder) {
         //if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
         //    return custom builder;
         //}
@@ -185,7 +200,7 @@ public final class OkHttpCommons {
      * Setting testMode configuration. If set as testMode, the connection will skip certification check
      */
     @SuppressWarnings("deprecation")
-    public static void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
+    private static void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
         if (VERSION.SDK_INT > 19) {
             return;
         }
@@ -235,7 +250,91 @@ public final class OkHttpCommons {
      * https://stackoverflow.com/questions/53648852/how-to-solve-okhttp3-internal-http2-streamresetexception-stream-was-reset-refu<br/>
      * https://github.com/square/okhttp/issues/3955
      */
-    public static void fixStreamResetError(Builder okBuilder) {
+    private static void fixStreamResetError(Builder okBuilder) {
         okBuilder.protocols(Collections.singletonList(Protocol.HTTP_1_1));
+    }
+
+    public static OkHttpClient.Builder createBuilder() {
+        OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
+
+        //if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
+        //    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
+        //    preferIPv4Dns(okBuilder);
+        //}
+        setupConnectionFix(okBuilder);
+        setupConnectionParams(okBuilder);
+        configureToIgnoreCertificate(okBuilder);
+        fixStreamResetError(okBuilder); // Should I move the line to Retrofit utils?
+        enableDecompression(okBuilder);
+        //enableRateLimiter(okBuilder)
+
+        //disableCache(okBuilder);
+        debugSetup(okBuilder);
+
+        return okBuilder;
+    }
+
+    private static void disableCache(OkHttpClient.Builder okBuilder) {
+        // Disable cache (could help with dlfree error on Eltex)
+        // Spoiler: no this won't help with dlfree error on Eltex
+        okBuilder.cache(null);
+    }
+
+    /**
+     * Checks that response is compressed and do uncompress if needed.
+     */
+    private static void enableDecompression(OkHttpClient.Builder builder) {
+        // Add gzip/deflate/br support
+        //builder.addInterceptor(BrotliInterceptor.INSTANCE);
+        builder.addInterceptor(new UnzippingInterceptor());
+    }
+
+    private static void enableRateLimiter(OkHttpClient.Builder builder) {
+        builder.addInterceptor(new RateLimitInterceptor());
+    }
+
+    private static void debugSetup(OkHttpClient.Builder okBuilder) {
+        if (BuildConfig.DEBUG) {
+            // Profiler could cause OutOfMemoryError when testing.
+            // Also outputs to logcat tons of info.
+            // If you enable it to all requests - expect slowdowns.
+            if (enableProfiler) {
+                addProfiler(okBuilder);
+            }
+            addLogger(okBuilder);
+        }
+    }
+
+    private static void addProfiler(OkHttpClient.Builder okBuilder) {
+        okBuilder.addInterceptor(new OkHttpProfilerInterceptor());
+    }
+
+    private static void addLogger(OkHttpClient.Builder okBuilder) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okBuilder.addInterceptor(logging);
+    }
+
+    private static void preferIPv4Dns(OkHttpClient.Builder okBuilder) {
+        okBuilder.dns(new OkHttpDNSSelector(OkHttpDNSSelector.IPvMode.IPV4_FIRST));
+        //okBuilder.dns(new PreferIpv4Dns());
+    }
+
+    private static void forceIPv4Dns(OkHttpClient.Builder okBuilder) {
+        okBuilder.dns(hostname -> {
+            List<InetAddress> lookup = Dns.SYSTEM.lookup(hostname);
+            List<InetAddress> filter = Helpers.filter(
+                lookup, value -> value instanceof Inet4Address
+            );
+            return filter != null ? filter : lookup;
+        });
+    }
+
+    /**
+     * Usage: `OkHttpClient newClient = wrapDns(client)`<br></br>
+     * https://github.com/square/okhttp/blob/master/okhttp-dnsoverhttps/src/test/java/okhttp3/dnsoverhttps/DohProviders.java
+     */
+    private static OkHttpClient wrapDnsOverHttps(OkHttpClient client) {
+        return client.newBuilder().dns(DohProviders.buildGoogle(client)).build();
     }
 }

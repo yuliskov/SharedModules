@@ -18,8 +18,8 @@ public class OkHttpManager {
     private final OkHttpClient mClient;
 
     private OkHttpManager(boolean enableProfiler) {
-        OkHttpClientHelper.setEnableProfiler(enableProfiler);
-        mClient = OkHttpClientHelper.createOkHttpClient();
+        OkHttpCommons.enableProfiler = enableProfiler;
+        mClient = OkHttpCommons.createBuilder().build();
     }
 
     public static OkHttpManager instance() {

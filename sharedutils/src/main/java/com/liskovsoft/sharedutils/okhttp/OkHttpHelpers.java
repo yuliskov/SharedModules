@@ -42,8 +42,8 @@ public class OkHttpHelpers {
         return getOkHttpManager().doOkHttpRequest(url, client, headers);
     }
 
-    public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder builder) {
-        return OkHttpClientHelper.setupBuilder(builder);
+    public static OkHttpClient.Builder createBuilder() {
+        return OkHttpCommons.createBuilder();
     }
 
     public static OkHttpClient getOkHttpClient() {
