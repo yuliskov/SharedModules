@@ -8,13 +8,11 @@ import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor;
 import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
-import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
 import okhttp3.Dns;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 import okhttp3.Protocol;
-import okhttp3.Request;
 import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -253,10 +251,8 @@ public final class OkHttpCommons {
     private static void fixStreamResetError(Builder okBuilder) {
         okBuilder.protocols(Collections.singletonList(Protocol.HTTP_1_1));
     }
-
-    public static OkHttpClient.Builder createBuilder() {
-        OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
-
+    
+    public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder okBuilder) {
         //if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
         //    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
         //    preferIPv4Dns(okBuilder);

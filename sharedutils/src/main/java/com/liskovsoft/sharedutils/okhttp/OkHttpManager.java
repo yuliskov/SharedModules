@@ -15,11 +15,11 @@ public class OkHttpManager {
     private static final String TAG = OkHttpManager.class.getSimpleName();
     private static final int NUM_TRIES = 3;
     private static OkHttpManager sInstance;
-    private final OkHttpClient mClient;
+    private OkHttpClient mClient;
+    private final boolean mEnableProfiler;
 
     private OkHttpManager(boolean enableProfiler) {
-        OkHttpCommons.enableProfiler = enableProfiler;
-        mClient = OkHttpCommons.createBuilder().build();
+        mEnableProfiler = enableProfiler;
     }
 
     public static OkHttpManager instance() {
@@ -34,46 +34,46 @@ public class OkHttpManager {
         return sInstance;
     }
 
-    public Response doOkHttpRequest(String url) {
-        return doOkHttpRequest(url, mClient);
+    public Response doRequest(String url) {
+        return doRequest(url, getClient());
     }
 
-    public Response doGetOkHttpRequest(String url, Map<String, String> headers) {
+    public Response doGetRequest(String url, Map<String, String> headers) {
         if (headers == null) {
             Log.d(TAG, "Headers are null... doing regular request...");
-            return doGetOkHttpRequest(url, mClient);
+            return doGetRequest(url, getClient());
         }
 
-        return doGetOkHttpRequest(url, mClient, headers);
+        return doGetRequest(url, getClient(), headers);
     }
 
-    public Response doPostOkHttpRequest(String url, Map<String, String> headers, String postBody, String contentType) {
-        return doPostOkHttpRequest(url, mClient, headers, postBody, contentType);
+    public Response doPostRequest(String url, Map<String, String> headers, String postBody, String contentType) {
+        return doPostRequest(url, getClient(), headers, postBody, contentType);
     }
 
-    public Response doGetOkHttpRequest(String url) {
-        return doGetOkHttpRequest(url, mClient);
+    public Response doGetRequest(String url) {
+        return doGetRequest(url, getClient());
     }
 
-    public Response doHeadOkHttpRequest(String url) {
-        return doHeadOkHttpRequest(url, mClient);
+    public Response doHeadRequest(String url) {
+        return doHeadRequest(url, getClient());
     }
 
     /**
      * NOTE: default method is GET
      */
-    public Response doOkHttpRequest(String url, OkHttpClient client) {
+    public Response doRequest(String url, OkHttpClient client) {
         Request okHttpRequest = new Request.Builder()
                 .url(url)
                 .build();
 
-        return doOkHttpRequest(client, okHttpRequest);
+        return doRequest(client, okHttpRequest);
     }
 
     /**
      * NOTE: default method is GET
      */
-    public Response doOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers) {
+    public Response doRequest(String url, OkHttpClient client, Map<String, String> headers) {
         if (headers == null) {
             headers = new HashMap<>();
         }
@@ -83,10 +83,10 @@ public class OkHttpManager {
                 .headers(Headers.of(headers))
                 .build();
 
-        return doOkHttpRequest(client, okHttpRequest);
+        return doRequest(client, okHttpRequest);
     }
 
-    private Response doPostOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers, String body, String contentType) {
+    private Response doPostRequest(String url, OkHttpClient client, Map<String, String> headers, String body, String contentType) {
         if (headers == null) {
             headers = new HashMap<>();
         }
@@ -97,38 +97,38 @@ public class OkHttpManager {
                 .post(RequestBody.create(MediaType.parse(contentType), body))
                 .build();
 
-        return doOkHttpRequest(client, okHttpRequest);
+        return doRequest(client, okHttpRequest);
     }
 
-    private Response doGetOkHttpRequest(String url, OkHttpClient client, Map<String, String> headers) {
+    private Response doGetRequest(String url, OkHttpClient client, Map<String, String> headers) {
         Request okHttpRequest = new Request.Builder()
                 .url(url)
                 .headers(Headers.of(headers))
                 .get()
                 .build();
 
-        return doOkHttpRequest(client, okHttpRequest);
+        return doRequest(client, okHttpRequest);
     }
 
-    private Response doGetOkHttpRequest(String url, OkHttpClient client) {
+    private Response doGetRequest(String url, OkHttpClient client) {
         Request okHttpRequest = new Request.Builder()
                 .url(url)
                 .get()
                 .build();
 
-        return doOkHttpRequest(client, okHttpRequest);
+        return doRequest(client, okHttpRequest);
     }
 
-    private Response doHeadOkHttpRequest(String url, OkHttpClient client) {
+    private Response doHeadRequest(String url, OkHttpClient client) {
         Request okHttpRequest = new Request.Builder()
                 .url(url)
                 .head()
                 .build();
 
-        return doOkHttpRequest(client, okHttpRequest);
+        return doRequest(client, okHttpRequest);
     }
 
-    private Response doOkHttpRequest(OkHttpClient client, Request okHttpRequest) {
+    private Response doRequest(OkHttpClient client, Request okHttpRequest) {
         Response okHttpResponse = null;
         Exception lastEx = null;
 
@@ -155,7 +155,12 @@ public class OkHttpManager {
         return okHttpResponse;
     }
 
-    public OkHttpClient getOkHttpClient() {
+    public OkHttpClient getClient() {
+        if (mClient == null) {
+            OkHttpCommons.enableProfiler = mEnableProfiler;
+            mClient = OkHttpCommons.setupBuilder(new OkHttpClient.Builder()).build();
+        }
+
         return mClient;
     }
 }

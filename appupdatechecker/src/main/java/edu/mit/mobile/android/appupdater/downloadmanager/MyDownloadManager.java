@@ -21,6 +21,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
 import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -82,7 +83,7 @@ public final class MyDownloadManager {
 
         String url = mRequest.mDownloadUri.toString();
 
-        Response response = OkHttpHelpers.doOkHttpRequest(url, mClient);
+        Response response = OkHttpHelpers.doRequest(url, mClient);
 
         if (response == null || response.body() == null) {
             throw new IllegalStateException("Error: bad response");
@@ -134,8 +135,10 @@ public final class MyDownloadManager {
             }
         };
 
-        Builder builder = OkHttpHelpers.createBuilder()
+        Builder builder = new OkHttpClient.Builder()
                 .addNetworkInterceptor(intercept);
+
+        OkHttpCommons.setupBuilder(builder);
 
         return builder.build();
     }
