@@ -97,6 +97,7 @@ public final class Helpers {
     public static final String THUMB_UP = "\uD83D\uDC4D";
     //public static final String HOURGLASS = "⌛";
     public static final String HOURGLASS = "\u231B";
+    private static DateFormat sDateFormat;
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
@@ -1687,5 +1688,17 @@ public final class Helpers {
         }
 
         return sRandom;
+    }
+
+    private static DateFormat getDateFormat() {
+        if (sDateFormat == null) {
+            sDateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
+        }
+
+        return sDateFormat;
+    }
+
+    public static String toShortDate(long timeMs) {
+        return getDateFormat().format(new Date(timeMs));
     }
 }
