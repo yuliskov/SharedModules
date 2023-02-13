@@ -1692,7 +1692,10 @@ public final class Helpers {
 
     private static DateFormat getDateFormat() {
         if (sDateFormat == null) {
-            sDateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
+            // https://jenkov.com/tutorials/java-internationalization/simpledateformat.html#pattern-syntax
+            sDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+            //sDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.getDefault());
+            //sDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
         }
 
         return sDateFormat;
