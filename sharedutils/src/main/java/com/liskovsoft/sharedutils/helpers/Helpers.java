@@ -86,6 +86,7 @@ public final class Helpers {
     private static final String LEGACY_OBJECT_DELIM = ",";
     private static final String MIME_VP9 = "video/x-vnd.on2.vp9";
     private static final String MIME_AV1 = "video/av01";
+    private static final Pattern URL_PREFIX = Pattern.compile("^[a-z.]+://.+$");
     private static HashMap<String, List<String>> sCache = new HashMap<>();
     private static Boolean sIsVP9Supported;
     private static Boolean sIsAV1Supported;
@@ -904,9 +905,8 @@ public final class Helpers {
             return false;
         }
 
-        return url.startsWith("http://") ||
-               url.startsWith("https://") ||
-               url.startsWith("youtube://");
+        Matcher m = URL_PREFIX.matcher(url);
+        return m.matches();
     }
 
     /**

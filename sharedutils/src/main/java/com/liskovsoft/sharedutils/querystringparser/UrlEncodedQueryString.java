@@ -29,7 +29,7 @@ public class UrlEncodedQueryString implements UrlQueryString {
                 mQueryPrefix = String.format("%s://%s%s", parsedUrl.getScheme(), parsedUrl.getHost(), parsedUrl.getPath());
                 mQueryString = UrlEncodedQueryStringBase.parse(parsedUrl);
             }
-        } else {
+        } else { // Only query
             mQueryString = UrlEncodedQueryStringBase.parse(url);
         }
     }
