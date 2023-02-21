@@ -46,7 +46,7 @@ public class UrlEncodedQueryString implements UrlQueryString {
             // https://www.youtube.com/results?search_query=|FR|+Mrs.+Doubtfire
             // https://youtu.be/wTw-jreMgCk\ (last char isn't valid)
             // https://m.youtube.com/watch?v=JsY3_Va6uqI&feature=emb_title###&Urj7svfj=&Rkj2f3jk=&Czj1i9k6= (# isn't valid)
-            return new URI(url.length() > 100 ? // OOM fix
+            return new URI(url.length() > 100 ? // OOM fix: don't replace long string
                     url : url
                       .replace(" ", "+")
                       .replace("|", "%7C")
