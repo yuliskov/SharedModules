@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -1704,5 +1705,12 @@ public final class Helpers {
 
     public static String toShortDate(long timeMs) {
         return getDateFormat().format(new Date(timeMs));
+    }
+
+    public static void enableActivity(Context context, String activityClassName, boolean enable) {
+        context.getPackageManager().setComponentEnabledSetting(
+                new ComponentName(context, activityClassName),
+                enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 }
