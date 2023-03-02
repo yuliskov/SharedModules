@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor;
 import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
+import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
 import okhttp3.Dns;
 import okhttp3.OkHttpClient;
@@ -45,7 +46,7 @@ public final class OkHttpCommons {
     // This is nearly equal to the cipher suites supported in Chrome 51, current as of 2016-05-25.
     // All of these suites are available on Android 7.0; earlier releases support a subset of these
     // suites. https://github.com/square/okhttp/issues/1972
-    private static final CipherSuite[] APPROVED_CIPHER_SUITES = new CipherSuite[] {
+    private static final CipherSuite[] APPROVED_CIPHER_SUITES = Helpers.shuffleArray(new CipherSuite[] {
             // TLSv1.3
             CipherSuite.TLS_AES_128_GCM_SHA256,
             CipherSuite.TLS_AES_256_GCM_SHA384,
@@ -79,7 +80,7 @@ public final class OkHttpCommons {
             // From NewPipe Downloader
             CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
             CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
-    };
+    });
 
     private static void setupConnectionParams(OkHttpClient.Builder okBuilder) {
         // Setup default timeout
@@ -88,11 +89,11 @@ public final class OkHttpCommons {
         okBuilder.readTimeout(READ_TIMEOUT_MS, TimeUnit.MILLISECONDS);
         okBuilder.writeTimeout(WRITE_TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
-        // Imitate 'keepAlive' = false
+        // Imitate 'keepAlive' = false (yt throttle fix?)
         // https://stackoverflow.com/questions/70873186/how-to-disable-connection-pooling-and-make-a-new-connection-for-each-request-in
         // https://stackoverflow.com/questions/63047533/connection-pool-okhttp
         // NOTE: SocketTimeoutException fix: setup connection pool with 0 (!) idle connections!
-        //okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
+        okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
     }
 
     /**

@@ -31,17 +31,20 @@ public class AppInfoHelpers {
         return getActivityLabel(context, launchActivityName);
     }
 
+    @SuppressWarnings("deprecation")
     public static int getAppVersionCode(Context context) {
-        PackageInfo packageInfo = createPackageInfo(context);
+        PackageInfo packageInfo = getPackageInfo(context);
         if (packageInfo != null) {
-            return (int) PackageInfoCompat.getLongVersionCode(packageInfo);
+            return packageInfo.versionCode;
+            // modern version
+            //return (int) PackageInfoCompat.getLongVersionCode(packageInfo);
         }
 
-        return 0;
+        return -1;
     }
 
     public static String getAppVersionName(Context context) {
-        PackageInfo packageInfo = createPackageInfo(context);
+        PackageInfo packageInfo = getPackageInfo(context);
         if (packageInfo != null) {
             return packageInfo.versionName;
         }
@@ -50,7 +53,7 @@ public class AppInfoHelpers {
     }
 
     public static String getAppLabel(Context context) {
-        PackageInfo packageInfo = createPackageInfo(context);
+        PackageInfo packageInfo = getPackageInfo(context);
 
         if (packageInfo != null) {
             return packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
@@ -59,7 +62,7 @@ public class AppInfoHelpers {
         return null;
     }
 
-    private static PackageInfo createPackageInfo(Context context) {
+    private static PackageInfo getPackageInfo(Context context) {
         try {
             return context
                     .getPackageManager()
