@@ -1556,11 +1556,6 @@ public final class Helpers {
             sAV1MaxHeight = getCodecMaxHeight(MIME_AV1);
         }
 
-        // Fix AV1 8K support (?)
-        if (height > 2160) {
-            height = 2160;
-        }
-
         return height <= sAV1MaxHeight;
     }
 

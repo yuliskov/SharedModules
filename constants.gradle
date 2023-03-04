@@ -45,6 +45,8 @@ project.ext {
     // amazonExoplayerVersion = '2.13.3' // New
     amazonExoplayerVersion = '2.10.6'
     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
+    playServicesCronetVersion = '18.0.1'
+    cronetApiVersion = '101.4951.41'
     
     espressoVersion = '3.2.0'
     retrofitVersion = '2.5.0'
