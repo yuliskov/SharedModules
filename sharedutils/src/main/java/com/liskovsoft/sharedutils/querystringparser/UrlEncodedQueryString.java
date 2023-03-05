@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
-public class UrlEncodedQueryString implements UrlQueryString {
+class UrlEncodedQueryString implements UrlQueryString {
     private static final Pattern VALIDATION_PATTERN = Pattern.compile("[^\\/?&]+=[^\\/&]+");
     @Nullable
     private String mQueryPrefix;

@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CombinedQueryString implements UrlQueryString {
+class CombinedQueryString implements UrlQueryString {
     private final List<UrlQueryString> mQueryStrings = new ArrayList<>();
 
     public CombinedQueryString(String url) {

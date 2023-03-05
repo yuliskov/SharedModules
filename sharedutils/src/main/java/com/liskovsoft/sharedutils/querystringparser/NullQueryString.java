@@ -2,7 +2,7 @@ package com.liskovsoft.sharedutils.querystringparser;
 
 import androidx.annotation.NonNull;
 
-public class NullQueryString implements UrlQueryString {
+class NullQueryString implements UrlQueryString {
     private final String mUrl;
 
     private NullQueryString(String url) {

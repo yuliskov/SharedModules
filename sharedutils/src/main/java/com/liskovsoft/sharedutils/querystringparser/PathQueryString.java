@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * Should contain at least one key/value pair: http://myurl.com/key/value/<br/>
  * Regex: \/key\/([^\/]*)
  */
-public class PathQueryString implements UrlQueryString {
+class PathQueryString implements UrlQueryString {
     private static final Pattern VALIDATION_PATTERN = Pattern.compile("\\/[^\\/]+\\/[^\\/]+\\/[^\\/]+");
     private static final Pattern ENDING_PATTERN = Pattern.compile("\\?.*");
     private String mUrl;
