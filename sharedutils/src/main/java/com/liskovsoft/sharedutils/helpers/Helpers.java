@@ -312,6 +312,24 @@ public final class Helpers {
         return result;
     }
 
+    public static String runMultiMatcher(String input, Pattern... patterns) {
+        if (input == null) {
+            return null;
+        }
+
+        String result = null;
+        for (Pattern pattern : patterns) {
+            Matcher matcher = pattern.matcher(input);
+
+            if (matcher.find()) {
+                result = matcher.group(matcher.groupCount()); // get last group
+                break;
+            }
+        }
+
+        return result;
+    }
+
     public static boolean isCallable(Context ctx, Intent intent) {
         List<ResolveInfo> list = ctx.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
