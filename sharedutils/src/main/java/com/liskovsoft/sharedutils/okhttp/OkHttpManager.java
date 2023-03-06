@@ -34,6 +34,10 @@ public class OkHttpManager {
         return sInstance;
     }
 
+    public static void unhold() {
+        sInstance = null;
+    }
+
     public Response doRequest(String url) {
         return doRequest(url, getClient());
     }

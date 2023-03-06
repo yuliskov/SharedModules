@@ -8,8 +8,8 @@ import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor;
 import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
-import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
+import okhttp3.Credentials;
 import okhttp3.Dns;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
@@ -22,8 +22,12 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import java.net.Authenticator;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -99,7 +103,7 @@ public final class OkHttpCommons {
     /**
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
-    private static void setupConnectionFix(Builder okBuilder) {
+    private static void setupConnectionFix(OkHttpClient.Builder okBuilder) {
         // Alter cipher list to create unique TLS fingerprint
         ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .cipherSuites(APPROVED_CIPHER_SUITES)
@@ -110,7 +114,7 @@ public final class OkHttpCommons {
     /**
      * Fixing SSL handshake timed out (probably provider issues in some countries)
      */
-    private static void setupConnectionFixOrigin(Builder okBuilder) {
+    private static void setupConnectionFixOrigin(OkHttpClient.Builder okBuilder) {
         // TLS 1.2 not supported on pre Lollipop (fallback to TLS 1.0)
         // Note, TLS 1.0 doesn't have SNI support. So, fix should work.
         if (VERSION.SDK_INT <= 19) {
@@ -258,6 +262,7 @@ public final class OkHttpCommons {
         //    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
         //    preferIPv4Dns(okBuilder);
         //}
+        setupProxy(okBuilder);
         setupConnectionFix(okBuilder);
         setupConnectionParams(okBuilder);
         configureToIgnoreCertificate(okBuilder);
@@ -333,5 +338,33 @@ public final class OkHttpCommons {
      */
     private static OkHttpClient wrapDnsOverHttps(OkHttpClient client) {
         return client.newBuilder().dns(DohProviders.buildGoogle(client)).build();
+    }
+
+    private static void setupProxy(OkHttpClient.Builder builder) {
+        setupSocksProxy(builder, "socksProxyHost", "socksProxyPort", "socksProxyUser", "socksProxyPassword", Proxy.Type.SOCKS);
+        setupSocksProxy(builder, "https.proxyHost", "https.proxyPort", "https.proxyUser", "https.proxyPassword", Proxy.Type.HTTP);
+        setupSocksProxy(builder, "http.proxyHost", "http.proxyPort", "http.proxyUser", "http.proxyPassword", Proxy.Type.HTTP);
+    }
+
+    private static void setupSocksProxy(Builder builder, String proxyHost, String proxyPort, String proxyUser, String proxyPassword, Proxy.Type proxyType) {
+        String host = System.getProperty(proxyHost);
+        String port = System.getProperty(proxyPort);
+        String user = System.getProperty(proxyUser);
+        String password = System.getProperty(proxyPassword);
+
+        if (host == null || port == null) {
+            return;
+        }
+
+        if (user != null && password != null) {
+            Authenticator.setDefault(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, password.toCharArray());
+                }
+            });
+        }
+
+        builder.proxy(new Proxy(proxyType, new InetSocketAddress(host, Helpers.parseInt(port))));
     }
 }

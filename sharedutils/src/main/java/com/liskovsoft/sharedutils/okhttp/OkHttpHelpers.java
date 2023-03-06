@@ -50,6 +50,11 @@ public class OkHttpHelpers {
         return getOkHttpManager().getClient();
     }
 
+    public static void unhold() {
+        sOkHttpManager = null;
+        OkHttpManager.unhold();
+    }
+
     private static OkHttpManager getOkHttpManager() {
         if (sOkHttpManager == null) {
             sOkHttpManager = OkHttpManager.instance();
