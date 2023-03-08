@@ -22,7 +22,7 @@ import android.net.Uri;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
-import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
+import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -83,7 +83,7 @@ public final class MyDownloadManager {
 
         String url = mRequest.mDownloadUri.toString();
 
-        Response response = OkHttpHelpers.doRequest(url, mClient);
+        Response response = OkHttpManager.instance().doRequest(url, mClient);
 
         if (response == null || response.body() == null) {
             throw new IllegalStateException("Error: bad response");
