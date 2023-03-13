@@ -47,6 +47,7 @@ project.ext {
     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
     playServicesCronetVersion = '18.0.1'
     cronetApiVersion = '101.4951.41'
+    cronetOkHttpVersion = '0.1.0'
     
     espressoVersion = '3.2.0'
     retrofitVersion = '2.5.0'
@@ -100,6 +101,7 @@ project.ext {
     // End My commons-io deps (Android 4.3 fix)
     
     workVersion = '2.5.0'
+    guavaVersion = '31.1-android' // Work library deps
     liveDataVersion = '2.1.0'
     browserXVersion = '1.3.0'
 
