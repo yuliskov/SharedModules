@@ -1726,4 +1726,24 @@ public final class Helpers {
                 enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
     }
+
+    public static String join(CharSequence delim, CharSequence... elements) {
+        if (delim == null || elements == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        int counter = 0;
+        int length = elements.length;
+
+        for (CharSequence element : elements) {
+            builder.append(element);
+            if (++counter != length) {
+                builder.append(delim);
+            }
+        }
+
+        return builder.toString();
+    }
 }
