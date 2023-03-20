@@ -1738,6 +1738,11 @@ public final class Helpers {
         int length = elements.length;
 
         for (CharSequence element : elements) {
+            if (element == null || element.length() == 0) {
+                ++counter;
+                continue;
+            }
+
             builder.append(element);
             if (++counter != length) {
                 builder.append(delim);
