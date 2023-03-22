@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.net.ssl.SSLException;
 import java.io.InputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -255,7 +256,7 @@ public class AppVersionChecker {
 
                 InputStream content = manager.getStreamForDownloadedFile(reqId);
                 jo = new JSONObject(StreamUtils.inputStreamToString(content));
-            } catch (final IllegalStateException | JSONException | SocketTimeoutException | SocketException | StreamResetException ex) {
+            } catch (final IllegalStateException | JSONException | SocketTimeoutException | SocketException | StreamResetException | SSLException ex) {
                 Log.e(TAG, ex.getMessage(), ex);
                 mLastException = ex;
             } catch (final Exception ex) {
