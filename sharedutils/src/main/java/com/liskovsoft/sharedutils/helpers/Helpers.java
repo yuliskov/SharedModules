@@ -1565,16 +1565,27 @@ public final class Helpers {
         return height <= sVP9MaxHeight;
     }
 
+    //public static boolean isAV1ResolutionSupported(int height) {
+    //    if (height <= 0) {
+    //        return false;
+    //    }
+    //
+    //    if (sAV1MaxHeight == 0) {
+    //        sAV1MaxHeight = getCodecMaxHeight(MIME_AV1);
+    //    }
+    //
+    //    return height <= sAV1MaxHeight;
+    //}
+
     public static boolean isAV1ResolutionSupported(int height) {
         if (height <= 0) {
             return false;
         }
 
-        if (sAV1MaxHeight == 0) {
-            sAV1MaxHeight = getCodecMaxHeight(MIME_AV1);
-        }
-
-        return height <= sAV1MaxHeight;
+        // On Rockchip (and some others) av1 codec info is bugged.
+        // Reported max resolution is 360p.
+        // So use vp9 info instead.
+        return isAV1Supported() && isVP9ResolutionSupported(height);
     }
 
     /**
