@@ -8,8 +8,9 @@ project.ext {
     // More info: https://stackoverflow.com/questions/48072438/java-lang-illegalstateexception-only-fullscreen-opaque-activities-can-request-o
     // NOTE: target sdk >= 28 cause weird behavior on Android 9 (slow text scroll speed etc)
     // NOTE: target sdk >= 30 needed to support manifest queries tag
-    targetSdkVersion = 26 // set target api = 26 to fix Android 8.0 error: "Only fullscreen opaque activities can request orientation"
-    compileSdkVersion = 30
+    // NOTE: api 26 orientation error fix: https://stackoverflow.com/a/52426009/1279056
+    targetSdkVersion = 33 // set target api = 26 to fix Android 8.0 error: "Only fullscreen opaque activities can request orientation"
+    compileSdkVersion = 33
     buildToolsVersion = '30.0.3'
     kotlinVersion = '1.5.30'
     kotlinCoreVersion = '1.6.0'
