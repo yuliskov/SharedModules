@@ -168,6 +168,10 @@ public class RxHelper {
                 Log.e(TAG, "Network error", e.getCause());
                 return;
             }
+            if ((e instanceof IllegalStateException) && (e.getCause() == null)) {
+                Log.e(TAG, "Seems that the user forgot to implement error handler", e);
+                return;
+            }
             if (e instanceof IOException) {
                 // fine, irrelevant network problem or API that throws on cancellation
                 return;
