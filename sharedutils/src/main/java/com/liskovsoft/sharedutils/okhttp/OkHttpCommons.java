@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor;
 import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
+import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
 import okhttp3.Credentials;
 import okhttp3.Dns;
@@ -97,7 +98,7 @@ public final class OkHttpCommons {
         // https://stackoverflow.com/questions/70873186/how-to-disable-connection-pooling-and-make-a-new-connection-for-each-request-in
         // https://stackoverflow.com/questions/63047533/connection-pool-okhttp
         // NOTE: SocketTimeoutException fix: setup connection pool with 0 (!) idle connections!
-        //okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
+        okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
     }
 
     /**
