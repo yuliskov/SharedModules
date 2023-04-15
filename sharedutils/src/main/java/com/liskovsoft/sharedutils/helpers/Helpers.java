@@ -1139,11 +1139,16 @@ public final class Helpers {
     }
 
     public static String parseStr(String[] arr, int index) {
+        return parseStr(arr, index, null);
+    }
+
+    public static String parseStr(String[] arr, int index, String defaultValue) {
         if (arr == null || arr.length <= index || index < 0) {
-            return null;
+            return defaultValue;
         }
 
-        return parseStr(arr[index]);
+        String result = parseStr(arr[index]);
+        return result != null ? result : defaultValue;
     }
 
     public static boolean parseBoolean(String[] arr, int index) {

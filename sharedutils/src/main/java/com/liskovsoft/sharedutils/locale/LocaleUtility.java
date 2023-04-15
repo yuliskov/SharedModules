@@ -54,7 +54,11 @@ public class LocaleUtility {
         return languages;
     }
 
-    static {
+    private static void initScriptsByLocale() {
+        if (!scriptsByLocale.isEmpty()) {
+            return;
+        }
+
         scriptsByLocale.put("aa", getScriptsMap("", "Latn"));
         scriptsByLocale.put("ab", getScriptsMap("", "Cyrl"));
         scriptsByLocale.put("abq", getScriptsMap("", "Cyrl"));
@@ -737,6 +741,8 @@ public class LocaleUtility {
      * @return
      */
     public static String getScript(Locale locale) {
+        initScriptsByLocale();
+
         String localeString = locale.toString();
         String language = "";
         String country = "";
