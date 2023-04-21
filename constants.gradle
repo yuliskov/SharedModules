@@ -15,7 +15,8 @@ project.ext {
     buildToolsVersion = '30.0.3'
     kotlinVersion = '1.6.21' // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk7
     kotlinxVersion = '1.6.4' // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-android
-    kotlinCoreVersion = '1.8.0' // https://mvnrepository.com/artifact/androidx.core/core-ktx
+    // latest core without 'resource android:attr/lStar not found' error
+    kotlinCoreVersion = '1.6.0' // https://mvnrepository.com/artifact/androidx.core/core-ktx
     gradleVersion = '6.9.1' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
     androidGradleVersion = '4.0.0+' // last version compatible with IntellJ 2020.3
     
