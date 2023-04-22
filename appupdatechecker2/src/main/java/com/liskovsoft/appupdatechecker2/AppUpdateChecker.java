@@ -17,6 +17,7 @@ import java.util.List;
 public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloaderListener {
     private static final String TAG = AppUpdateChecker.class.getSimpleName();
     private static final int FRESH_TIME_MS = 15 * 60 * 1_000; // 15 minutes
+    private static final int MIN_APK_SIZE_BYTES = 25_000_000; // 25 MB
     private final Context mContext;
     private final AppVersionChecker mVersionChecker;
     private final AppDownloader mDownloader;
@@ -26,6 +27,10 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
     private String mLatestVersionName;
 
     public AppUpdateChecker(Context context, AppUpdateCheckerListener listener) {
+        this(context, listener, MIN_APK_SIZE_BYTES);
+    }
+
+    public AppUpdateChecker(Context context, AppUpdateCheckerListener listener, int minApkSizeBytes) {
         Log.d(TAG, "Starting...");
 
         FileHelpers.checkCachePermissions(context); // should be an Activity context
@@ -33,7 +38,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
         mContext = context.getApplicationContext();
         mListener = listener;
         mVersionChecker = new AppVersionChecker(mContext, this);
-        mDownloader = new AppDownloader(mContext, this);
+        mDownloader = new AppDownloader(mContext, this, minApkSizeBytes);
         mSettingsManager = new SettingsManager(mContext);
 
         //  Cleanup the storage. I don't want to accidentally install old version.

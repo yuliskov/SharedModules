@@ -20,16 +20,17 @@ import java.io.File;
  */
 public class AppDownloader {
     private static final String TAG = AppDownloader.class.getSimpleName();
-    private static final int MIN_APK_SIZE_BYTES = 15_000_000;
     private static final String CURRENT_APK = "update.apk";
     private final Context mContext;
     private boolean mInProgress;
     private final AppDownloaderListener mListener;
+    private final int mMinApkSizeBytes;
     private AppDownloadTask mDownloadTask;
 
-    public AppDownloader(Context context, AppDownloaderListener listener) {
+    public AppDownloader(Context context, AppDownloaderListener listener, int minApkSizeBytes) {
         mContext = context;
         mListener = listener;
+        mMinApkSizeBytes = minApkSizeBytes;
     }
 
     /**
@@ -99,7 +100,7 @@ public class AppDownloader {
 
                     if (destination != null) {
                         // It could be a web page instead of apk
-                        if (size > MIN_APK_SIZE_BYTES) {
+                        if (size > mMinApkSizeBytes) {
                             path = destination.getPath();
                         } else { // do cleanup
                             FileHelpers.delete(destination.getPath());
