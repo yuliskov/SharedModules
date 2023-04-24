@@ -51,7 +51,7 @@ public final class OkHttpCommons {
     // This is nearly equal to the cipher suites supported in Chrome 51, current as of 2016-05-25.
     // All of these suites are available on Android 7.0; earlier releases support a subset of these
     // suites. https://github.com/square/okhttp/issues/1972
-    private static final CipherSuite[] APPROVED_CIPHER_SUITES = new CipherSuite[] {
+    private static final CipherSuite[] APPROVED_CIPHER_SUITES = Helpers.shuffleArray(new CipherSuite[] {
             // TLSv1.3
             CipherSuite.TLS_AES_128_GCM_SHA256,
             CipherSuite.TLS_AES_256_GCM_SHA384,
@@ -85,7 +85,7 @@ public final class OkHttpCommons {
             // From NewPipe Downloader
             CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
             CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
-    };
+    });
 
     private static void setupConnectionParams(OkHttpClient.Builder okBuilder) {
         // Setup default timeout

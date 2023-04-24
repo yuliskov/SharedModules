@@ -24,9 +24,9 @@ object CronetManager {
             try {
                 engine = NativeCronetProvider(context)
                     .createBuilder()
-                    //.enableQuic(true)
-                    //.enableHttp2(true)
-                    //.enableBrotli(true)
+                    .enableQuic(true)
+                    .enableHttp2(true)
+                    .enableBrotli(true)
                     .build()
             } catch (e: UnsatisfiedLinkError) {
                 // Fatal Exception: java.lang.UnsatisfiedLinkError
