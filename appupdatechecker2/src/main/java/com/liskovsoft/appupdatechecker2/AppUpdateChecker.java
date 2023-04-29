@@ -131,14 +131,21 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     @Override
     public void onApkDownloaded(String path) {
-        if (path != null) {
-            mSettingsManager.setApkPath(path);
-
-            Log.d(TAG, "App update received. Apk path: " + path);
-            Log.d(TAG, "App update received. Changelog: " + mChangeLog);
-
-            mListener.onUpdateFound(mLatestVersionName, mChangeLog, path);
+        if (path == null) {
+            return;
         }
+
+        if (mContext.getPackageManager().getPackageArchiveInfo(path, 0) == null) { // package is broken
+            FileHelpers.delete(path);
+            return;
+        }
+
+        mSettingsManager.setApkPath(path);
+
+        Log.d(TAG, "App update received. Apk path: " + path);
+        Log.d(TAG, "App update received. Changelog: " + mChangeLog);
+
+        mListener.onUpdateFound(mLatestVersionName, mChangeLog, path);
     }
 
     @Override
