@@ -113,7 +113,8 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
                 mSettingsManager.setLatestVersionNumber(latestVersionNumber);
 
                 if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
-                        FileHelpers.isFreshFile(mSettingsManager.getApkPath(), FRESH_TIME_MS)) {
+                        FileHelpers.isFreshFile(mSettingsManager.getApkPath(), FRESH_TIME_MS) &&
+                        checkApk(mSettingsManager.getApkPath())) {
                     mListener.onUpdateFound(latestVersionName, changelog, mSettingsManager.getApkPath());
                 } else {
                     mDownloader.download(downloadUris);
@@ -131,12 +132,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     @Override
     public void onApkDownloaded(String path) {
-        if (path == null) {
-            return;
-        }
-
-        if (mContext.getPackageManager().getPackageArchiveInfo(path, 0) == null) { // package is broken
-            FileHelpers.delete(path);
+        if (!checkApk(path)) {
             return;
         }
 
@@ -192,5 +188,10 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     public String getPreferredHost() {
         return mSettingsManager.getPreferredHost();
+    }
+
+    private boolean checkApk(String path) {
+        // package is not broken
+        return path != null && mContext.getPackageManager().getPackageArchiveInfo(path, 0) != null;
     }
 }
