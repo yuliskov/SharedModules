@@ -97,6 +97,7 @@ public final class Helpers {
     // https://unicode-table.com/en/
     // https://www.compart.com/en/unicode/
     public static final String THUMB_UP = "\uD83D\uDC4D";
+    public static final String THUMB_DOWN = "\uD83D\uDC4E";
     //public static final String HOURGLASS = "⌛";
     public static final String HOURGLASS = "\u231B";
     private static DateFormat sDateFormat;
@@ -1094,7 +1095,13 @@ public final class Helpers {
             return -1;
         }
 
-        return Integer.parseInt(numString);
+        try {
+            return Integer.parseInt(numString);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 
     public static long parseLong(String numString) {
@@ -1412,21 +1419,25 @@ public final class Helpers {
      * @return removed items (if any) or null (if nothing removed)
      */
     public static <T> List<T> removeIf(Collection<T> collection, Filter<T> filter) {
-        if (collection == null || filter == null || collection.getClass().getName().contains("UnmodifiableList")) {
+        if (collection == null || filter == null) {
             return null;
         }
 
         List<T> removed = null;
-        final Iterator<T> each = collection.iterator();
-        while (each.hasNext()) {
-            T next = each.next();
-            if (filter.test(next)) {
-                each.remove();
-                if (removed == null) {
-                    removed = new ArrayList<>();
+        try {
+            final Iterator<T> each = collection.iterator();
+            while (each.hasNext()) {
+                T next = each.next();
+                if (filter.test(next)) {
+                    each.remove();
+                    if (removed == null) {
+                        removed = new ArrayList<>();
+                    }
+                    removed.add(next);
                 }
-                removed.add(next);
             }
+        } catch (UnsupportedOperationException e) { // read only collection
+            e.printStackTrace();
         }
 
         return removed;
