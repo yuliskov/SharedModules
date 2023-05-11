@@ -19,11 +19,13 @@ public class ScreenHelper {
 
         Map<Integer, List<Integer>> screens = new HashMap<>();
         List<Integer> defaultParams = Arrays.asList(-798407885, 1430778939);
+        List<Integer> undefaultParams = Arrays.asList(-593272746);
         screens.put(707132426, defaultParams);
         screens.put(317199503, defaultParams);
         screens.put(-2135702237, defaultParams);
         screens.put(-1362651736, defaultParams);
         screens.put(1869372423, defaultParams);
+        screens.put(707469194, defaultParams);
 
         List<Integer> params = screens.get(screenNum);
 
@@ -39,6 +41,13 @@ public class ScreenHelper {
 
             if (!done) {
                 new Handler().postDelayed(ScreenHelper::applyScreenId, 1_000);
+            }
+        } else {
+            for (int param : undefaultParams) {
+                if (param == screenParams) {
+                    new Handler().postDelayed(ScreenHelper::applyScreenId, 1_000);
+                    break;
+                }
             }
         }
     }
