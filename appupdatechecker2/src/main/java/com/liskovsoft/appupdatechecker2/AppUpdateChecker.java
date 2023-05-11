@@ -17,7 +17,7 @@ import java.util.List;
 public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloaderListener {
     private static final String TAG = AppUpdateChecker.class.getSimpleName();
     private static final int FRESH_TIME_MS = 15 * 60 * 1_000; // 15 minutes
-    private static final int MIN_APK_SIZE_BYTES = 5_000_000; // 5 MB
+    private static final int MIN_APK_SIZE_BYTES = 20_000_000; // 20 MB
     private final Context mContext;
     private final AppVersionChecker mVersionChecker;
     private final AppDownloader mDownloader;
