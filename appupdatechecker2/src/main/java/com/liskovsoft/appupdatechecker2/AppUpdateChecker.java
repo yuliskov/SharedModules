@@ -113,7 +113,6 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
                 mSettingsManager.setLatestVersionNumber(latestVersionNumber);
 
                 if (latestVersionNumber == mSettingsManager.getLatestVersionNumber() &&
-                        FileHelpers.isFreshFile(mSettingsManager.getApkPath(), FRESH_TIME_MS) &&
                         checkApk(mSettingsManager.getApkPath())) {
                     mListener.onUpdateFound(latestVersionName, changelog, mSettingsManager.getApkPath());
                 } else {
@@ -192,6 +191,6 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
 
     private boolean checkApk(String path) {
         // package is not broken
-        return path != null && mContext.getPackageManager().getPackageArchiveInfo(path, 0) != null;
+        return FileHelpers.isFreshFile(path, FRESH_TIME_MS) && mContext.getPackageManager().getPackageArchiveInfo(path, 0) != null;
     }
 }
