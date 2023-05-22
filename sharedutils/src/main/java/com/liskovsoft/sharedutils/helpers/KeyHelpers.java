@@ -108,6 +108,11 @@ public class KeyHelpers {
         return keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
     }
 
+    public static boolean isNavigationKey(int keyCode) {
+        return keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ||
+                keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN;
+    }
+
     /**
      * G20s fix (Enter mapped to OK): show soft keyboard on textview click<br/>
      * More info: https://stackoverflow.com/questions/1489852/android-handle-enter-in-an-edittext

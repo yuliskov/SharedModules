@@ -580,7 +580,7 @@ public final class Helpers {
         return false;
     }
 
-    public static boolean equals(String first, String second) {
+    public static boolean equals(Object first, Object second) {
         if (first == null && second == null) {
             return true;
         }
