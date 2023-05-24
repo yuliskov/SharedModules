@@ -1,6 +1,7 @@
 package com.liskovsoft.sharedutils.helpers;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
@@ -124,6 +125,11 @@ public class KeyHelpers {
 
         for (EditText editField : editFields) {
             editField.setOnKeyListener((v, keyCode, event) -> {
+                // Skip physical keyboard
+                if (v.getResources().getConfiguration().keyboard == Configuration.KEYBOARD_QWERTY) {
+                    return false;
+                }
+
                 if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
                     // Perform action on key press
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
