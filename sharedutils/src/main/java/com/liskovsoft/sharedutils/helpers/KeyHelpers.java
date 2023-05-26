@@ -125,10 +125,10 @@ public class KeyHelpers {
 
         for (EditText editField : editFields) {
             editField.setOnKeyListener((v, keyCode, event) -> {
-                // Skip physical keyboard
-                if (v.getResources().getConfiguration().keyboard == Configuration.KEYBOARD_QWERTY) {
-                    return false;
-                }
+                // Skip physical keyboard. Cause bugs. Soft keyboard won't pop in.
+                //if (v.getResources().getConfiguration().keyboard == Configuration.KEYBOARD_QWERTY) {
+                //    return false;
+                //}
 
                 if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
                     // Perform action on key press
