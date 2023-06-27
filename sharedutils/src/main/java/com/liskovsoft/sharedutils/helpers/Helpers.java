@@ -1179,6 +1179,36 @@ public final class Helpers {
         return !floatEquals(result, -1) ? result : defaultValue;
     }
 
+    public static List<Integer> parseIntList(String[] arr, int index) {
+        String list = parseStr(arr, index);
+        List<Integer> result = new ArrayList<>();
+
+        if (list != null) {
+            String[] listArr = splitArray(list);
+
+            for (String item : listArr) {
+                result.add(parseInt(item));
+            }
+        }
+
+        return result;
+    }
+
+    public static List<String> parseStrList(String[] arr, int index) {
+        String list = parseStr(arr, index);
+        List<String> result = new ArrayList<>();
+
+        if (list != null) {
+            String[] listArr = splitArray(list);
+
+            for (String item : listArr) {
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
     public static String[] splitArrayLegacy(String arr) {
         return splitArrayLegacy(split(ARRAY_DELIM, arr), arr);
     }
@@ -1189,6 +1219,10 @@ public final class Helpers {
 
     public static String mergeArray(Object... items) {
         return Helpers.merge(ARRAY_DELIM, items);
+    }
+
+    public static <T> String mergeList(List<T> list) {
+        return mergeArray(list.toArray());
     }
 
     public static String[] splitObjectLegacy(String obj) {
