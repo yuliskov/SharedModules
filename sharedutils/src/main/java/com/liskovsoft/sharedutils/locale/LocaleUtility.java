@@ -781,12 +781,12 @@ public class LocaleUtility {
         Locale currentLocale = LocaleUtility.getCurrentLocale(context);
 
         // Fix weird locale like en_RO
-        for (Locale locale : Locale.getAvailableLocales()) {
-            if (locale.getCountry().equals(currentLocale.getCountry())) {
-                currentLocale = locale;
-                break;
-            }
-        }
+        //for (Locale locale : Locale.getAvailableLocales()) {
+        //    if (locale.getCountry().equals(currentLocale.getCountry())) {
+        //        currentLocale = locale;
+        //        break;
+        //    }
+        //}
 
         java.text.DateFormat natural =
                 java.text.DateFormat.getTimeInstance(
