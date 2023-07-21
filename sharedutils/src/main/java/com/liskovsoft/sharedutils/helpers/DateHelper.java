@@ -17,7 +17,9 @@ public class DateHelper {
             return 0;
         }
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss" + (timestamp.contains("+") ? "X" : ""), Locale.US);
+        String longPattern = "yyyy-MM-dd'T'HH:mm:ss" + (timestamp.contains("+") ? "X" : "");
+        String shortPattern = "yyyy-MM-dd";
+        SimpleDateFormat format = new SimpleDateFormat(timestamp.contains("T") ? longPattern : shortPattern, Locale.US);
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
         try {
