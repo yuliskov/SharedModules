@@ -26,7 +26,7 @@ object CronetManager {
                     .createBuilder()
                     .enableQuic(true)
                     .enableHttp2(true)
-                    //.enableBrotli(true)
+                    .enableBrotli(true)
                     //.setUserAgent(userAgent)
                     //.addQuicHint("youtube.com", 80, 80)
                     .build()
