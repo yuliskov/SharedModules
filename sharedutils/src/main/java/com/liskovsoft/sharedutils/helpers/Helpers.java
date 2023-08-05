@@ -1145,6 +1145,15 @@ public final class Helpers {
         return result != -1 ? result : defaultValue;
     }
 
+    public static long parseLong(String[] arr, int index, long defaultValue) {
+        if (arr == null || arr.length <= index || index < 0) {
+            return defaultValue;
+        }
+
+        long result = parseLong(arr[index]);
+        return result != -1 ? result : defaultValue;
+    }
+
     public static String parseStr(String[] arr, int index) {
         return parseStr(arr, index, null);
     }
@@ -1188,6 +1197,21 @@ public final class Helpers {
 
             for (String item : listArr) {
                 result.add(parseInt(item));
+            }
+        }
+
+        return result;
+    }
+
+    public static List<Long> parseLongList(String[] arr, int index) {
+        String list = parseStr(arr, index);
+        List<Long> result = new ArrayList<>();
+
+        if (list != null) {
+            String[] listArr = splitArray(list);
+
+            for (String item : listArr) {
+                result.add(parseLong(item));
             }
         }
 
