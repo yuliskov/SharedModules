@@ -459,14 +459,15 @@ public final class Helpers {
     }
 
     public static boolean isAndroidTVLauncher(Context context) {
-        return  isPackageExists(context, "com.google.android.leanbacklauncher") ||
+        return  isPackageExists(context, "com.amazon.tv.leanbacklauncher") || // port of the official Android TV launcher (https://github.com/tsynik/LeanbackLauncher)
+                isPackageExists(context, "com.google.android.leanbacklauncher") ||
                 isPackageExists(context, "com.google.android.tvlauncher") || // Android TV 10
                 isPackageExists(context, "com.google.android.apps.tv.launcherx"); // Google TV Home
     }
 
-    public static boolean isAndroidTVRecommendations(Context context) {
-        return isPackageExists(context, "com.google.android.leanbacklauncher.recommendations");
-    }
+    //public static boolean isAndroidTVRecommendations(Context context) {
+    //    return isPackageExists(context, "com.google.android.leanbacklauncher.recommendations");
+    //}
 
     public static boolean isATVChannelsSupported(Context context) {
         return VERSION.SDK_INT >= 26 && isAndroidTVLauncher(context);
