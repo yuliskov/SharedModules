@@ -46,6 +46,8 @@ dependencies {
     implementation project(path: ':commons-io-2.8.0')
 
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
+    // Note: 1.2.0 Requires multiple androidx.lifecycle libs
+    implementation 'androidx.preference:preference:' + preferenceXLibraryVersion
 
     implementation 'com.squareup.okhttp3:okhttp:' + okhttpVersion
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:' + okhttpVersion

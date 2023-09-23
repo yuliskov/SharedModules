@@ -26,6 +26,7 @@ project.ext {
     leanbackXLibraryVersion = '1.0.0'
     annotationXLibraryVersion = '1.1.0'
     recyclerviewXLibraryVersion = '1.1.0'
+    preferenceXLibraryVersion = '1.1.0' // Note: 1.2.0 Requires multiple androidx.lifecycle libs
     mediaXLibraryVersion = '1.2.0' // exoplayer fix
     constraintLayoutXVersion = '1.1.2'
     supportLibraryVersion = '28.0.0'
