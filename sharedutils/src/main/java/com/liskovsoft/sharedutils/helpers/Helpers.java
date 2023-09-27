@@ -491,7 +491,7 @@ public final class Helpers {
             return false;
         }
 
-        return context.getPackageManager().hasSystemFeature("android.hardware.touchscreen");
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN);
     }
 
     public static boolean isAndroidTV(Context context) {
