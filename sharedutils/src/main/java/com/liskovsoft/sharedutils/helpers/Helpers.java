@@ -37,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
@@ -152,6 +153,7 @@ public final class Helpers {
     /**
      * Source: https://stackoverflow.com/questions/16704597/how-do-you-get-the-user-defined-device-name-in-android
      */
+    @SuppressLint("MissingPermission")
     public static String getUserDeviceName(Context context) {
         // 1) No need special permissions
         String bluetoothName = Settings.System.getString(context.getContentResolver(), "bluetooth_name");
@@ -1234,6 +1236,10 @@ public final class Helpers {
         return result;
     }
 
+    public static String[] parseArray(String[] arr, int index) {
+        return splitArray(parseStr(arr, index));
+    }
+
     public static String[] splitArrayLegacy(String arr) {
         return splitArrayLegacy(split(ARRAY_DELIM, arr), arr);
     }
@@ -1262,7 +1268,7 @@ public final class Helpers {
         return Helpers.merge(OBJECT_DELIM, params);
     }
 
-    private static String[] split(String delim, String data) {
+    public static String[] split(String delim, String data) {
         if (data == null) {
             return null;
         }
@@ -1275,7 +1281,7 @@ public final class Helpers {
         return data.split(Pattern.quote(delim));
     }
 
-    private static String merge(String delim, Object... params) {
+    public static String merge(String delim, Object... params) {
         if (params == null) {
             return null;
         }
@@ -1831,5 +1837,22 @@ public final class Helpers {
         }
 
         return builder.toString();
+    }
+
+    /**
+     * https://developer.amazon.com/docs/fire-tv/implement-voiceview-accessibility-features-fire-os.html
+     */
+    public static void describedBy(View view, Integer... ids) {
+        if (Build.VERSION.SDK_INT >= 19) {
+            // You can set extras on a button which is described by some
+            // static text elsewhere on the screen as follows.
+            view.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
+                    super.onInitializeAccessibilityNodeInfo(host, info);
+                    info.getExtras().putString("com.amazon.accessibility.describedBy", Helpers.merge(" ", (Object[]) ids));
+                    info.setEnabled(host.isEnabled());
+                }
+            });
+        }
     }
 }
