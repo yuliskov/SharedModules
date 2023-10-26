@@ -89,6 +89,14 @@ public class RxHelper {
                 );
     }
 
+    public static <T> Disposable execute(Observable<T> observable, OnError onError) {
+        return setup(observable)
+                .subscribe(
+                        obj -> {}, // ignore result
+                        onError::onError
+                );
+    }
+
     public static <T> Disposable execute(Observable<T> observable, Runnable onFinish) {
         return setup(observable)
                 .subscribe(
@@ -98,11 +106,11 @@ public class RxHelper {
                 );
     }
 
-    public static <T> Disposable execute(Observable<T> observable, Runnable onError, Runnable onFinish) {
+    public static <T> Disposable execute(Observable<T> observable, OnError onError, Runnable onFinish) {
         return setup(observable)
                 .subscribe(
                         obj -> {}, // ignore result
-                        error -> onError.run(),
+                        onError::onError,
                         onFinish::run
                 );
     }
