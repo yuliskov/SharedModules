@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager;
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager.MyRequest;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -137,7 +138,10 @@ public class AppVersionChecker {
 
         final Uri[] downloadUrls;
 
-        if (mVersionInfo.has("downloadUrlList")) {
+        if (mVersionInfo.has("downloadUrlList_" + Build.CPU_ABI)) {
+            JSONArray urls = mVersionInfo.getJSONArray("downloadUrlList_" + Build.CPU_ABI);
+            downloadUrls = parse(urls);
+        } else if (mVersionInfo.has("downloadUrlList")) {
             JSONArray urls = mVersionInfo.getJSONArray("downloadUrlList");
             downloadUrls = parse(urls);
         } else {
