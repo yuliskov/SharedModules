@@ -4,8 +4,12 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Build.VERSION;
+import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
@@ -24,6 +28,12 @@ public class PermissionHelpers {
             Manifest.permission.RECORD_AUDIO
     };
 
+    // Overlay Permissions
+    public static final int REQUEST_OVERLAY = 114;
+    private static String[] PERMISSIONS_OVERLAY = {
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+    };
+
     /**
      * Checks if the app has permission to access device storage<br/>
      * If the app does not has permission then the user will be prompted to grant permissions<br/>
@@ -40,6 +50,17 @@ public class PermissionHelpers {
         requestPermissions(context, PERMISSIONS_MIC, REQUEST_MIC);
     }
 
+    public static void verifyOverlayPermissions(Context context) {
+        if (Build.VERSION.SDK_INT >= 29 && !Settings.canDrawOverlays(context) && context instanceof Activity) {
+            //requestPermissions(context, PERMISSIONS_OVERLAY, REQUEST_OVERLAY);
+            Intent intent = new Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + context.getApplicationContext().getPackageName())
+            );
+            ((Activity) context).startActivityForResult(intent, REQUEST_OVERLAY);
+        }
+    }
+
     /**
      * Only check. There is no prompt.
      * @param context to apply permissions to
@@ -53,6 +74,10 @@ public class PermissionHelpers {
     public static boolean hasMicPermissions(Context context) {
         // Check if we have mic permission
         return hasPermissions(context, PERMISSIONS_MIC);
+    }
+
+    public static boolean hasOverlayPermissions(Context context) {
+        return Build.VERSION.SDK_INT < 29 || Settings.canDrawOverlays(context);
     }
 
     // Utils
