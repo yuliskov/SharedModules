@@ -77,7 +77,22 @@ public class PermissionHelpers {
     }
 
     public static boolean hasOverlayPermissions(Context context) {
-        return Build.VERSION.SDK_INT < 29 || Settings.canDrawOverlays(context);
+        return Build.VERSION.SDK_INT < 29 || Settings.canDrawOverlays(context) || !hasOverlayActivity(context);
+    }
+
+    private static boolean hasOverlayActivity(Context context) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            Intent intent = new Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + context.getApplicationContext().getPackageName())
+            );
+
+            PackageManager packageManager = context.getPackageManager();
+
+            return intent.resolveActivity(packageManager) != null;
+        }
+
+        return false;
     }
 
     // Utils
