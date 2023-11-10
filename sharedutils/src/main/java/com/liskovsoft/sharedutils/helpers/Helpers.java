@@ -1490,16 +1490,16 @@ public final class Helpers {
 
         List<T> removed = null;
         try {
-            final Iterator<T> each = collection.iterator();
-            while (each.hasNext()) {
-                T next = each.next();
+            for (T next : collection) {
                 if (filter.test(next)) {
-                    each.remove();
                     if (removed == null) {
                         removed = new ArrayList<>();
                     }
                     removed.add(next);
                 }
+            }
+            if (removed != null) {
+                collection.removeAll(removed);
             }
         } catch (UnsupportedOperationException e) { // read only collection
             e.printStackTrace();
