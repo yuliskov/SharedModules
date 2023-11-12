@@ -43,7 +43,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
         mSettingsManager = new SettingsManager(mContext);
 
         // Cleanup the storage. I don't want to accidentally install old version.
-        FileHelpers.delete(mSettingsManager.getApkPath());
+        //FileHelpers.delete(mSettingsManager.getApkPath());
     }
 
     /**
@@ -124,7 +124,7 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
             mSettingsManager.setLastCheckedMs(System.currentTimeMillis());
 
             // Cleanup the storage. I don't want to accidentally install old version.
-            FileHelpers.delete(mSettingsManager.getApkPath());
+            //FileHelpers.delete(mSettingsManager.getApkPath());
 
             mListener.onUpdateError(new IllegalStateException(AppUpdateCheckerListener.LATEST_VERSION));
         }
