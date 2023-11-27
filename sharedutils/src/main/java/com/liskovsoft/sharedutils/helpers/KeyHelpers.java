@@ -133,11 +133,29 @@ public class KeyHelpers {
                 if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
                     // Perform action on key press
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        Helpers.showKeyboard(v.getContext());
+                        Helpers.showKeyboardAlt(v.getContext(), v);
                     }
                     return true; // disable default action (text auto commit)
                 }
                 return false;
+            });
+        }
+    }
+
+    public static void fixShowKeyboard(EditText... editFields) {
+        if (editFields == null || editFields.length == 0) {
+            return;
+        }
+
+        for (EditText editField : editFields) {
+            if (editField.getOnFocusChangeListener() != null) {
+                continue;
+            }
+
+            editField.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    Helpers.showKeyboardAlt(v.getContext(), v);
+                }
             });
         }
     }
