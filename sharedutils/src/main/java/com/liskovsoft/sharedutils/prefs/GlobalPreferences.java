@@ -27,13 +27,18 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String ENABLE_DNS_OVER_HTTPS = "enable_dns_over_https";
     private static final String VISITOR_COOKIE = "visitor_cookie";
     private static final String HIDE_SHORTS_FROM_SUBSCRIPTIONS = "hide_shorts_from_subscriptions";
+    private static final String HIDE_SHORTS_FROM_TRENDING = "hide_shorts_from_trending";
     private static final String HIDE_STREAMS_FROM_SUBSCRIPTIONS = "hide_streams_from_subscriptions";
     private static final String HIDE_WATCHED_FROM_HOME = "hide_watched_from_home";
     private static final String HIDE_WATCHED_FROM_SUBSCRIPTIONS = "hide_watched_from_subscriptions";
     private static final String HIDE_SHORTS_EVERYWHERE = "hide_shorts_everywhere";
     private static final String HIDE_SHORTS_FROM_HOME = "hide_shorts_from_home";
     private static final String HIDE_SHORTS_FROM_HISTORY = "hide_shorts_from_history";
+    private static final String HIDE_SHORTS_FROM_CHANNEL = "hide_shorts_from_channel";
     private static final String HIDE_UPCOMING = "hide_upcoming";
+    private static final String HIDE_UPCOMING_FROM_CHANNEL = "hide_upcoming_from_channel";
+    private static final String HIDE_UPCOMING_FROM_HOME = "hide_upcoming_from_home";
+    private static final String HIDE_UPCOMING_FROM_SUBSCRIPTIONS = "hide_upcoming_from_subscriptions";
     private static final String CONTENT_BLOCK_ALT_SERVER = "content_block_alt_server";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
@@ -185,6 +190,14 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         return getBoolean(HIDE_SHORTS_EVERYWHERE, false);
     }
 
+    public void hideShortsFromChannel(boolean enable) {
+        putBoolean(HIDE_SHORTS_FROM_CHANNEL, enable);
+    }
+
+    public boolean isHideShortsFromChannelEnabled() {
+        return getBoolean(HIDE_SHORTS_FROM_CHANNEL, false);
+    }
+
     public void hideShortsFromHome(boolean enable) {
         putBoolean(HIDE_SHORTS_FROM_HOME, enable);
     }
@@ -199,6 +212,14 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isHideShortsFromSubscriptionsEnabled() {
         return getBoolean(HIDE_SHORTS_FROM_SUBSCRIPTIONS, true);
+    }
+
+    public void hideShortsFromTrending(boolean enable) {
+        putBoolean(HIDE_SHORTS_FROM_TRENDING, enable);
+    }
+
+    public boolean isHideShortsFromTrendingEnabled() {
+        return getBoolean(HIDE_SHORTS_FROM_TRENDING, true);
     }
 
     public void hideStreamsFromSubscriptions(boolean enable) {
@@ -223,6 +244,30 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isHideUpcomingEnabled() {
         return getBoolean(HIDE_UPCOMING, false);
+    }
+
+    public void hideUpcomingFromChannel(boolean enable) {
+        putBoolean(HIDE_UPCOMING_FROM_CHANNEL, enable);
+    }
+
+    public boolean isHideUpcomingFromChannelEnabled() {
+        return getBoolean(HIDE_UPCOMING_FROM_CHANNEL, true);
+    }
+
+    public void hideUpcomingFromHome(boolean enable) {
+        putBoolean(HIDE_UPCOMING_FROM_HOME, enable);
+    }
+
+    public boolean isHideUpcomingFromHomeEnabled() {
+        return getBoolean(HIDE_UPCOMING_FROM_HOME, true);
+    }
+
+    public void hideUpcomingFromSubscriptions(boolean enable) {
+        putBoolean(HIDE_UPCOMING_FROM_SUBSCRIPTIONS, enable);
+    }
+
+    public boolean isHideUpcomingFromSubscriptionsEnabled() {
+        return getBoolean(HIDE_UPCOMING_FROM_SUBSCRIPTIONS, false);
     }
 
     public void enableContentBlockAltServer(boolean enable) {
