@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -175,7 +176,7 @@ public class RxHelper {
                 return;
             }
             if ((e instanceof IllegalStateException) &&
-                    ((e.getCause() instanceof SocketException) || (e.getCause() instanceof ConnectException))) {
+                    ((e.getCause() instanceof SocketException) || (e.getCause() instanceof UnknownHostException))) {
                 // network problems (no internet, failed to connect etc)
                 Log.e(TAG, "Network error", e.getCause());
                 return;
