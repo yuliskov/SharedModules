@@ -48,6 +48,7 @@ android {
         stbolshoetv {}
         stredboxtv {}
         stsibsetru {}
+        stamazon {}
     }
 }
 
