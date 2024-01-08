@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaCodecInfo;
@@ -536,10 +537,26 @@ public final class Helpers {
         View decorView = activity.getWindow().getDecorView();
 
         if (VERSION.SDK_INT >= 19) {
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            // Keep navigation bar in gesture mode to support gestures
+            int hideNavigation = isEdgeToEdgeEnabled(activity) != 2 ? View.SYSTEM_UI_FLAG_HIDE_NAVIGATION : 0;
+            decorView.setSystemUiVisibility(hideNavigation | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         } else {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
+    }
+
+    /**
+     * 0 : Navigation is displaying with 3 buttons<br/>
+     * 1 : Navigation is displaying with 2 button(Android P navigation mode)<br/>
+     * 2 : Full screen gesture(Gesture on android Q)
+     */
+    private static int isEdgeToEdgeEnabled(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("config_navBarInteractionMode", "integer", "android");
+        if (resourceId > 0) {
+            return resources.getInteger(resourceId);
+        }
+        return 0;
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
