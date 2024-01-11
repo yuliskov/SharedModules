@@ -85,8 +85,6 @@ public final class Helpers {
     public static final int REMOVE_PACKAGE_CODE = 521;
     private static final String ARRAY_DELIM = "%AR%";
     private static final String OBJECT_DELIM = "%OB%";
-    private static final String LEGACY_ARRAY_DELIM = "|";
-    private static final String LEGACY_OBJECT_DELIM = ",";
     private static final String MIME_VP9 = "video/x-vnd.on2.vp9";
     private static final String MIME_AV1 = "video/av01";
     private static final Pattern URL_PREFIX = Pattern.compile("^[a-z.]+://.+$");
@@ -537,6 +535,7 @@ public final class Helpers {
         View decorView = activity.getWindow().getDecorView();
 
         if (VERSION.SDK_INT >= 19) {
+            // https://developer.android.com/codelabs/gesture-navigation
             // Keep navigation bar in gesture mode to support gestures
             int hideNavigation = isEdgeToEdgeEnabled(activity) != 2 ? View.SYSTEM_UI_FLAG_HIDE_NAVIGATION : 0;
             decorView.setSystemUiVisibility(hideNavigation | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -548,7 +547,8 @@ public final class Helpers {
     /**
      * 0 : Navigation is displaying with 3 buttons<br/>
      * 1 : Navigation is displaying with 2 button(Android P navigation mode)<br/>
-     * 2 : Full screen gesture(Gesture on android Q)
+     * 2 : Full screen gesture(Gesture on android Q)<br/>
+     * <a href="https://developer.android.com/codelabs/gesture-navigation">tutorial</a>
      */
     private static int isEdgeToEdgeEnabled(Context context) {
         Resources resources = context.getResources();
@@ -1257,10 +1257,6 @@ public final class Helpers {
         return splitArray(parseStr(arr, index));
     }
 
-    public static String[] splitArrayLegacy(String arr) {
-        return splitArrayLegacy(split(ARRAY_DELIM, arr), arr);
-    }
-
     public static String[] splitArray(String arr) {
         return split(ARRAY_DELIM, arr);
     }
@@ -1271,10 +1267,6 @@ public final class Helpers {
 
     public static <T> String mergeList(List<T> list) {
         return mergeArray(list.toArray());
-    }
-
-    public static String[] splitObjectLegacy(String obj) {
-        return splitObjectLegacy(split(OBJECT_DELIM, obj), obj);
     }
 
     public static String[] splitObject(String obj) {
@@ -1351,22 +1343,6 @@ public final class Helpers {
 
     public static <T> T firstNonNull(T obj, T defObj) {
         return obj != null ? obj : defObj;
-    }
-
-    private static String[] splitArrayLegacy(String[] split, String arr) {
-        if (split != null && split.length == 1) {
-            return split(LEGACY_ARRAY_DELIM, arr);
-        }
-
-        return split;
-    }
-
-    private static String[] splitObjectLegacy(String[] split, String obj) {
-        if (split != null && split.length == 1) {
-            return split(LEGACY_OBJECT_DELIM, obj);
-        }
-
-        return split;
     }
 
     public static int[] range(int start, int end, int step) {
