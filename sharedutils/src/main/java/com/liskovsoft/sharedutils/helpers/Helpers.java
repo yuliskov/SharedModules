@@ -85,6 +85,8 @@ public final class Helpers {
     public static final int REMOVE_PACKAGE_CODE = 521;
     private static final String ARRAY_DELIM = "%AR%";
     private static final String OBJECT_DELIM = "%OB%";
+    private static final String LEGACY_ARRAY_DELIM = "|";
+    private static final String LEGACY_OBJECT_DELIM = ",";
     private static final String MIME_VP9 = "video/x-vnd.on2.vp9";
     private static final String MIME_AV1 = "video/av01";
     private static final Pattern URL_PREFIX = Pattern.compile("^[a-z.]+://.+$");
@@ -1275,6 +1277,22 @@ public final class Helpers {
 
     public static String mergeObject(Object... params) {
         return Helpers.merge(OBJECT_DELIM, params);
+    }
+
+    public static String[] splitArrayLegacy(String arr) {
+        if (arr != null && (arr.contains(ARRAY_DELIM) || arr.contains(OBJECT_DELIM))) {
+            return split(ARRAY_DELIM, arr);
+        }
+
+        return split(LEGACY_ARRAY_DELIM, arr);
+    }
+
+    public static String[] splitObjectLegacy(String obj) {
+        if (obj != null && (obj.contains(OBJECT_DELIM) || obj.contains(ARRAY_DELIM))) {
+            return split(OBJECT_DELIM, obj);
+        }
+
+        return split(LEGACY_OBJECT_DELIM, obj);
     }
 
     public static String[] split(String delim, String data) {
