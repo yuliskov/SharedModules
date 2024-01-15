@@ -95,6 +95,7 @@ public final class Helpers {
     private static Boolean sIsAV1Supported;
     private static int sVP9MaxHeight;
     private static int sAV1MaxHeight;
+    private static long sCachedRamSize = -1;
     private static Random sRandom;
     // https://unicode-table.com/en/
     // https://www.compart.com/en/unicode/
@@ -1005,18 +1006,29 @@ public final class Helpers {
         }
     }
 
-    public static int getDeviceRam(Context context) {
-        if (context == null || VERSION.SDK_INT < 16) {
+    public static long getDeviceRam(Context context) {
+        if (sCachedRamSize != -1) {
+            return sCachedRamSize;
+        }
+
+        if (context == null) {
             return -1;
         }
+
+        long result;
 
         ActivityManager actManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
         if (actManager != null) {
             actManager.getMemoryInfo(memInfo);
-        } else return 500000000;//safe value for devices with 1gb or more...
+            result = memInfo.totalMem;
+        } else {
+            result = 500_000_000; // safe value for devices with 1gb or more...
+        }
 
-        return (int) (memInfo.totalMem / 18);
+        sCachedRamSize = result;
+
+        return result;
     }
 
     public static String replace(String content, Pattern oldVal, String newVal) {
