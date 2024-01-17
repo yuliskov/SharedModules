@@ -31,7 +31,6 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String HIDE_STREAMS_FROM_SUBSCRIPTIONS = "hide_streams_from_subscriptions";
     private static final String HIDE_WATCHED_FROM_HOME = "hide_watched_from_home";
     private static final String HIDE_WATCHED_FROM_SUBSCRIPTIONS = "hide_watched_from_subscriptions";
-    private static final String HIDE_SHORTS_EVERYWHERE = "hide_shorts_everywhere";
     private static final String HIDE_SHORTS_FROM_HOME = "hide_shorts_from_home";
     private static final String HIDE_SHORTS_FROM_HISTORY = "hide_shorts_from_history";
     private static final String HIDE_SHORTS_FROM_CHANNEL = "hide_shorts_from_channel";
@@ -180,14 +179,6 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isHideWatchedFromSubscriptionsEnabled() {
         return getBoolean(HIDE_WATCHED_FROM_SUBSCRIPTIONS, false);
-    }
-
-    public void hideShortsEverywhere(boolean enable) {
-        putBoolean(HIDE_SHORTS_EVERYWHERE, enable);
-    }
-
-    public boolean isHideShortsEverywhereEnabled() {
-        return getBoolean(HIDE_SHORTS_EVERYWHERE, false);
     }
 
     public void hideShortsFromChannel(boolean enable) {
