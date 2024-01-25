@@ -1887,7 +1887,7 @@ public final class Helpers {
     public static List<String> splitStringBySize(String str, int size) {
         List<String> split = new ArrayList<>();
 
-        Scanner scanner = new Scanner(str).useDelimiter("\\s+");
+        Scanner scanner = new Scanner(str).useDelimiter(" ");
 
         StringBuilder builder = new StringBuilder();
 
