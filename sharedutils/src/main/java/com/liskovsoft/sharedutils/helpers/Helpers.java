@@ -40,7 +40,9 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.InputMethodManager;
+
 import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -67,13 +69,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
@@ -1877,5 +1879,39 @@ public final class Helpers {
                 }
             });
         }
+    }
+
+    /**
+     * Trying to split while keeping the words not divided.
+     */
+    public static List<String> splitStringBySize(String str, int size) {
+        List<String> split = new ArrayList<>();
+
+        Scanner scanner = new Scanner(str).useDelimiter("\\s+");
+
+        StringBuilder builder = new StringBuilder();
+
+        while (scanner.hasNext()) {
+            String aWord = scanner.next();
+
+            if (builder.length() != 0) {
+                builder.append(" ");
+            }
+
+            builder.append(aWord);
+
+            if (builder.length() > size) {
+                split.add(builder.toString());
+                builder = new StringBuilder();
+            }
+        }
+
+        if (builder.length() != 0) {
+            split.add(builder.toString());
+        }
+
+        scanner.close();
+
+        return split;
     }
 }

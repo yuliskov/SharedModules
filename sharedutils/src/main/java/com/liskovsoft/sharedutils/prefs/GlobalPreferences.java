@@ -229,14 +229,6 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         return getBoolean(HIDE_SHORTS_FROM_HISTORY, true);
     }
 
-    public void hideUpcoming(boolean enable) {
-        putBoolean(HIDE_UPCOMING, enable);
-    }
-
-    public boolean isHideUpcomingEnabled() {
-        return getBoolean(HIDE_UPCOMING, false);
-    }
-
     public void hideUpcomingFromChannel(boolean enable) {
         putBoolean(HIDE_UPCOMING_FROM_CHANNEL, enable);
     }
