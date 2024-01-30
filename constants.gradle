@@ -16,7 +16,7 @@ project.ext {
     kotlinVersion = '1.6.21' // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk7
     kotlinxVersion = '1.6.4' // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-android
     // NOTE: Kotlin core 1.7.0 has 'resource android:attr/lStar not found' error (dialog black background bug)
-    kotlinCoreVersion = '1.9.0' // https://mvnrepository.com/artifact/androidx.core/core-ktx
+    kotlinCoreVersion = '1.8.0' // https://mvnrepository.com/artifact/androidx.core/core-ktx
     gradleVersion = '6.9.1' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
     androidGradleVersion = '4.0.0+' // last version compatible with IntellJ 2020.3
     
@@ -50,9 +50,9 @@ project.ext {
     amazonExoplayerVersion = '2.10.6'
     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
     // playServicesCronetVersion = '18.0.1'
-    cronetApiVersion = '105.5195.68' // latest version with Android 7.0 support
+    // cronetApiVersion = '105.5195.68' // latest version with Android 7.0 support
     // cronetApiVersion = '98.4758.101' // fast too
-    // cronetApiVersion = '75.3770.101' // the fastest one (best choice)
+    cronetApiVersion = '75.3770.101' // the fastest one (best choice)
     cronetOkHttpVersion = '0.1.0'
     
     espressoVersion = '3.2.0'
