@@ -105,6 +105,7 @@ public final class Helpers {
     // https://www.compart.com/en/unicode/
     public static final String THUMB_UP = "\uD83D\uDC4D";
     public static final String THUMB_DOWN = "\uD83D\uDC4E";
+    public static final String NON_BREAKING_SPACE = "\u00A0";
     //public static final String HOURGLASS = "⌛";
     public static final String HOURGLASS = "\u231B";
     private static DateFormat sDateFormat;
