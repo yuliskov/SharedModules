@@ -263,6 +263,8 @@ public final class OkHttpCommons {
         //    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
         //    preferIPv4Dns(okBuilder);
         //}
+        // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
+        forceIPv4Dns(okBuilder);
         //setupProxy(okBuilder); // proxy configured in another place
         setupConnectionFix(okBuilder);
         setupConnectionParams(okBuilder);
