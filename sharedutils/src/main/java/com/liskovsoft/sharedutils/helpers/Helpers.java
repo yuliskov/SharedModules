@@ -1567,6 +1567,7 @@ public final class Helpers {
                 collection.removeAll(removed);
             }
         } catch (UnsupportedOperationException e) { // read only collection
+            removed = null;
             e.printStackTrace();
         }
 
