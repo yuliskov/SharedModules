@@ -6,6 +6,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor;
 import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionPool;
@@ -259,12 +260,11 @@ public final class OkHttpCommons {
     }
     
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder okBuilder) {
-        //if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
-        //    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
-        //    preferIPv4Dns(okBuilder);
-        //}
-        // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
-        forceIPv4Dns(okBuilder);
+        if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
+            // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
+            forceIPv4Dns(okBuilder);
+            //preferIPv4Dns(okBuilder); // alt method
+        }
         //setupProxy(okBuilder); // proxy configured in another place
         setupConnectionFix(okBuilder);
         setupConnectionParams(okBuilder);
