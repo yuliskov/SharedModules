@@ -88,9 +88,9 @@ public final class Helpers {
     private static final String TAG = Helpers.class.getSimpleName();
     public static final int REMOVE_PACKAGE_CODE = 521;
     private static final String ARRAY_DELIM = "%AR%";
-    private static final String PREFS_DELIM = "%OB%";
+    private static final String DATA_DELIM = "%OB%";
     private static final String LEGACY_ARRAY_DELIM = "|";
-    private static final String LEGACY_PREFS_DELIM = ",";
+    private static final String LEGACY_DATA_DELIM = ",";
     private static final String MIME_VP9 = "video/x-vnd.on2.vp9";
     private static final String MIME_AV1 = "video/av01";
     private static final Pattern URL_PREFIX = Pattern.compile("^[a-z.]+://.+$");
@@ -1318,28 +1318,28 @@ public final class Helpers {
         return mergeArray(list.toArray());
     }
 
-    public static String[] splitPrefs(String prefs) {
-        return split(PREFS_DELIM, prefs);
+    public static String[] splitData(String data) {
+        return split(DATA_DELIM, data);
     }
 
-    public static String mergePrefs(Object... items) {
-        return Helpers.merge(PREFS_DELIM, items);
+    public static String mergeData(Object... items) {
+        return Helpers.merge(DATA_DELIM, items);
     }
 
     public static String[] splitArrayLegacy(String arr) {
-        if (arr != null && (arr.contains(ARRAY_DELIM) || arr.contains(PREFS_DELIM))) {
+        if (arr != null && (arr.contains(ARRAY_DELIM) || arr.contains(DATA_DELIM))) {
             return split(ARRAY_DELIM, arr);
         }
 
         return split(LEGACY_ARRAY_DELIM, arr);
     }
 
-    public static String[] splitPrefsLegacy(String obj) {
-        if (obj != null && (obj.contains(PREFS_DELIM) || obj.contains(ARRAY_DELIM))) {
-            return split(PREFS_DELIM, obj);
+    public static String[] splitDataLegacy(String data) {
+        if (data != null && (data.contains(DATA_DELIM) || data.contains(ARRAY_DELIM))) {
+            return split(DATA_DELIM, data);
         }
 
-        return split(LEGACY_PREFS_DELIM, obj);
+        return split(LEGACY_DATA_DELIM, data);
     }
 
     public static String[] split(String delim, String data) {
