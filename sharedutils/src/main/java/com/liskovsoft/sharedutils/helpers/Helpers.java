@@ -91,6 +91,7 @@ public final class Helpers {
     private static final String DATA_DELIM = "%OB%";
     private static final String LEGACY_ARRAY_DELIM = "|";
     private static final String LEGACY_DATA_DELIM = ",";
+    private static final String OBJ_DELIM = "&vi;";
     private static final String MIME_VP9 = "video/x-vnd.on2.vp9";
     private static final String MIME_AV1 = "video/av01";
     private static final Pattern URL_PREFIX = Pattern.compile("^[a-z.]+://.+$");
@@ -1311,7 +1312,7 @@ public final class Helpers {
     }
 
     public static String mergeArray(Object... items) {
-        return Helpers.merge(ARRAY_DELIM, items);
+        return merge(ARRAY_DELIM, items);
     }
 
     public static <T> String mergeList(List<T> list) {
@@ -1323,7 +1324,7 @@ public final class Helpers {
     }
 
     public static String mergeData(Object... items) {
-        return Helpers.merge(DATA_DELIM, items);
+        return merge(DATA_DELIM, items);
     }
 
     public static String[] splitArrayLegacy(String arr) {
@@ -1342,7 +1343,15 @@ public final class Helpers {
         return split(LEGACY_DATA_DELIM, data);
     }
 
-    public static String[] split(String delim, String data) {
+    public static String[] splitObj(String obj) {
+        return split(OBJ_DELIM, obj);
+    }
+
+    public static String mergeObj(Object... items) {
+        return merge(OBJ_DELIM, items);
+    }
+
+    private static String[] split(String delim, String data) {
         if (data == null) {
             return null;
         }
@@ -1355,7 +1364,7 @@ public final class Helpers {
         return data.split(Pattern.quote(delim));
     }
 
-    public static String merge(String delim, Object... params) {
+    private static String merge(String delim, Object... params) {
         if (params == null) {
             return null;
         }
