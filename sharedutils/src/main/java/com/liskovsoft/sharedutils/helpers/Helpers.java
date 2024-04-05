@@ -137,7 +137,7 @@ public final class Helpers {
     public static InputStream appendStream(InputStream first, InputStream second) {
         return FileHelpers.appendStream(first, second);
     }
-    
+
     public static <T> T[] appendArray(T[] first, T[] second) {
         T[] result = Arrays.copyOf(first, first.length + second.length);
         System.arraycopy(second, 0, result, first.length, second.length);
@@ -1259,48 +1259,47 @@ public final class Helpers {
     }
 
     public static List<Integer> parseIntList(String[] arr, int index) {
-        String list = parseStr(arr, index);
-        List<Integer> result = new ArrayList<>();
-
-        if (list != null) {
-            String[] listArr = splitArray(list);
-
-            for (String item : listArr) {
-                result.add(parseInt(item));
-            }
-        }
-
-        return result;
+        return parseList(arr, index, Helpers::parseInt);
     }
 
     public static List<Long> parseLongList(String[] arr, int index) {
+        return parseList(arr, index, Helpers::parseLong);
+    }
+
+    public static List<String> parseStrList(String[] arr, int index) {
+        return parseList(arr, index, Helpers::parseStr);
+    }
+
+    public interface Parser<T> {
+        T parse(String spec);
+    }
+
+    public static <T> List<T> parseList(String[] arr, int index, Parser<T> parser) {
         String list = parseStr(arr, index);
-        List<Long> result = new ArrayList<>();
+        List<T> result = new ArrayList<>();
 
         if (list != null) {
             String[] listArr = splitArray(list);
 
             for (String item : listArr) {
-                result.add(parseLong(item));
+                result.add(parser.parse(item));
             }
         }
 
         return result;
     }
 
-    public static List<String> parseStrList(String[] arr, int index) {
-        String list = parseStr(arr, index);
-        List<String> result = new ArrayList<>();
+    public static <T> T parseItem(String[] arr, int index, Parser<T> parser) {
+        return parseItem(arr, index, parser, null);
+    }
 
-        if (list != null) {
-            String[] listArr = splitArray(list);
-
-            for (String item : listArr) {
-                result.add(item);
-            }
+    public static <T> T parseItem(String[] arr, int index, Parser<T> parser, T defaultValue) {
+        if (arr == null || arr.length <= index || index < 0) {
+            return defaultValue;
         }
 
-        return result;
+        T result = parser.parse(arr[index]);
+        return result != null ? result : defaultValue;
     }
 
     public static String[] parseArray(String[] arr, int index) {
@@ -1378,6 +1377,10 @@ public final class Helpers {
         for (Object param : params) {
             if (sb.length() != 0) {
                 sb.append(delim);
+            }
+
+            if (param instanceof List) {
+                param = mergeList((List<?>) param);
             }
 
             sb.append(param);
@@ -1596,7 +1599,7 @@ public final class Helpers {
 
         return false;
     }
-    
+
     public static <T> List<T> filter(Collection<T> collection, Filter<T> filter) {
         if (collection == null || filter == null) {
             return null;
