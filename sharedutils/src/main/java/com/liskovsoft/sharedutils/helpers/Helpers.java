@@ -76,6 +76,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -1289,6 +1290,22 @@ public final class Helpers {
         return result;
     }
 
+    public static <T, K> Map<T, K> parseMap(String[] arr, int index, Parser<T> keyParser, Parser<K> valueParser) {
+        String list = parseStr(arr, index);
+        Map<T, K> result = new HashMap<>();
+
+        if (list != null) {
+            String[] listArr = splitArray(list);
+
+            for (String item : listArr) {
+                String[] keyValPair = item.split("\\|");
+                result.put(keyParser.parse(keyValPair[0]), valueParser.parse(keyValPair[1]));
+            }
+        }
+
+        return result;
+    }
+
     public static <T> T parseItem(String[] arr, int index, Parser<T> parser) {
         return parseItem(arr, index, parser, null);
     }
@@ -1316,6 +1333,15 @@ public final class Helpers {
 
     public static <T> String mergeList(List<T> list) {
         return mergeArray(list.toArray());
+    }
+
+    public static <T, K> String mergeMap(Map<T, K> map) {
+        List<String> pairs = new ArrayList<>();
+        for (Entry<T, K> pair : map.entrySet()) {
+            pairs.add(String.format("%s|%s", pair.getKey(), pair.getValue()));
+        }
+
+        return mergeList(pairs);
     }
 
     public static String[] splitData(String data) {
@@ -1381,6 +1407,8 @@ public final class Helpers {
 
             if (param instanceof List) {
                 param = mergeList((List<?>) param);
+            } else if (param instanceof Map) {
+                param = mergeMap((Map<?, ?>) param);
             }
 
             sb.append(param);
