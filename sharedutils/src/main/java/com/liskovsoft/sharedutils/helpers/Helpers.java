@@ -1275,15 +1275,18 @@ public final class Helpers {
         T parse(String spec);
     }
 
-    public static <T> List<T> parseList(String[] arr, int index, Parser<T> parser) {
-        String list = parseStr(arr, index);
+    public static <T> List<T> parseList(String[] arr, int index, Parser<T> itemParser) {
+        return parseList(parseStr(arr, index), itemParser);
+    }
+
+    public static <T> List<T> parseList(String spec, Parser<T> itemParser) {
         List<T> result = new ArrayList<>();
 
-        if (list != null) {
-            String[] listArr = splitArray(list);
+        if (spec != null) {
+            String[] listArr = splitArray(spec);
 
             for (String item : listArr) {
-                result.add(parser.parse(item));
+                result.add(itemParser.parse(item));
             }
         }
 
@@ -1291,11 +1294,14 @@ public final class Helpers {
     }
 
     public static <T, K> Map<T, K> parseMap(String[] arr, int index, Parser<T> keyParser, Parser<K> valueParser) {
-        String list = parseStr(arr, index);
+        return parseMap(parseStr(arr, index), keyParser, valueParser);
+    }
+
+    public static <T, K> Map<T, K> parseMap(String spec, Parser<T> keyParser, Parser<K> valueParser) {
         Map<T, K> result = new HashMap<>();
 
-        if (list != null) {
-            String[] listArr = splitArray(list);
+        if (spec != null) {
+            String[] listArr = splitArray(spec);
 
             for (String item : listArr) {
                 String[] keyValPair = item.split("\\|");
