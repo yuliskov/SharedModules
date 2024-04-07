@@ -90,6 +90,7 @@ public final class Helpers {
     public static final int REMOVE_PACKAGE_CODE = 521;
     private static final String ARRAY_DELIM = "%AR%";
     private static final String DATA_DELIM = "%OB%";
+    private static final String PAIR_DELIM = "%PR%";
     private static final String LEGACY_ARRAY_DELIM = "|";
     private static final String LEGACY_DATA_DELIM = ",";
     private static final String OBJ_DELIM = "&vi;";
@@ -1304,7 +1305,13 @@ public final class Helpers {
             String[] listArr = splitArray(spec);
 
             for (String item : listArr) {
-                String[] keyValPair = item.split("\\|");
+                //String[] keyValPair = item.split("\\|");
+                String[] keyValPair = split(PAIR_DELIM, item);
+
+                if (keyValPair.length != 2) {
+                    continue;
+                }
+
                 result.put(keyParser.parse(keyValPair[0]), valueParser.parse(keyValPair[1]));
             }
         }
@@ -1344,7 +1351,8 @@ public final class Helpers {
     public static <T, K> String mergeMap(Map<T, K> map) {
         List<String> pairs = new ArrayList<>();
         for (Entry<T, K> pair : map.entrySet()) {
-            pairs.add(String.format("%s|%s", pair.getKey(), pair.getValue()));
+            //pairs.add(String.format("%s|%s", pair.getKey(), pair.getValue()));
+            pairs.add(merge(PAIR_DELIM, pair.getKey(), pair.getValue()));
         }
 
         return mergeList(pairs);
