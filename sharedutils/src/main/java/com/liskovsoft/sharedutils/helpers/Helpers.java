@@ -1484,6 +1484,24 @@ public final class Helpers {
         return result;
     }
 
+    public static float[] range(float origStart, float origEnd, float origStep) {
+        float multiplexer = 1000f;
+        int start = (int) (origStart * multiplexer);
+        int end = (int) (origEnd * multiplexer);
+        int step = (int) (origStep * multiplexer);
+
+        int size = (end - start) / step + 1;
+        float[] result = new float[size];
+        int value = start;
+
+        for (int i = 0; i < size; i++) {
+            result[i] = value / multiplexer;
+            value += step;
+        }
+
+        return result;
+    }
+
     /**
      * Creates map from string array resource. Uses '|' as delimiter.
      * @return key/value map
