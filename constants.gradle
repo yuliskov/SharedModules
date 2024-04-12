@@ -113,4 +113,6 @@ project.ext {
 
     chatkitVersion = 'v0.4.1'
     gotevSpeechVersion = '1.1.2'
+
+    phoenixVersion = '3.0.0'
 }

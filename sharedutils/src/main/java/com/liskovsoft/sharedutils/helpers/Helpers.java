@@ -575,6 +575,14 @@ public final class Helpers {
             int sticky = Build.VERSION.SDK_INT >= 19 ? View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY : 0;
             activity.getWindow().getDecorView().setSystemUiVisibility(hideNavigation | sticky | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
+
+        if (VERSION.SDK_INT >= 19) {
+            // Make status and nav bars transparent
+            // <item name="android:windowTranslucentStatus">false</item>
+            // <item name="android:windowTranslucentNavigation">false</item>
+            activity.getWindow().setFlags(LayoutParams.FLAG_TRANSLUCENT_STATUS, LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().setFlags(LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
     }
 
     public static void addFullscreenListener(Activity activity) {
