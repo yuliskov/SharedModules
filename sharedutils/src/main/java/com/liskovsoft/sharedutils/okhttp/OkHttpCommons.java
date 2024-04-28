@@ -95,11 +95,11 @@ public final class OkHttpCommons {
         okBuilder.readTimeout(READ_TIMEOUT_MS, TimeUnit.MILLISECONDS);
         okBuilder.writeTimeout(WRITE_TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
-        // Imitate 'keepAlive' = false (yt throttle fix?)
+        // Imitate 'keepAlive' = false (yt throttle fix? Cause slow video loading?)
         // https://stackoverflow.com/questions/70873186/how-to-disable-connection-pooling-and-make-a-new-connection-for-each-request-in
         // https://stackoverflow.com/questions/63047533/connection-pool-okhttp
         // NOTE: SocketTimeoutException fix: setup connection pool with 0 (!) idle connections!
-        okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
+        //okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
     }
 
     /**
