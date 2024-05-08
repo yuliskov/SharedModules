@@ -165,6 +165,10 @@ public class RxHelper {
                 );
     }
 
+    public static <T> void runBlocking(Observable<T> observable) {
+        observable.blockingSubscribe();
+    }
+
     /**
      * <a href="https://stackoverflow.com/questions/43525052/rxjava2-observable-take-throws-undeliverableexception">More info 1</a>
      * <a href="https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling">More info 2</a>
