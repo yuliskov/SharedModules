@@ -19,7 +19,6 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private final static String MEDIA_SERVICE_REFRESH_TOKEN = "media_service_refresh_token";
     private final static String MEDIA_SERVICE_ACCOUNT_DATA = "media_service_account_data";
     private final static String OAUTH2_ACCOUNT_DATA = "oauth2_account_data";
-    private final static String DRIVE_MAPPING_DATA = "drive_mapping_data";
     private final static String MEDIA_SERVICE_DATA = "media_service_data";
     private static final String RECOMMENDED_PLAYLIST_TYPE = "recommended_playlist_type";
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
@@ -125,14 +124,6 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public String getOAuth2AccountData() {
         return getString(OAUTH2_ACCOUNT_DATA, null);
-    }
-
-    public void setDriveMappingData(String data) {
-        putString(DRIVE_MAPPING_DATA, data);
-    }
-
-    public String getDriveMappingData() {
-        return getString(DRIVE_MAPPING_DATA, null);
     }
 
     public void setMediaServiceData(String data) {

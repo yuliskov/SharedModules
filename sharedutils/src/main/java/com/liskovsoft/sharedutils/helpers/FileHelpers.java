@@ -225,6 +225,14 @@ public class FileHelpers {
         }
     }
 
+    public static void copy(InputStream source, File destination) {
+        try {
+            IOUtils.copy(source, new FileOutputStream(destination));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void copyDirectory(File source, File target) {
         if (!target.exists()) {
             target.mkdirs();
