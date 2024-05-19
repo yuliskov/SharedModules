@@ -40,6 +40,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String HIDE_UPCOMING_FROM_HOME = "hide_upcoming_from_home";
     private static final String HIDE_UPCOMING_FROM_SUBSCRIPTIONS = "hide_upcoming_from_subscriptions";
     private static final String CONTENT_BLOCK_ALT_SERVER = "content_block_alt_server";
+    private static final String EXTENDED_HLS_FORMATS_ENABLED = "extended_hls_formats_enabled";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
@@ -268,5 +269,13 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isContentBlockAltServerEnabled() {
         return getBoolean(CONTENT_BLOCK_ALT_SERVER, false);
+    }
+
+    public void enableExtendedHlsFormats(boolean enable) {
+        putBoolean(EXTENDED_HLS_FORMATS_ENABLED, enable);
+    }
+
+    public boolean isExtendedHlsFormatsEnabled() {
+        return getBoolean(EXTENDED_HLS_FORMATS_ENABLED, false);
     }
 }
