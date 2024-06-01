@@ -76,6 +76,6 @@ dependencies {
     implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
 
     // Add kotlin support libs
-    implementation 'androidx.core:core-ktx:' + kotlinCoreVersion
+    implementation 'androidx.core:core-ktx:' + kotlinCoreXVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
 }
