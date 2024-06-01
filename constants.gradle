@@ -22,6 +22,7 @@ project.ext {
     
     testSupportLibraryVersion = '0.5'
     testXSupportLibraryVersion = '1.1.0'
+    coreXLibraryVersion = '1.9.0' // the latest compatible with others and cronet 119
     appCompatXLibraryVersion = '1.2.0' // old: 1.0.0
     leanbackXLibraryVersion = '1.0.0'
     annotationXLibraryVersion = '1.1.0'
@@ -50,6 +51,7 @@ project.ext {
     amazonExoplayerVersion = '2.10.6'
     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
     // playServicesCronetVersion = '18.0.1'
+    // cronetApiVersion = '119.6045.31' // for testing
     // cronetApiVersion = '105.5195.68' // latest version with Android 7.0 support
     // cronetApiVersion = '98.4758.101' // fast too
     cronetApiVersion = '75.3770.101' // the fastest one (best choice)
