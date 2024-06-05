@@ -517,6 +517,21 @@ public final class Helpers {
                 || pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK));
     }
 
+    public static String findFirst(String input, Pattern pattern) {
+        String regExpVal = null;
+
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.find()) {
+            if (matcher.groupCount() >= 1) {
+                regExpVal = matcher.group(1);
+            } else {
+                regExpVal = matcher.group(0); // all match
+            }
+        }
+
+        return regExpVal;
+    }
+
     public static boolean matchAll(String input, Pattern... patterns) {
         for (Pattern pattern : patterns) {
             Matcher matcher = pattern.matcher(input);
