@@ -109,6 +109,8 @@ public final class Helpers {
     public static final String THUMB_UP = "\uD83D\uDC4D";
     public static final String THUMB_DOWN = "\uD83D\uDC4E";
     public static final String NON_BREAKING_SPACE = "\u00A0";
+    public static final String SPEECH = "\uD83D\uDDE8";
+    public static final String SPEAKER = "\uD83D\uDD08";
     //public static final String HOURGLASS = "⌛";
     public static final String HOURGLASS = "\u231B";
     private static DateFormat sDateFormat;
