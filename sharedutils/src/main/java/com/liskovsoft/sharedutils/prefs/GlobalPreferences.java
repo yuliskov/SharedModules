@@ -85,30 +85,12 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         }
     }
 
-    public void setRawAuthData(String data) {
-        if (Helpers.isAndroidTV(mContext)) {
-            putString(MESSAGE_AUTH_BODY, data);
-        }
-    }
-
-    public String getRawAuthData() {
-        return getString(MESSAGE_AUTH_BODY, null);
-    }
-
     public void setRecommendedPlaylistType(String type) {
         putString(RECOMMENDED_PLAYLIST_TYPE, type);
     }
 
     public String getRecommendedPlaylistType() {
         return getString(RECOMMENDED_PLAYLIST_TYPE, PLAYLIST_TYPE_RECOMMENDATIONS);
-    }
-
-    public void setMediaServiceRefreshToken(String token) {
-        putString(MEDIA_SERVICE_REFRESH_TOKEN, token);
-    }
-
-    public String getMediaServiceRefreshToken() {
-        return getString(MEDIA_SERVICE_REFRESH_TOKEN, null);
     }
 
     public void setMediaServiceAccountData(String data) {
