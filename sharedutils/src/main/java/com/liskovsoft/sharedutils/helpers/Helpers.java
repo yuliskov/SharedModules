@@ -1984,19 +1984,16 @@ public final class Helpers {
 
         StringBuilder builder = new StringBuilder();
 
-        int counter = 0;
-        int length = elements.length;
-
         for (CharSequence element : elements) {
             if (element == null || element.length() == 0) {
-                ++counter;
                 continue;
             }
 
-            builder.append(element);
-            if (++counter != length) {
+            if (builder.length() > 0) {
                 builder.append(delim);
             }
+
+            builder.append(element);
         }
 
         return builder.toString();
