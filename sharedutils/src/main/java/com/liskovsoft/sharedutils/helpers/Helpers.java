@@ -2058,4 +2058,21 @@ public final class Helpers {
         }
         return false;
     }
+
+    public static int getNextValue(int currentValue, int[] valueList) {
+        int nextState = valueList[0];
+        boolean found = false;
+
+        for (int state : valueList) {
+            if (found) {
+                nextState = state;
+                break;
+            }
+
+            if (state == currentValue) {
+                found = true;
+            }
+        }
+        return nextState;
+    }
 }
