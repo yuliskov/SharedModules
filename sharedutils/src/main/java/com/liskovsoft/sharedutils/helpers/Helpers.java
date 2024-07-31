@@ -448,6 +448,10 @@ public final class Helpers {
      * @return whether ended with arr
      */
     public static boolean endsWith(String fullStr, String... nameArr) {
+        if (fullStr == null) {
+            return false;
+        }
+
         for (String name : nameArr) {
             if (fullStr.endsWith(name)) {
                 return true;
