@@ -117,5 +117,4 @@ project.ext {
     gotevSpeechVersion = '1.1.2'
 
     phoenixVersion = '3.0.0'
-    regexodusVersion = '0.1.15'
 }
