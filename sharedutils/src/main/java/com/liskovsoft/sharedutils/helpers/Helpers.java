@@ -447,7 +447,7 @@ public final class Helpers {
      * @param nameArr array to match
      * @return whether ended with arr
      */
-    public static boolean endsWith(String fullStr, String... nameArr) {
+    public static boolean endsWithAny(String fullStr, String... nameArr) {
         if (fullStr == null) {
             return false;
         }
