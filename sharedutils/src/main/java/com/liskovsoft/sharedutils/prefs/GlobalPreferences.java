@@ -2,7 +2,6 @@ package com.liskovsoft.sharedutils.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -41,6 +40,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String HIDE_UPCOMING_FROM_SUBSCRIPTIONS = "hide_upcoming_from_subscriptions";
     private static final String CONTENT_BLOCK_ALT_SERVER = "content_block_alt_server";
     private static final String EXTENDED_HLS_FORMATS_ENABLED = "extended_hls_formats_enabled";
+    private static final String REGULAR_FORMATS_FORCED = "regular_formats_forced";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
@@ -73,16 +73,6 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public static boolean isInitialized() {
         return sInstance != null && sInstance.getContext() != null;
-    }
-
-    public static String getVisitorCookie() {
-        return isInitialized() ? sInstance.getString(VISITOR_COOKIE, null) : null;
-    }
-
-    public static void setVisitorCookie(String visitorCookie) {
-        if (isInitialized()) {
-            sInstance.putString(VISITOR_COOKIE, visitorCookie);
-        }
     }
 
     public void setRecommendedPlaylistType(String type) {
@@ -259,5 +249,13 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isExtendedHlsFormatsEnabled() {
         return getBoolean(EXTENDED_HLS_FORMATS_ENABLED, false);
+    }
+
+    public void forceRegularFormats(boolean enable) {
+        putBoolean(REGULAR_FORMATS_FORCED, enable);
+    }
+
+    public boolean isRegularFormatsForced() {
+        return getBoolean(REGULAR_FORMATS_FORCED, false);
     }
 }
