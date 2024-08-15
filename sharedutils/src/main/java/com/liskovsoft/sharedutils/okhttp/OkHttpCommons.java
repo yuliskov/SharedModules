@@ -9,9 +9,7 @@ import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
-import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
-import okhttp3.Credentials;
 import okhttp3.Dns;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
@@ -265,7 +263,7 @@ public final class OkHttpCommons {
             forceIPv4Dns(okBuilder);
             //preferIPv4Dns(okBuilder); // alt method
         }
-        //setupProxy(okBuilder); // proxy configured in another place
+        //setupProxy(okBuilder); // proxy configured in system props
         setupConnectionFix(okBuilder);
         setupConnectionParams(okBuilder);
         configureToIgnoreCertificate(okBuilder);
@@ -344,12 +342,13 @@ public final class OkHttpCommons {
     }
 
     private static void setupProxy(OkHttpClient.Builder builder) {
-        setupSocksProxy(builder, "socksProxyHost", "socksProxyPort", "socksProxyUser", "socksProxyPassword", Proxy.Type.SOCKS);
-        setupSocksProxy(builder, "https.proxyHost", "https.proxyPort", "https.proxyUser", "https.proxyPassword", Proxy.Type.HTTP);
-        setupSocksProxy(builder, "http.proxyHost", "http.proxyPort", "http.proxyUser", "http.proxyPassword", Proxy.Type.HTTP);
+        setupProxy(builder, "socksProxyHost", "socksProxyPort", "socksProxyUser", "socksProxyPassword", Proxy.Type.SOCKS);
+        setupProxy(builder, "https.proxyHost", "https.proxyPort", "https.proxyUser", "https.proxyPassword", Proxy.Type.HTTP);
+        setupProxy(builder, "http.proxyHost", "http.proxyPort", "http.proxyUser", "http.proxyPassword", Proxy.Type.HTTP);
     }
 
-    private static void setupSocksProxy(Builder builder, String proxyHost, String proxyPort, String proxyUser, String proxyPassword, Proxy.Type proxyType) {
+    // https://stackoverflow.com/questions/35554380/okhttpclient-proxy-authentication-how-to
+    private static void setupProxy(Builder builder, String proxyHost, String proxyPort, String proxyUser, String proxyPassword, Proxy.Type proxyType) {
         String host = System.getProperty(proxyHost);
         String port = System.getProperty(proxyPort);
         String user = System.getProperty(proxyUser);
