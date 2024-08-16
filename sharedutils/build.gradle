@@ -41,10 +41,7 @@ dependencies {
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
     testImplementation project(path: ':sharedtests')
-
-    androidTestImplementation 'junit:junit:' + junitVersion
-    androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
-    androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+    testImplementation project(path: ':sharedutils')
 
     implementation project(path: ':commons-io-2.8.0')
 
