@@ -1,6 +1,8 @@
 package com.liskovsoft.sharedutils.rx;
 
 import androidx.annotation.Nullable;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -195,6 +197,11 @@ public class RxHelper {
             }
             if (e instanceof InterruptedException) {
                 // fine, some blocking code was interrupted by a dispose call
+                return;
+            }
+            if (e instanceof NullPointerException && Helpers.equals(e.getStackTrace()[0].getClassName(), "java.net.SocksSocketImpl")) {
+                // Proxy connection error?
+                // java.net.SocksSocketImpl.privilegedConnect (SocksSocketImpl.java:94)
                 return;
             }
             if ((e instanceof NullPointerException) || (e instanceof IllegalArgumentException)) {
