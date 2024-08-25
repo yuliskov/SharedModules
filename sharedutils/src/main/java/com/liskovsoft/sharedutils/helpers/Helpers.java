@@ -73,6 +73,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -2078,5 +2079,33 @@ public final class Helpers {
             }
         }
         return nextState;
+    }
+
+    /**
+     * Limit the maximum size of a Map by removing oldest entries when limit reached
+     */
+    public static <K, V> Map<K, V> createLRUMap(final int maxEntries) {
+        return new LinkedHashMap<K, V>(maxEntries + 1, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+                return size() > maxEntries;
+            }
+        };
+    }
+
+    /**
+     * Trim playlist if one exceeds max size
+     */
+    public static <T> List<T> createLRUList(final int maxEntries) {
+        return new LinkedList<T>() {
+            @Override
+            public boolean add(T t) {
+                if (size() > maxEntries) {
+                    removeFirst();
+                }
+
+                return super.add(t);
+            }
+        };
     }
 }
