@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
+import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
 import okhttp3.Dns;
 import okhttp3.OkHttpClient;
@@ -98,6 +99,7 @@ public final class OkHttpCommons {
         // https://stackoverflow.com/questions/63047533/connection-pool-okhttp
         // NOTE: SocketTimeoutException fix: setup connection pool with 0 (!) idle connections!
         //okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
+        okBuilder.connectionPool(new ConnectionPool(10, 24, TimeUnit.HOURS)); // Video unavailable fix???
     }
 
     /**
