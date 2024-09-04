@@ -1607,6 +1607,20 @@ public final class Helpers {
         return true;
     }
 
+    public static boolean anyNull(Object... items) {
+        if (items == null || items.length == 0) {
+            return false;
+        }
+
+        for (Object item : items) {
+            if (item == null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static String decode(String urlDecoded) {
         try {
             urlDecoded = URLDecoder.decode(urlDecoded, "UTF-8");
