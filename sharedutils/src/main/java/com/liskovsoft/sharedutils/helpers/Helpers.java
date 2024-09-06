@@ -1420,7 +1420,7 @@ public final class Helpers {
         return merge(OBJ_DELIM, items);
     }
 
-    private static String[] split(String delim, String data) {
+    public static String[] split(String delim, String data) {
         if (data == null) {
             return null;
         }
@@ -1433,7 +1433,7 @@ public final class Helpers {
         return data.split(Pattern.quote(delim));
     }
 
-    private static String merge(String delim, Object... params) {
+    public static String merge(String delim, Object... params) {
         if (params == null) {
             return null;
         }
@@ -2096,6 +2096,7 @@ public final class Helpers {
     }
 
     /**
+     * NOTE: proper item order not guaranteed!!!<br/>
      * Limit the maximum size of a Map by removing oldest entries when limit reached
      */
     public static <K, V> Map<K, V> createLRUMap(final int maxEntries) {
@@ -2111,14 +2112,18 @@ public final class Helpers {
      * Trim playlist if one exceeds max size
      */
     public static <T> List<T> createLRUList(final int maxEntries) {
-        return new LinkedList<T>() {
+        return new ArrayList<T>() {
             @Override
-            public boolean add(T t) {
-                if (size() > maxEntries) {
-                    removeFirst();
+            public boolean add(T element) {
+                if (contains(element)) {
+                    remove(element);
                 }
 
-                return super.add(t);
+                if (size() > maxEntries) {
+                    remove(0);
+                }
+
+                return super.add(element);
             }
         };
     }
