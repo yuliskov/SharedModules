@@ -261,7 +261,7 @@ public class AppVersionChecker {
 
                 InputStream content = manager.getStreamForDownloadedFile(reqId);
                 jo = new JSONObject(StreamUtils.inputStreamToString(content));
-            } catch (final IllegalStateException | JSONException | SocketTimeoutException |
+            } catch (final IllegalStateException | IllegalArgumentException | JSONException | SocketTimeoutException |
                     SocketException | StreamResetException | SSLException | ProtocolException ex) {
                 Log.e(TAG, ex.getMessage(), ex);
                 mLastException = ex;

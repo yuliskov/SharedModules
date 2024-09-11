@@ -16,13 +16,20 @@ import java.util.zip.Inflater;
 public class UnzippingInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Response response = chain.proceed(chain.request());
+        Response response = null;
+
+        try {
+            response = chain.proceed(chain.request());
+        } catch (NullPointerException e) {
+            // NOP
+        }
+
         return unzip(response);
     }
 
     // copied from okhttp3.internal.http.HttpEngine (because is private)
     private Response unzip(final Response response) throws IOException {
-        if (response.body() == null) {
+        if (response == null || response.body() == null) {
             return response;
         }
 
