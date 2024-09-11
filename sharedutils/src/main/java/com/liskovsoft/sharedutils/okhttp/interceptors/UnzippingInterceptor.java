@@ -16,13 +16,7 @@ import java.util.zip.Inflater;
 public class UnzippingInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Response response = null;
-
-        try {
-            response = chain.proceed(chain.request());
-        } catch (NullPointerException e) {
-            // NOP
-        }
+        Response response = chain.proceed(chain.request());
 
         return unzip(response);
     }
