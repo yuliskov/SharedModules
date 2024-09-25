@@ -1306,15 +1306,15 @@ public final class Helpers {
         T parse(String spec);
     }
 
-    public static <T> List<T> parseList(String[] arr, int index, Parser<T> itemParser) {
-        return parseList(parseStr(arr, index), itemParser);
+    public static <T> List<T> parseList(String[] arr, int index, String delim, Parser<T> itemParser) {
+        return parseList(delim, parseStr(arr, index), itemParser);
     }
 
-    public static <T> List<T> parseList(String spec, Parser<T> itemParser) {
+    public static <T> List<T> parseList(String delim, String data, Parser<T> itemParser) {
         List<T> result = new ArrayList<>();
 
-        if (spec != null) {
-            String[] listArr = splitArray(spec);
+        if (data != null) {
+            String[] listArr = split(delim, data);
 
             for (String item : listArr) {
                 result.add(itemParser.parse(item));
@@ -1322,6 +1322,10 @@ public final class Helpers {
         }
 
         return result;
+    }
+
+    public static <T> List<T> parseList(String[] arr, int index, Parser<T> itemParser) {
+        return parseList(ARRAY_DELIM, parseStr(arr, index), itemParser);
     }
 
     public static <T, K> Map<T, K> parseMap(String[] arr, int index, Parser<T> keyParser, Parser<K> valueParser) {
@@ -1375,7 +1379,11 @@ public final class Helpers {
     }
 
     public static <T> String mergeList(List<T> list) {
-        return mergeArray(list.toArray());
+        return merge(ARRAY_DELIM, list.toArray());
+    }
+
+    public static <T> String mergeList(String delim, List<T> list) {
+        return merge(delim, list.toArray());
     }
 
     public static <T, K> String mergeMap(Map<T, K> map) {
@@ -1584,7 +1592,7 @@ public final class Helpers {
         int hash = -1;
 
         for (Object item : items) {
-            if (item != null) {
+            if (item != null && item.hashCode() != -1) {
                 hash = 31 * hash + item.hashCode();
                 break;
             }
