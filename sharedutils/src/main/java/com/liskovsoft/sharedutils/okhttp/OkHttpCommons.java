@@ -39,9 +39,9 @@ import java.util.concurrent.TimeUnit;
 
 public final class OkHttpCommons {
     private static final String TAG = OkHttpCommons.class.getSimpleName();
-    public static final long CONNECT_TIMEOUT_MS = 30_000;
-    public static final long READ_TIMEOUT_MS = 30_000;
-    public static final long WRITE_TIMEOUT_MS = 30_000;
+    public static final long CONNECT_TIMEOUT_MS = 10_000;
+    public static final long READ_TIMEOUT_MS = 10_000;
+    public static final long WRITE_TIMEOUT_MS = 10_000;
     public static boolean enableProfiler = true;
 
     private OkHttpCommons() {

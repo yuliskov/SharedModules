@@ -29,4 +29,19 @@ public class DateHelper {
         }
         return date != null ? date.getTime() : 0;
     }
+
+    public static String toHumanDate(long unixTimeStamp) {
+        Date date = new Date(unixTimeStamp);
+
+        Locale locale = Locale.getDefault();
+        String pattern1 = "d MMM, y";
+        String pattern2 = "d MMM " + (is24HourLocale(locale) ? "H:mm" : "h:mm a");
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern1, locale);
+
+        return sdf.format(date);
+    }
+
+    public static boolean is24HourLocale(Locale locale) {
+        return !Helpers.equalsAny(locale.getLanguage(), "en", "es", "pt", "fr", "hi", "tl", "ar", "sw", "bn", "ur");
+    }
 }
