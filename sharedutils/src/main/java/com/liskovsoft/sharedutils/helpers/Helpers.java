@@ -114,7 +114,6 @@ public final class Helpers {
     public static final String SPEAKER = "\uD83D\uDD08";
     //public static final String HOURGLASS = "⌛";
     public static final String HOURGLASS = "\u231B";
-    private static DateFormat sDateFormat;
 
     /**
      * Simple wildcard matching routine. Implemented without regex. So you may expect huge performance boost.
@@ -1592,7 +1591,7 @@ public final class Helpers {
         int hash = -1;
 
         for (Object item : items) {
-            if (item != null && item.hashCode() != -1) {
+            if (item != null && item.hashCode() != -1 && item.hashCode() != 0) {
                 hash = 31 * hash + item.hashCode();
                 break;
             }
@@ -1980,21 +1979,6 @@ public final class Helpers {
         }
 
         return sRandom;
-    }
-
-    private static DateFormat getDateFormat() {
-        if (sDateFormat == null) {
-            // https://jenkov.com/tutorials/java-internationalization/simpledateformat.html#pattern-syntax
-            sDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-            //sDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.getDefault());
-            //sDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
-        }
-
-        return sDateFormat;
-    }
-
-    public static String toShortDate(long timeMs) {
-        return getDateFormat().format(new Date(timeMs));
     }
 
     public static void enableActivity(Context context, String activityClassName, boolean enable) {
