@@ -10,6 +10,7 @@ import java.util.TimeZone;
  * Format variants:<br/>
  * "dd.MM.yyyy HH:mm"<br/>
  * "MM/dd/yyyy hh:mm a"<br/>
+ * "d MMM, y"<br/>
  * Manual: https://jenkov.com/tutorials/java-internationalization/simpledateformat.html#pattern-syntax
  */
 public class DateHelper {
@@ -36,24 +37,35 @@ public class DateHelper {
         return date != null ? date.getTime() : 0;
     }
 
-    public static String toShortDate(long unixTimeStamp) {
-        Date date = new Date(unixTimeStamp);
+    //public static String toShortDate(long unixTimeStamp) {
+    //    Date date = new Date(unixTimeStamp);
+    //
+    //    Locale locale = Locale.getDefault();
+    //    String pattern1 = "d MMM, y";
+    //    String pattern2 = "d MMM " + (is24HourLocale(locale) ? "H:mm" : "h:mm a");
+    //    SimpleDateFormat sdf = new SimpleDateFormat(pattern1, locale);
+    //
+    //    return sdf.format(date);
+    //}
 
-        Locale locale = Locale.getDefault();
-        String pattern1 = "d MMM, y";
-        String pattern2 = "d MMM " + (is24HourLocale(locale) ? "H:mm" : "h:mm a");
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern1, locale);
+    //public static String toUpcomingDate(long timeMs) {
+    //    Date date = new Date(timeMs);
+    //
+    //    Locale locale = Locale.getDefault();
+    //    String pattern1 = "dd.MM.yyyy " + (is24HourLocale(locale) ? "HH:mm" : "hh:mm a");
+    //    String pattern2 = "d MMM, y " + (is24HourLocale(locale) ? "HH:mm" : "hh:mm a");
+    //    SimpleDateFormat sdf = new SimpleDateFormat(pattern2, locale);
+    //
+    //    return sdf.format(date);
+    //}
 
-        return sdf.format(date);
-    }
-
-    public static String toUpcomingDate(long timeMs) {
+    public static String toShortDate(long timeMs, boolean showHours) {
         Date date = new Date(timeMs);
 
         Locale locale = Locale.getDefault();
-        String pattern1 = "dd.MM.yyyy " + (is24HourLocale(locale) ? "HH:mm" : "hh:mm a");
-        String pattern2 = "d MMM " + (is24HourLocale(locale) ? "HH:mm" : "hh:mm a");
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern2, locale);
+        String datePattern = "d MMM, y";
+        String hoursPattern = is24HourLocale(locale) ? "HH:mm" : "hh:mm a";
+        SimpleDateFormat sdf = new SimpleDateFormat(showHours ? String.format("%s %s", datePattern, hoursPattern) : datePattern, locale);
 
         return sdf.format(date);
     }
