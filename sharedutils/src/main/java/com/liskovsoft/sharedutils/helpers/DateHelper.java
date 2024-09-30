@@ -1,5 +1,7 @@
 package com.liskovsoft.sharedutils.helpers;
 
+import android.os.Build;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +26,7 @@ public class DateHelper {
             return 0;
         }
 
-        String longPattern = "yyyy-MM-dd'T'HH:mm:ss" + (timestamp.contains("+") ? "X" : "");
+        String longPattern = "yyyy-MM-dd'T'HH:mm:ss" + (timestamp.contains("+") && Build.VERSION.SDK_INT > 19 ? "X" : "");
         String shortPattern = "yyyy-MM-dd";
         SimpleDateFormat format = new SimpleDateFormat(timestamp.contains("T") ? longPattern : shortPattern, Locale.US);
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -63,7 +65,7 @@ public class DateHelper {
         Date date = new Date(timeMs);
 
         Locale locale = Locale.getDefault();
-        String datePattern = "d MMM, y";
+        String datePattern = is24HourLocale(locale) ? "d MMM, y" : "MMM d, y";
         String hoursPattern = is24HourLocale(locale) ? "HH:mm" : "hh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(showHours ? String.format("%s %s", datePattern, hoursPattern) : datePattern, locale);
 
