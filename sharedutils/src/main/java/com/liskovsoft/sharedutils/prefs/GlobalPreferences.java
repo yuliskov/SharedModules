@@ -135,7 +135,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public boolean isIPv4DnsPreferred() {
-        return getBoolean(PREFER_IPV_4_DNS, true);
+        return getBoolean(PREFER_IPV_4_DNS, false);
     }
 
     public void enableDnsOverHttps(boolean enable) {
