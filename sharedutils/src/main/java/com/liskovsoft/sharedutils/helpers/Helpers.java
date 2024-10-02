@@ -1591,7 +1591,8 @@ public final class Helpers {
         int hash = -1;
 
         for (Object item : items) {
-            if (item != null && item.hashCode() != -1 && item.hashCode() != 0) {
+            // Don't skip zero hash because or you'll broke Home section (id == 0)
+            if (item != null && item.hashCode() != -1) {
                 hash = 31 * hash + item.hashCode();
                 break;
             }
@@ -1664,7 +1665,7 @@ public final class Helpers {
     }
 
     public interface Filter<T> {
-        boolean test(T value);
+        boolean test(T item);
     }
 
     /**
