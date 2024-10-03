@@ -1468,6 +1468,32 @@ public final class Helpers {
         return sb.toString();
     }
 
+    public static String combineItems(String divider, Object... items) {
+        StringBuilder result = new StringBuilder();
+
+        if (items != null) {
+            for (Object item : items) {
+                if (item == null) {
+                    continue;
+                }
+
+                String strItem = item.toString();
+
+                if (strItem == null || strItem.isEmpty()) {
+                    continue;
+                }
+
+                if (divider == null || result.length() == 0) {
+                    result.append(strItem);
+                } else {
+                    result.append(divider).append(strItem);
+                }
+            }
+        }
+
+        return result.length() != 0 ? result.toString() : null;
+    }
+
     public static void openLink(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag

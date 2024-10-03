@@ -2,6 +2,8 @@ package com.liskovsoft.sharedutils.helpers;
 
 import android.os.Build;
 
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,40 +41,46 @@ public class DateHelper {
         return date != null ? date.getTime() : 0;
     }
 
-    //public static String toShortDate(long unixTimeStamp) {
-    //    Date date = new Date(unixTimeStamp);
-    //
-    //    Locale locale = Locale.getDefault();
-    //    String pattern1 = "d MMM, y";
-    //    String pattern2 = "d MMM " + (is24HourLocale(locale) ? "H:mm" : "h:mm a");
-    //    SimpleDateFormat sdf = new SimpleDateFormat(pattern1, locale);
-    //
-    //    return sdf.format(date);
-    //}
+    public static String getCurrentDateTimeShort() {
+        return toShortDate(System.currentTimeMillis(), true, false, true);
+    }
 
-    //public static String toUpcomingDate(long timeMs) {
-    //    Date date = new Date(timeMs);
-    //
-    //    Locale locale = Locale.getDefault();
-    //    String pattern1 = "dd.MM.yyyy " + (is24HourLocale(locale) ? "HH:mm" : "hh:mm a");
-    //    String pattern2 = "d MMM, y " + (is24HourLocale(locale) ? "HH:mm" : "hh:mm a");
-    //    SimpleDateFormat sdf = new SimpleDateFormat(pattern2, locale);
-    //
-    //    return sdf.format(date);
-    //}
+    public static String getCurrentTimeShort() {
+        return toShortDate(System.currentTimeMillis(), false, false, true);
+    }
 
-    public static String toShortDate(long timeMs, boolean showHours) {
+    public static String getCurrentDateShort() {
+        return toShortDate(System.currentTimeMillis(), true, false, false);
+    }
+
+    public static String toShortTime(long timeMs) {
+        return toShortDate(timeMs, false, false, true);
+    }
+
+    public static String toShortDate(long timeMs, boolean showDate, boolean showYear, boolean showHours) {
         Date date = new Date(timeMs);
 
         Locale locale = Locale.getDefault();
-        String datePattern = is24HourLocale(locale) ? "d MMM, y" : "MMM d, y";
-        String hoursPattern = is24HourLocale(locale) ? "HH:mm" : "hh:mm a";
-        SimpleDateFormat sdf = new SimpleDateFormat(showHours ? String.format("%s %s", datePattern, hoursPattern) : datePattern, locale);
+        boolean is24HourLocale = GlobalPreferences.sInstance != null ? GlobalPreferences.sInstance.is24HourLocaleEnabled() : is24HourLocale(locale);
+        String datePattern = is24HourLocale ? "EEE d MMM" : "EEE MMM d";
+        String yearPattern = "y";
+        String hoursPattern = is24HourLocale ? "H:mm" : "h:mm a";
+
+        datePattern = showDate ? datePattern : "";
+        yearPattern = showYear ? yearPattern : "";
+        hoursPattern = showHours ? hoursPattern : "";
+
+        // details: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+        SimpleDateFormat sdf = new SimpleDateFormat(Helpers.combineItems(" ", datePattern, yearPattern, hoursPattern), locale);
 
         return sdf.format(date);
     }
 
-    public static boolean is24HourLocale(Locale locale) {
+    public static boolean is24HourLocale() {
+        return is24HourLocale(Locale.getDefault());
+    }
+
+    private static boolean is24HourLocale(Locale locale) {
         return !Helpers.equalsAny(locale.getLanguage(), "en", "es", "pt", "fr", "hi", "tl", "ar", "sw", "bn", "ur");
     }
 }

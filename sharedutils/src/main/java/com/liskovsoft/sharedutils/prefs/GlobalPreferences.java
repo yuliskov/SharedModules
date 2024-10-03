@@ -3,7 +3,10 @@ package com.liskovsoft.sharedutils.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import com.liskovsoft.sharedutils.helpers.DateHelper;
+
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 final public class GlobalPreferences extends SharedPreferencesBase {
@@ -40,6 +43,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String HIDE_UPCOMING_FROM_SUBSCRIPTIONS = "hide_upcoming_from_subscriptions";
     private static final String CONTENT_BLOCK_ALT_SERVER = "content_block_alt_server";
     private static final String EXTENDED_HLS_FORMATS_ENABLED = "extended_hls_formats_enabled";
+    private static final String IS_24_HOUR_LOCALE_ENABLED = "is_24_hour_locale_enabled";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
 
     private GlobalPreferences(Context context) {
@@ -248,5 +252,13 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public boolean isExtendedHlsFormatsEnabled() {
         return getBoolean(EXTENDED_HLS_FORMATS_ENABLED, false);
+    }
+
+    public boolean is24HourLocaleEnabled() {
+        return getBoolean(IS_24_HOUR_LOCALE_ENABLED, DateHelper.is24HourLocale());
+    }
+
+    public void enable24HourLocale(boolean enable) {
+        putBoolean(IS_24_HOUR_LOCALE_ENABLED, enable);
     }
 }
