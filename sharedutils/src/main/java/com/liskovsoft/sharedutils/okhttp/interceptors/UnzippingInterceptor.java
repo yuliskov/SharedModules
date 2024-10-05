@@ -2,8 +2,10 @@ package com.liskovsoft.sharedutils.okhttp.interceptors;
 
 import okhttp3.Headers;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.internal.http.RealResponseBody;
 import okio.GzipSource;
 import okio.InflaterSource;
@@ -67,6 +69,7 @@ public class UnzippingInterceptor implements Interceptor {
         builder.protocol(Protocol.HTTP_1_1);
         builder.code(204);
         builder.message("Empty response");
+        builder.body(ResponseBody.create(MediaType.get("text/plain; charset=UTF-8"), ""));
 
         return builder.build();
     }
