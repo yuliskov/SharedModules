@@ -15,9 +15,9 @@ public class LocaleUpdater {
     private final GlobalPreferences mPrefs;
     private final Context mContext;
 
-    public LocaleUpdater(Context ctx) {
-        mContext = ctx;
-        mPrefs = GlobalPreferences.instance(ctx);
+    public LocaleUpdater(Context context) {
+        mContext = context;
+        mPrefs = GlobalPreferences.instance(context);
     }
 
     public void update() {
