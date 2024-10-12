@@ -184,8 +184,7 @@ public class RxHelper {
             }
             if ((e instanceof IllegalStateException) &&
                     ((e.getCause() instanceof SocketException) ||
-                     (e.getCause() instanceof UnknownHostException) ||
-                     (e.getCause() instanceof NoRouteToHostException))) {
+                     (e.getCause() instanceof UnknownHostException))) {
                 // network problems (no internet, failed to connect etc)
                 Log.e(TAG, "Network error", e.getCause());
                 return;

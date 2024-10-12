@@ -28,7 +28,9 @@ public class DateHelper {
             return 0;
         }
 
-        String longPattern = "yyyy-MM-dd'T'HH:mm:ss" + (timestamp.contains("+") && Build.VERSION.SDK_INT > 19 ? "X" : "");
+        // Unknown pattern character 'X'
+        boolean supportXPattern = Build.VERSION.SDK_INT > 23;
+        String longPattern = "yyyy-MM-dd'T'HH:mm:ss" + (timestamp.contains("+") && supportXPattern ? "X" : "");
         String shortPattern = "yyyy-MM-dd";
         SimpleDateFormat format = new SimpleDateFormat(timestamp.contains("T") ? longPattern : shortPattern, Locale.US);
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
