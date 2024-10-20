@@ -226,6 +226,10 @@ public class FileHelpers {
     }
 
     public static void copy(InputStream source, File destination) {
+        if (destination.getParentFile() != null && !destination.getParentFile().exists()) {
+            destination.getParentFile().mkdirs();
+        }
+
         try {
             IOUtils.copy(source, new FileOutputStream(destination));
         } catch (IOException e) {
