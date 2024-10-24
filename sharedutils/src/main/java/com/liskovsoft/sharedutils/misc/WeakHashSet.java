@@ -23,6 +23,16 @@ public class WeakHashSet<T> {
         return false;
     }
 
+    public boolean add(int idx, T item) {
+        if (item != null && !contains(item)) {
+            cleanup();
+            mWeakReferences.add(idx, new WeakReference<>(item));
+            return true;
+        }
+
+        return false;
+    }
+
     public void remove(T item) {
         if (item != null) {
             Helpers.removeIf(mWeakReferences, next -> item.equals(next.get()));
