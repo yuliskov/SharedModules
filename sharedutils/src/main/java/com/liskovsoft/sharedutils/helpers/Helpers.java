@@ -73,7 +73,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -483,6 +482,13 @@ public final class Helpers {
                 isPackageExists(context, "com.google.android.apps.tv.launcherx"); // Google TV Home
     }
 
+    public static boolean isGoogleTVLauncher(Context context) {
+        String pkgName = "com.google.android.apps.tv.launcherx";
+        //int pkgVersionCode = 413515; // 557827
+        //return isPackageExists(context, pkgName) && getPackageVersionCode(context, pkgName) >= pkgVersionCode;
+        return isPackageExists(context, pkgName);
+    }
+
     //public static boolean isAndroidTVRecommendations(Context context) {
     //    return isPackageExists(context, "com.google.android.leanbacklauncher.recommendations");
     //}
@@ -779,7 +785,19 @@ public final class Helpers {
         return pkgNames;
     }
 
-    public static boolean isPackageExists(Context context, String pkgName) {
+    private static boolean isPackageExists(Context context, String pkgName) {
+        PackageInfo packageInfo = getPackageInfo(context, pkgName);
+
+        return packageInfo != null;
+    }
+
+    private static int getPackageVersionCode(Context context, String pkgName) {
+        PackageInfo packageInfo = getPackageInfo(context, pkgName);
+        return packageInfo != null ? packageInfo.versionCode : -1;
+    }
+
+    @Nullable
+    private static PackageInfo getPackageInfo(Context context, String pkgName) {
         PackageManager manager = context.getPackageManager();
         PackageInfo packageInfo = null;
 
@@ -789,7 +807,7 @@ public final class Helpers {
             // NOP
         }
 
-        return packageInfo != null;
+        return packageInfo;
     }
 
     public static void removePackage(Context context, String pkgName) {
