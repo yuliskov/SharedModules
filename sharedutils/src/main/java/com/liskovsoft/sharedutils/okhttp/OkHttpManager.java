@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class OkHttpManager {
     private static final String TAG = OkHttpManager.class.getSimpleName();
-    private static final int NUM_TRIES = 3;
+    private static final int NUM_TRIES = 1;
     private static OkHttpManager sInstance;
     private OkHttpClient mClient;
     private final boolean mEnableProfiler;
