@@ -123,8 +123,8 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
             // No update is needed.
             mSettingsManager.setLastCheckedMs(System.currentTimeMillis());
 
-            // Cleanup the storage. I don't want to accidentally install old version.
-            //FileHelpers.delete(mSettingsManager.getApkPath());
+            // Remove old apks.
+            FileHelpers.delete(mSettingsManager.getApkPath());
 
             mListener.onUpdateError(new IllegalStateException(AppUpdateCheckerListener.LATEST_VERSION));
         }
