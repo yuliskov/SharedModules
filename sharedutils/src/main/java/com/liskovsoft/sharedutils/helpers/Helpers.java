@@ -1395,11 +1395,11 @@ public final class Helpers {
         return merge(ARRAY_DELIM, items);
     }
 
-    public static <T> String mergeList(List<T> list) {
+    public static <T> String mergeList(Collection<T> list) {
         return merge(ARRAY_DELIM, list.toArray());
     }
 
-    public static <T> String mergeList(String delim, List<T> list) {
+    public static <T> String mergeList(String delim, Collection<T> list) {
         return merge(delim, list.toArray());
     }
 
@@ -1474,8 +1474,8 @@ public final class Helpers {
                 sb.append(delim);
             }
 
-            if (param instanceof List) {
-                param = mergeList((List<?>) param);
+            if (param instanceof Collection) {
+                param = mergeList((Collection<?>) param);
             } else if (param instanceof Map) {
                 param = mergeMap((Map<?, ?>) param);
             }
