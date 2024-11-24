@@ -711,8 +711,8 @@ public final class Helpers {
             return false;
         }
 
-        first = first.toLowerCase();
-        second = second.toLowerCase();
+        first = normalize(first);
+        second = normalize(second);
 
         return first.contains(second) || second.contains(first);
     }
@@ -726,8 +726,8 @@ public final class Helpers {
             return false;
         }
 
-        word = word.toLowerCase();
-        prefix = prefix.toLowerCase();
+        word = normalize(word);
+        prefix = normalize(prefix);
 
         return word.startsWith(prefix);
     }
@@ -2163,5 +2163,17 @@ public final class Helpers {
                 return super.add(element);
             }
         };
+    }
+
+    private static String normalize(String word) {
+        if (word == null || word.isEmpty()) {
+            return word;
+        }
+
+        return word.toLowerCase().replace("ё", "е");
+    }
+
+    public static String ellipsize(String str, int maxLen) {
+        return str.length() <= maxLen ? str : str.substring(0, maxLen - 3) + "...";
     }
 }

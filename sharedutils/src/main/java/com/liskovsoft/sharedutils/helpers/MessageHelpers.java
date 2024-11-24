@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageHelpers {
+    private static final int MAX_LEN = 300;
     private static final int LONG_MSG_TIMEOUT_MS = 5_000;
     private static final int CLEANUP_TIMEOUT_MS = 10_000;
     private static final List<Toast> sToasts = new ArrayList<>();
@@ -55,7 +56,7 @@ public class MessageHelpers {
 
         Runnable toast = () -> {
             try {
-                Toast currentToast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+                Toast currentToast = Toast.makeText(context, Helpers.ellipsize(msg, MAX_LEN), Toast.LENGTH_LONG);
                 fixTextSize(currentToast, context);
                 addAndCancelPrevIfNeeded(currentToast, isLong);
                 currentToast.show();
