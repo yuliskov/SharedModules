@@ -3,6 +3,7 @@ package com.liskovsoft.sharedutils.helpers;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -159,5 +160,11 @@ public class AppInfoHelpers {
         }
 
         return false;
+    }
+
+    public static String getMainActivityName(Context context) {
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+
+        return intent != null && intent.getComponent() != null ? intent.getComponent().getClassName() : null;
     }
 }
