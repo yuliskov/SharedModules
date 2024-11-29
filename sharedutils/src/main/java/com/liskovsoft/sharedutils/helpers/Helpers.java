@@ -2176,4 +2176,22 @@ public final class Helpers {
     public static String ellipsize(String str, int maxLen) {
         return str.length() <= maxLen ? str : str.substring(0, maxLen - 3) + "...";
     }
+
+    public static boolean isTextRTL(CharSequence text) {
+        if (text == null) {
+            return false;
+        }
+
+        // One char not enough. Rtl strings may contain couple ltr chars.
+        int len = Math.min(text.length(), 3);
+        for (int i = 0; i < len; i++) {
+            char c = text.charAt(i);
+            byte directionality = Character.getDirectionality(c);
+            if (directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                    directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
