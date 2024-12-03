@@ -590,15 +590,17 @@ public final class Helpers {
             activity.getWindow().setDecorFitsSystemWindows(false);
             WindowInsetsController controller = activity.getWindow().getInsetsController();
             // https://developer.android.com/codelabs/gesture-navigation
-            // Keep navigation bar in gesture mode to support gestures
-            if (controller != null && isEdgeToEdgeEnabled(activity) != 2) {
+            // Keep navigation bar in gesture mode to support gestures???
+            //if (controller != null && isEdgeToEdgeEnabled(activity) != 2) {
+            if (controller != null) {
                 controller.hide(WindowInsets.Type.systemBars());
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             }
         } else {
             // https://developer.android.com/codelabs/gesture-navigation
-            // Keep navigation bar in gesture mode to support gestures
-            int hideNavigation = isEdgeToEdgeEnabled(activity) != 2 ? (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) : 0;
+            // Keep navigation bar in gesture mode to support gestures???
+            //int hideNavigation = isEdgeToEdgeEnabled(activity) != 2 ? (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) : 0;
+            int hideNavigation = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             int sticky = Build.VERSION.SDK_INT >= 19 ? View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY : 0;
             activity.getWindow().getDecorView().setSystemUiVisibility(hideNavigation | sticky | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
