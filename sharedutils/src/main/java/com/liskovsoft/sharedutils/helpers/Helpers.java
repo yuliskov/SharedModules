@@ -416,6 +416,10 @@ public final class Helpers {
         return s != null && s.matches("^[-+]?\\d+$");
     }
 
+    public static boolean hasDigits(String s) {
+        return s != null && s.matches("^.*[-+]?\\d*\\.?\\d+.*$");
+    }
+
     /**
      * Force normal font size regardless of the system settings
      * @param configuration app config
