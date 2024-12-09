@@ -2121,17 +2121,17 @@ public final class Helpers {
         return false;
     }
 
-    public static int getNextValue(int currentValue, int[] valueList) {
-        int nextState = valueList[0];
+    public static <T> T getNextValue(T currentValue, T[] valueList) {
+        T nextState = valueList[0];
         boolean found = false;
 
-        for (int state : valueList) {
+        for (T state : valueList) {
             if (found) {
                 nextState = state;
                 break;
             }
 
-            if (state == currentValue) {
+            if (state.equals(currentValue)) {
                 found = true;
             }
         }
