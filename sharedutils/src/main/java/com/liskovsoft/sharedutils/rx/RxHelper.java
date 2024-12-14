@@ -86,7 +86,7 @@ public class RxHelper {
     }
 
     public static <T> Disposable execute(Observable<T> observable) {
-        return setup(observable)
+        return observable
                 .subscribe(
                         obj -> {}, // ignore result
                         error -> Log.e(TAG, "Execute error: %s", error.getMessage())
@@ -94,7 +94,7 @@ public class RxHelper {
     }
 
     public static <T> Disposable execute(Observable<T> observable, OnError onError) {
-        return setup(observable)
+        return observable
                 .subscribe(
                         obj -> {}, // ignore result
                         onError::onError
@@ -102,7 +102,7 @@ public class RxHelper {
     }
 
     public static <T> Disposable execute(Observable<T> observable, Runnable onFinish) {
-        return setup(observable)
+        return observable
                 .subscribe(
                         obj -> {}, // ignore result
                         error -> Log.e(TAG, "Execute error: %s", error.getMessage()),
@@ -111,7 +111,7 @@ public class RxHelper {
     }
 
     public static <T> Disposable execute(Observable<T> observable, OnError onError, Runnable onFinish) {
-        return setup(observable)
+        return observable
                 .subscribe(
                         obj -> {}, // ignore result
                         onError::onError,
