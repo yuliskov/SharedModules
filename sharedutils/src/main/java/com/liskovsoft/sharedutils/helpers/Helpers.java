@@ -1652,12 +1652,12 @@ public final class Helpers {
         return hash != -1 ? Math.abs(hash) : -1;
     }
 
-    public static boolean allNulls(Object... items) {
-        if (items == null || items.length == 0) {
+    public static <T> boolean allNulls(List<T> items) {
+        if (items == null || items.isEmpty()) {
             return true;
         }
 
-        for (Object item : items) {
+        for (T item : items) {
             if (item != null) {
                 return false;
             }
@@ -1666,12 +1666,42 @@ public final class Helpers {
         return true;
     }
 
-    public static boolean anyNull(Object... items) {
-        if (items == null || items.length == 0) {
+    @SafeVarargs
+    public static <T> boolean allNulls(T... items) {
+        if (items == null) {
+            return true;
+        }
+
+        for (T item : items) {
+            if (item != null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    public static <T> boolean anyNull(List<T> items) {
+        if (items == null || items.isEmpty()) {
             return false;
         }
 
-        for (Object item : items) {
+        for (T item : items) {
+            if (item == null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @SafeVarargs
+    public static <T> boolean anyNull(T... items) {
+        if (items == null) {
+            return false;
+        }
+
+        for (T item : items) {
             if (item == null) {
                 return true;
             }
