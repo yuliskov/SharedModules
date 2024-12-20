@@ -16,6 +16,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaCodecInfo;
@@ -2199,5 +2200,20 @@ public final class Helpers {
             }
         }
         return false;
+    }
+
+    public static int invertColor(int color) {
+        // Extract RGB components from the color
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        // Invert the colors by subtracting from 255
+        int invertedRed = 255 - red;
+        int invertedGreen = 255 - green;
+        int invertedBlue = 255 - blue;
+
+        // Combine the inverted colors back into a single color
+        return Color.rgb(invertedRed, invertedGreen, invertedBlue);
     }
 }

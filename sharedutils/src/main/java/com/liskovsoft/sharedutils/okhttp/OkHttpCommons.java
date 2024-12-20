@@ -100,7 +100,7 @@ public final class OkHttpCommons {
         // NOTE: SocketTimeoutException fix: setup connection pool with 0 (!) idle connections!
         //okBuilder.connectionPool(new ConnectionPool(0, READ_TIMEOUT_MS, TimeUnit.MILLISECONDS));
         //okBuilder.connectionPool(new ConnectionPool(10, 24, TimeUnit.HOURS)); // Video unavailable fix???
-        okBuilder.connectionPool(new ConnectionPool(20, 5, TimeUnit.MINUTES)); // Long video start fix???
+        //okBuilder.connectionPool(new ConnectionPool(20, 5, TimeUnit.MINUTES)); // Long video start fix???
     }
 
     /**
