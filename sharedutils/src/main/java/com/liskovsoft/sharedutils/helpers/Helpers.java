@@ -417,6 +417,10 @@ public final class Helpers {
         return s != null && s.matches("^[-+]?\\d+$");
     }
 
+    public static boolean hasWords(String s) {
+        return s != null && s.matches("^.*[^\\d\\W]+.*$");
+    }
+
     public static boolean hasDigits(String s) {
         return s != null && s.matches("^.*[-+]?\\d*\\.?\\d+.*$");
     }
