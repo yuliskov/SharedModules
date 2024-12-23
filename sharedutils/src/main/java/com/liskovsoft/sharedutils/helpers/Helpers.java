@@ -2250,4 +2250,10 @@ public final class Helpers {
         // Combine the inverted colors back into a single color
         return Color.rgb(invertedRed, invertedGreen, invertedBlue);
     }
+
+    public static boolean isAppInForeground() {
+        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+        ActivityManager.getMyMemoryState(appProcessInfo);
+        return appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+    }
 }
