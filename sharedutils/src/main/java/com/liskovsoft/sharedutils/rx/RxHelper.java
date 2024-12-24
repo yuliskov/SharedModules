@@ -8,6 +8,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.exceptions.OnErrorNotImplementedException;
@@ -16,12 +17,11 @@ import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.NoRouteToHostException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RxHelper {
     private static final String TAG = RxHelper.class.getSimpleName();
+    private static final Scheduler sCachedScheduler = Schedulers.from(Executors.newCachedThreadPool());
 
     public static void disposeActions(Disposable... actions) {
         if (actions != null) {
@@ -305,7 +306,7 @@ public class RxHelper {
         // NOTE: Schedulers.io() reuses blocked threads in RxJava 2
         // https://github.com/ReactiveX/RxJava/issues/6542
         return observable
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(sCachedScheduler)
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
