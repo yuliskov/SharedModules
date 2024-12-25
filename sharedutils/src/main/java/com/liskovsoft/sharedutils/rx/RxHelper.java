@@ -94,38 +94,45 @@ public class RxHelper {
         return action != null && !action.isDisposed();
     }
 
-    public static <T> Disposable execute(Observable<T> observable) {
-        return observable
-                .subscribe(
-                        obj -> {}, // ignore result
-                        error -> Log.e(TAG, "Execute error: %s", error.getMessage())
-                );
-    }
+    public static <T> Disposable execute(Observable<T> observable, @Nullable OnResult<T> onResult, @Nullable OnError onError, @Nullable Runnable onFinish) {
+        if (onResult == null) {
+            onResult = result -> {}; // ignore result
+        }
 
-    public static <T> Disposable execute(Observable<T> observable, OnError onError) {
-        return observable
-                .subscribe(
-                        obj -> {}, // ignore result
-                        onError::onError
-                );
-    }
+        if (onError == null) {
+            onError = error -> Log.e(TAG, "Execute error: %s", error.getMessage());
+        }
 
-    public static <T> Disposable execute(Observable<T> observable, Runnable onFinish) {
-        return observable
-                .subscribe(
-                        obj -> {}, // ignore result
-                        error -> Log.e(TAG, "Execute error: %s", error.getMessage()),
-                        onFinish::run
-                );
-    }
+        if (onFinish == null) {
+            onFinish = () -> {};
+        }
 
-    public static <T> Disposable execute(Observable<T> observable, OnError onError, Runnable onFinish) {
         return observable
                 .subscribe(
-                        obj -> {}, // ignore result
+                        onResult::onResult,
                         onError::onError,
                         onFinish::run
                 );
+    }
+
+    public static <T> Disposable execute(Observable<T> observable) {
+        return execute(observable, null, null, null);
+    }
+
+    public static <T> Disposable execute(Observable<T> observable, OnResult<T> onResult, OnError onError) {
+        return execute(observable, onResult, onError, null);
+    }
+
+    public static <T> Disposable execute(Observable<T> observable, OnError onError) {
+        return execute(observable, null, onError, null);
+    }
+
+    public static <T> Disposable execute(Observable<T> observable, Runnable onFinish) {
+        return execute(observable, null, null, onFinish);
+    }
+
+    public static <T> Disposable execute(Observable<T> observable, OnError onError, Runnable onFinish) {
+        return execute(observable, null, onError, onFinish);
     }
 
     public static Disposable startInterval(Runnable callback, int periodSec) {
@@ -246,7 +253,7 @@ public class RxHelper {
         return setup(Observable.fromIterable(source));
     }
 
-    public static Observable<Void> fromVoidable(Runnable callback) {
+    public static Observable<Void> fromRunnable(Runnable callback) {
         return create(emitter -> {
             callback.run();
             emitter.onComplete();
