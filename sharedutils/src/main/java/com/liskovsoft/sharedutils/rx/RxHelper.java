@@ -29,7 +29,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class RxHelper {
     private static final String TAG = RxHelper.class.getSimpleName();
-    private static final Scheduler sCachedScheduler = Schedulers.from(Executors.newCachedThreadPool());
+    private static @Nullable Scheduler sCachedScheduler;
+
+    private static Scheduler getCachedScheduler() {
+        if (sCachedScheduler == null) {
+            sCachedScheduler = Schedulers.from(Executors.newCachedThreadPool());
+        }
+
+        return sCachedScheduler;
+    }
 
     public static void disposeActions(Disposable... actions) {
         if (actions != null) {
@@ -306,7 +314,7 @@ public class RxHelper {
         // NOTE: Schedulers.io() reuses blocked threads in RxJava 2
         // https://github.com/ReactiveX/RxJava/issues/6542
         return observable
-                .subscribeOn(sCachedScheduler)
+                .subscribeOn(getCachedScheduler())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
