@@ -1283,6 +1283,7 @@ public final class Helpers {
         return result != -1 ? result : defaultValue;
     }
 
+    @Nullable
     public static String parseStr(String[] arr, int index) {
         return parseStr(arr, index, null);
     }
