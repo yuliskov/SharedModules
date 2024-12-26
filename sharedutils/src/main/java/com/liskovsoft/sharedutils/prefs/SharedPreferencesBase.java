@@ -80,4 +80,10 @@ public class SharedPreferencesBase {
     public String getString(String key, String defVal) {
         return mPrefs.getString(key, defVal);
     }
+
+    public void clear() {
+        mPrefs.edit()
+                .clear()
+                .apply();
+    }
 }
