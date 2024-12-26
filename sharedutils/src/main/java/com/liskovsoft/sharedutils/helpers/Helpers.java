@@ -1757,6 +1757,7 @@ public final class Helpers {
      * Predicate replacement function for devices with Android 6.0 and below.
      * @return removed items (if any) or null (if nothing removed)
      */
+    @Nullable
     public static <T> List<T> removeIf(Collection<T> collection, Filter<T> filter) {
         if (collection == null || filter == null) {
             return null;
