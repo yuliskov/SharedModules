@@ -1331,7 +1331,7 @@ public final class Helpers {
     }
 
     public interface Parser<T> {
-        T parse(String spec);
+        @Nullable T parse(String spec);
     }
 
     public static <T> List<T> parseList(String[] arr, int index, String delim, Parser<T> itemParser) {
@@ -1345,7 +1345,10 @@ public final class Helpers {
             String[] listArr = split(delim, data);
 
             for (String item : listArr) {
-                result.add(itemParser.parse(item));
+                T parsed = itemParser.parse(item);
+                if (parsed != null) {
+                    result.add(parsed);
+                }
             }
         }
 
