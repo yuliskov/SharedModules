@@ -40,7 +40,8 @@ project.ext {
     autoValueVersion = '1.6'
     checkerframeworkVersion = '2.5.0'
     testRunnerVersion = '1.0.2'
-    materialVersion = '1.2.1'
+    // materialVersion = '1.2.1'
+    materialVersion = '1.5.0' // MaterialPicker dark style fix
     flexboxVersion = '3.0.0'
     
     legacyExoplayerVersion = '2.9.6'
