@@ -109,6 +109,14 @@ public class KeyHelpers {
         return keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
     }
 
+    public static boolean isLeftRightKey(int keyCode) {
+        return keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT;
+    }
+
+    public static boolean isUpDownKey(int keyCode) {
+        return keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN;
+    }
+
     public static boolean isNavigationKey(int keyCode) {
         return keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ||
                 keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN;
