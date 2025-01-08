@@ -238,11 +238,11 @@ public class RxHelper {
     }
 
     public static <T> Observable<T> create(ObservableOnSubscribe<T> source) {
-        return setup(Observable.create(source));
+        return setup(Observable.create(wrapOnSubscribe(source)));
     }
 
     public static <T> Observable<T> createLong(ObservableOnSubscribe<T> source) {
-        return setupLong(Observable.create(source));
+        return setupLong(Observable.create(wrapOnSubscribe(source)));
     }
 
     public static <T> Observable<T> fromCallable(Callable<T> supplier) {
@@ -336,5 +336,28 @@ public class RxHelper {
         return observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * Catch errors thrown after Observer is disposed.
+     * Such errors cannot be caught anywhere else.
+     */
+    private static <T> ObservableOnSubscribe<T> wrapOnSubscribe(ObservableOnSubscribe<T> source) {
+        return emitter -> {
+            try {
+                source.subscribe(emitter);
+            } catch (Exception e) {
+                // Catch errors thrown after Observer is disposed.
+                // Such errors cannot be caught anywhere else.
+                if (emitter.isDisposed()) {
+                    // InterruptedIOException - Thread interrupted. Thread died!!
+                    // UnknownHostException: Unable to resolve host (DNS error) Thread died?
+                    // Don't rethrow!!! These exceptions cannot be caught inside RxJava!!! Thread died!!!
+                    e.printStackTrace();
+                } else {
+                    throw e;
+                }
+            }
+        };
     }
 }
