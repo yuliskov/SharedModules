@@ -43,6 +43,31 @@ public class DateHelper {
         return date != null ? date.getTime() : 0;
     }
 
+    /**
+     * Input example: "2022-09-11T23:39:38+00:00"<br/>
+     * https://stackoverflow.com/questions/2597083/illegal-pattern-character-t-when-parsing-a-date-string-to-java-util-date<br/>
+     * https://stackoverflow.com/questions/7681782/simpledateformat-unparseable-date-exception
+     */
+    private static Date toDate(String timestamp) {
+        if (timestamp == null || timestamp.isEmpty()) {
+            return null;
+        }
+
+        // Unknown pattern character 'X'
+        boolean supportXPattern = Build.VERSION.SDK_INT > 23;
+        String longPattern = "yyyy-MM-dd'T'HH:mm:ss" + (timestamp.contains("+") && supportXPattern ? "X" : "");
+        String shortPattern = "yyyy-MM-dd";
+        SimpleDateFormat format = new SimpleDateFormat(timestamp.contains("T") ? longPattern : shortPattern, Locale.US);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = null;
+        try {
+            date = format.parse(timestamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     public static String getCurrentDateTimeShort() {
         return toShortDate(System.currentTimeMillis(), true, false, true);
     }
@@ -60,8 +85,19 @@ public class DateHelper {
     }
 
     public static String toShortDate(long timeMs, boolean showDate, boolean showYear, boolean showHours) {
-        Date date = new Date(timeMs);
+        return toShortDate(new Date(timeMs), showDate, showYear, showHours);
+    }
 
+    /**
+     * Input example: "2022-09-11T23:39:38+00:00"<br/>
+     * https://stackoverflow.com/questions/2597083/illegal-pattern-character-t-when-parsing-a-date-string-to-java-util-date<br/>
+     * https://stackoverflow.com/questions/7681782/simpledateformat-unparseable-date-exception
+     */
+    public static String toShortDate(String timestamp, boolean showDate, boolean showYear, boolean showHours) {
+        return toShortDate(toDate(timestamp), showDate, showYear, showHours);
+    }
+
+    private static String toShortDate(Date date, boolean showDate, boolean showYear, boolean showHours) {
         Locale locale = Locale.getDefault();
         boolean is24HourLocale = GlobalPreferences.sInstance != null ? GlobalPreferences.sInstance.is24HourLocaleEnabled() : is24HourLocale(locale);
         String datePattern = is24HourLocale ? "EEE d MMM" : "EEE MMM d";
