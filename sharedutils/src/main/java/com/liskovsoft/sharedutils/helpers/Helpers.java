@@ -931,7 +931,13 @@ public final class Helpers {
             return;
         }
 
-        context.runOnUiThread(() -> context.getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON));
+        context.runOnUiThread(() -> {
+            try {
+                context.getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } catch (ArrayIndexOutOfBoundsException e) { // A rare unknown crash (length=0; index=16)
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
