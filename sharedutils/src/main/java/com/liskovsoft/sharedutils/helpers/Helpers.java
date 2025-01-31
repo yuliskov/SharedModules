@@ -1280,6 +1280,10 @@ public final class Helpers {
         return result != -1 ? result : defaultValue;
     }
 
+    public static long parseLong(String[] arr, int index) {
+        return parseLong(arr, index, 0);
+    }
+
     public static long parseLong(String[] arr, int index, long defaultValue) {
         if (arr == null || arr.length <= index || index < 0) {
             return defaultValue;
@@ -1313,6 +1317,10 @@ public final class Helpers {
         }
 
         return parseBoolean(arr[index]);
+    }
+
+    public static float parseFloat(String[] arr, int index) {
+        return parseFloat(arr, index, 0);
     }
 
     public static float parseFloat(String[] arr, int index, float defaultValue) {
@@ -1855,6 +1863,9 @@ public final class Helpers {
         return result;
     }
 
+    /**
+     * Fix duplicated items inside ATV channels etc.
+     */
     public static <T> void removeDuplicates(List<T> list) {
         Set<T> set = new LinkedHashSet<>(list);
         list.clear();
