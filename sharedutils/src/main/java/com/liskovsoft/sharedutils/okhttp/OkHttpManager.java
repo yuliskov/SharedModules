@@ -10,6 +10,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -134,31 +135,40 @@ public class OkHttpManager {
         return doRequest(client, okHttpRequest);
     }
 
+    //private Response doRequest(OkHttpClient client, Request okHttpRequest) {
+    //    Response okHttpResponse = null;
+    //    Exception lastEx = null;
+    //
+    //    for (int tries = NUM_TRIES; tries > 0; tries--) {
+    //        try {
+    //            okHttpResponse = client.newCall(okHttpRequest).execute();
+    //            if (!okHttpResponse.isSuccessful()) {
+    //                throw new IllegalStateException("Unexpected code " + okHttpResponse);
+    //            }
+    //
+    //            break; // no exception is thrown - job is done
+    //        } catch (Exception ex) {
+    //            //Log.e(TAG, ex.getMessage()); // network error, just return null
+    //            okHttpResponse = null;
+    //            lastEx = ex;
+    //        }
+    //    }
+    //
+    //    if (lastEx != null && okHttpResponse == null) { // request failed
+    //        lastEx.printStackTrace();
+    //        Log.e(TAG, lastEx.getMessage());
+    //    }
+    //
+    //    return okHttpResponse;
+    //}
+
     private Response doRequest(OkHttpClient client, Request okHttpRequest) {
-        Response okHttpResponse = null;
-        Exception lastEx = null;
-
-        for (int tries = NUM_TRIES; tries > 0; tries--) {
-            try {
-                okHttpResponse = client.newCall(okHttpRequest).execute();
-                if (!okHttpResponse.isSuccessful()) {
-                    throw new IllegalStateException("Unexpected code " + okHttpResponse);
-                }
-
-                break; // no exception is thrown - job is done
-            } catch (Exception ex) {
-                //Log.e(TAG, ex.getMessage()); // network error, just return null
-                okHttpResponse = null;
-                lastEx = ex;
-            }
+        try {
+            return client.newCall(okHttpRequest).execute();
+        } catch (IOException ex) {
+            Log.e(TAG, ex.getMessage()); // network error
+            throw new IllegalStateException("Failed to execute OkHttp request to " + okHttpRequest.url(), ex);
         }
-
-        if (lastEx != null && okHttpResponse == null) { // request failed
-            lastEx.printStackTrace();
-            Log.e(TAG, lastEx.getMessage());
-        }
-
-        return okHttpResponse;
     }
 
     public OkHttpClient getClient() {
