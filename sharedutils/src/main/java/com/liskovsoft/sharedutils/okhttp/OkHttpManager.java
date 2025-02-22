@@ -167,7 +167,7 @@ public class OkHttpManager {
             return client.newCall(okHttpRequest).execute();
         } catch (IOException ex) {
             Log.e(TAG, ex.getMessage()); // network error
-            throw new IllegalStateException("Failed to execute OkHttp request to " + okHttpRequest.url(), ex);
+            throw new IllegalStateException("Interrupted OkHttp request to " + okHttpRequest.url(), ex);
         }
     }
 
