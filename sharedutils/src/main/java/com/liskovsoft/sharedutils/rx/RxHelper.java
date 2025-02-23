@@ -215,6 +215,11 @@ public class RxHelper {
                 // fine, irrelevant network problem or API that throws on cancellation
                 return;
             }
+            if ((e instanceof IllegalStateException) &&
+                    (e.getCause() instanceof IOException)) {
+                // fine, irrelevant network problem or API that throws on cancellation
+                return;
+            }
             if (e instanceof InterruptedException) {
                 // fine, some blocking code was interrupted by a dispose call
                 return;
