@@ -183,4 +183,8 @@ public final class DeviceHelpers {
             return false;
         }
     }
+
+    public static boolean isTCL() {
+        return Build.MANUFACTURER.toLowerCase().contains("tcl") || Build.BRAND.toLowerCase().contains("tcl");
+    }
 }
