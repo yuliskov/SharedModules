@@ -1866,7 +1866,7 @@ public final class Helpers {
     /**
      * Fix duplicated items inside ATV channels etc.
      */
-    public static <T> void removeDuplicates(List<T> list) {
+    public static <T> void removeDuplicates(Collection<T> list) {
         Set<T> set = new LinkedHashSet<>(list);
         list.clear();
         list.addAll(set);
