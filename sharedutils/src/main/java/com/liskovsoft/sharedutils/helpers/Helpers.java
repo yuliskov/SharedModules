@@ -1867,9 +1867,13 @@ public final class Helpers {
      * Fix duplicated items inside ATV channels etc.
      */
     public static <T> void removeDuplicates(Collection<T> list) {
-        Set<T> set = new LinkedHashSet<>(list);
-        list.clear();
-        list.addAll(set);
+        try {
+            Set<T> set = new LinkedHashSet<>(list);
+            list.clear();
+            list.addAll(set);
+        } catch (UnsupportedOperationException e) { // read only collection
+            e.printStackTrace();
+        }
     }
 
     public static <T> T get(Collection<T> collection, int index) {
