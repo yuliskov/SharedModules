@@ -2060,6 +2060,10 @@ public final class Helpers {
         return getRandom().nextInt((max - min) + 1) + min;
     }
 
+    public static <T> T getRandomItem(T[] items) {
+        return items[Helpers.getRandomNumber(0, items.length - 1)];
+    }
+
     public static <T extends Comparable<T>> T[] sortNatural(T[] stringArray) {
         Arrays.sort(stringArray, T::compareTo);
         return stringArray;
