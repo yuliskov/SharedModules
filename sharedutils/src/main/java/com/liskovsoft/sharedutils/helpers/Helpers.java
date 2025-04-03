@@ -1833,6 +1833,7 @@ public final class Helpers {
         return result;
     }
 
+    @Nullable
     public static <T> T findFirst(Collection<T> collection, Filter<T> filter) {
         if (collection == null || filter == null) {
             return null;
