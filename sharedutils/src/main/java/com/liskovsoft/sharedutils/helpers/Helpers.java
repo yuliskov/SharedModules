@@ -83,6 +83,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -2221,6 +2222,26 @@ public final class Helpers {
      */
     public static <T> List<T> createLRUList(final int maxEntries) {
         return new ArrayList<T>() {
+            @Override
+            public boolean add(T element) {
+                if (contains(element)) {
+                    remove(element);
+                }
+
+                if (size() > maxEntries) {
+                    remove(0);
+                }
+
+                return super.add(element);
+            }
+        };
+    }
+
+    /**
+     * Trim playlist if one exceeds max size
+     */
+    public static <T> List<T> createSafeLRUList(final int maxEntries) {
+        return new CopyOnWriteArrayList<T>() {
             @Override
             public boolean add(T element) {
                 if (contains(element)) {
