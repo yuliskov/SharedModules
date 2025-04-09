@@ -461,6 +461,10 @@ public final class Helpers {
         }
 
         for (String name : nameArr) {
+            if (name == null) {
+                continue;
+            }
+
             if (fullStr.endsWith(name)) {
                 return true;
             }
