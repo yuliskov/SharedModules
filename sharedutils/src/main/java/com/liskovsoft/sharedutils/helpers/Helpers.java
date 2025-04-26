@@ -1934,9 +1934,13 @@ public final class Helpers {
             return false;
         }
 
-        if (sVP9MaxHeight == 0) {
+        if (sVP9MaxHeight == 0) { // not initialized
             // TV capabilities sometimes are limited to the screen resolution not real decoder support
             switch (Build.MODEL) {
+                // Can't handle anything above FHD
+                case "AFTSSS": // fire tv stick 3th gen
+                    sVP9MaxHeight = 1080;
+                    break;
                 // FHD tvs capable 4K
                 case "MiTV-AXSO0":
                 case "VIDAA_TV":
@@ -1957,7 +1961,7 @@ public final class Helpers {
             return false;
         }
 
-        if (sAV1MaxHeight == 0) {
+        if (sAV1MaxHeight == 0) { // not initialized
             sAV1MaxHeight = getCodecMaxHeight(MIME_AV1);
 
             // On Rockchip (and some others) av1 codec info is bugged.
