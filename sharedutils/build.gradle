@@ -73,7 +73,7 @@ dependencies {
 
     // Add modern TLS ciphers to HttpUrlConnection
     // https://stackoverflow.com/questions/16299531/how-to-override-the-cipherlist-sent-to-the-server-by-android-when-using-httpsurl
-    implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
+    implementation 'info.guardianproject.netcipher:netcipher:' + netcipherVersion
 
     // Add kotlin support libs
     implementation 'androidx.core:core-ktx:' + kotlinCoreXVersion

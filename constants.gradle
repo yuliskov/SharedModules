@@ -118,4 +118,5 @@ project.ext {
     gotevSpeechVersion = '1.1.7' // The latest with minSdk 17. The previous one: '1.1.2'
 
     phoenixVersion = '3.0.0'
+    netcipherVersion = '2.1.0'
 }
