@@ -252,8 +252,15 @@ public class RxHelper {
         return setupLong(Observable.create(wrapOnSubscribe(source)));
     }
 
-    public static <T> Observable<T> fromCallable(Callable<T> supplier) {
-        return setup(Observable.fromCallable(supplier));
+    public static <T> Observable<T> fromCallable(Callable<T> callback) {
+        // NOTE: In stock implementation Unhandled NPE crash will happen if callable returns null
+        //return setup(Observable.fromCallable(callback));
+        return fromNullable(callback);
+    }
+
+    @SafeVarargs
+    private static <T> Observable<T> fromMultiCallable(Callable<T>... callbacks) {
+        return fromMultiNullable(callbacks);
     }
 
     public static <T> Observable<T> fromIterable(Iterable<T> source) {
@@ -267,7 +274,7 @@ public class RxHelper {
         });
     }
 
-    public static <T> Observable<T> fromNullable(Callable<T> callback) {
+    private static <T> Observable<T> fromNullable(Callable<T> callback) {
         return create(emitter -> {
             T result = callback.call();
 
@@ -284,7 +291,7 @@ public class RxHelper {
     }
 
     @SafeVarargs
-    public static <T> Observable<T> fromMultiNullable(Callable<T>... callbacks) {
+    private static <T> Observable<T> fromMultiNullable(Callable<T>... callbacks) {
         return create(emitter -> {
             boolean success = false;
             for (Callable<T> callback : callbacks) {
