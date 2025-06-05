@@ -49,6 +49,7 @@ android {
         stredboxtv {}
         stsibsetru {}
         stamazon {}
+        staptoide {}
     }
 }
 
