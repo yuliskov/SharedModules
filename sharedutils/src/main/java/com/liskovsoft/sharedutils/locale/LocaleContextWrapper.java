@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build.VERSION;
 import android.os.LocaleList;
+import android.util.DisplayMetrics;
 
 import java.util.Locale;
 
@@ -17,8 +18,11 @@ public class LocaleContextWrapper extends ContextWrapper {
         super(base);
     }
 
-    @SuppressWarnings("deprecation")
     public static Context wrap(Context context, Locale newLocale) {
+        return wrap(context, newLocale, null);
+    }
+    
+    public static Context wrap(Context context, Locale newLocale, DisplayMetrics customMetrics) {
         if (newLocale == null) {
             return context;
         }
@@ -30,6 +34,10 @@ public class LocaleContextWrapper extends ContextWrapper {
         }
 
         Configuration configuration = res.getConfiguration();
+
+        if (customMetrics != null) {
+            configuration.densityDpi = (int) (customMetrics.density * 160); // 160 is the baseline DPI
+        }
 
         if (VERSION.SDK_INT >= 24) {
             configuration.setLocale(newLocale);
@@ -48,5 +56,30 @@ public class LocaleContextWrapper extends ContextWrapper {
         }
 
         return new ContextWrapper(context);
+    }
+
+    public static void applySavedLocale(Context context, Locale newLocale, DisplayMetrics customMetrics) {
+        if (context == null) {
+            return;
+        }
+
+        if (newLocale == null) {
+            return;
+        }
+
+        Resources res = context.getResources();
+
+        if (res == null) {
+            return;
+        }
+
+        Configuration configuration = res.getConfiguration();
+
+        if (customMetrics != null) {
+            configuration.densityDpi = (int) (customMetrics.density * 160); // 160 is the baseline DPI
+        }
+
+        configuration.locale = newLocale;
+        res.updateConfiguration(configuration, res.getDisplayMetrics());
     }
 }
