@@ -314,7 +314,8 @@ public class FileHelpers {
             StringBuilder buf = new StringBuilder(bufsize);
             InputStreamReader reader = new InputStreamReader(in, "UTF-8");
 
-            for (int readBytes = reader.read(cbuf, 0, bufsize); readBytes > 0; readBytes = reader.read(cbuf, 0, bufsize)) {
+            int readBytes;
+            while ((readBytes = reader.read(cbuf, 0, bufsize)) != -1) {
                 buf.append(cbuf, 0, readBytes);
             }
 
@@ -340,8 +341,6 @@ public class FileHelpers {
     //    String result = null;
     //
     //    try {
-    //        //System.gc(); // OutOfMemoryError fix (simple wrapper for below)?
-    //        //Runtime.getRuntime().gc(); // OutOfMemoryError fix?
     //        result = IOUtils.toString(content, "UTF-8");
     //        content.close();
     //    } catch (IOException e) {
