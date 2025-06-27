@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
@@ -306,59 +307,79 @@ public class FileHelpers {
         streamToFile(toStream(is), destination);
     }
 
-    /**
-     * Converts with respect to charset encoding.<br/>
-     * More optimized than alt method below?<br/>
-     * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
-     */
-    public static String toString(InputStream content) {
-        if (content == null) {
-            return null;
-        }
-
-        String result = null;
-
+    public static String toString(InputStream in) {
         try {
-            //System.gc(); // OutOfMemoryError fix (simple wrapper for below)?
-            //Runtime.getRuntime().gc(); // OutOfMemoryError fix?
-            result = IOUtils.toString(content, "UTF-8");
-            content.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d(TAG, e.getMessage());
-        }
+            int bufsize = 8196;
+            char[] cbuf = new char[bufsize];
+            StringBuilder buf = new StringBuilder(bufsize);
+            InputStreamReader reader = new InputStreamReader(in, "UTF-8");
 
-        return result;
-    }
-
-    /**
-     * Converts with respect to charset encoding.<br/>
-     * Use alt methods carefully.<br/>
-     * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
-     */
-    public static String toStringAlt(InputStream content) {
-        if (content == null) {
-            return null;
-        }
-
-        String result = null;
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            BufferedInputStream bis = new BufferedInputStream(content);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = bis.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, length);
+            for (int readBytes = reader.read(cbuf, 0, bufsize); readBytes > 0; readBytes = reader.read(cbuf, 0, bufsize)) {
+                buf.append(cbuf, 0, readBytes);
             }
-            // StandardCharsets.UTF_8.name() > JDK 7
-            result = outputStream.toString("UTF-8");
-            bis.close();
+
+            return buf.toString();
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG, e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
 
-        return result;
+        return null;
     }
+
+    ///**
+    // * Converts with respect to charset encoding.<br/>
+    // * More optimized than alt method below?<br/>
+    // * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
+    // */
+    //public static String toString(InputStream content) {
+    //    if (content == null) {
+    //        return null;
+    //    }
+    //
+    //    String result = null;
+    //
+    //    try {
+    //        //System.gc(); // OutOfMemoryError fix (simple wrapper for below)?
+    //        //Runtime.getRuntime().gc(); // OutOfMemoryError fix?
+    //        result = IOUtils.toString(content, "UTF-8");
+    //        content.close();
+    //    } catch (IOException e) {
+    //        e.printStackTrace();
+    //        Log.d(TAG, e.getMessage());
+    //    }
+    //
+    //    return result;
+    //}
+
+    ///**
+    // * Converts with respect to charset encoding.<br/>
+    // * Use alt methods carefully.<br/>
+    // * https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
+    // */
+    //public static String toStringAlt(InputStream content) {
+    //    if (content == null) {
+    //        return null;
+    //    }
+    //
+    //    String result = null;
+    //    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+    //        BufferedInputStream bis = new BufferedInputStream(content);
+    //        byte[] buffer = new byte[1024];
+    //        int length;
+    //        while ((length = bis.read(buffer)) != -1) {
+    //            outputStream.write(buffer, 0, length);
+    //        }
+    //        // StandardCharsets.UTF_8.name() > JDK 7
+    //        result = outputStream.toString("UTF-8");
+    //        bis.close();
+    //    } catch (IOException e) {
+    //        e.printStackTrace();
+    //        Log.d(TAG, e.getMessage());
+    //    }
+    //
+    //    return result;
+    //}
 
     //public static String toStringEfficient(InputStream content) {
     //    if (content == null) {
@@ -382,18 +403,18 @@ public class FileHelpers {
     //    return sb.toString();
     //}
 
-    public static String toStringOld(InputStream content) {
-        if (content == null) {
-            return null;
-        }
-
-        Scanner s = new Scanner(content, "UTF-8").useDelimiter("\\A");
-        String result = s.hasNext() ? s.next() : "";
-
-        s.close();
-
-        return result;
-    }
+    //public static String toStringOld(InputStream content) {
+    //    if (content == null) {
+    //        return null;
+    //    }
+    //
+    //    Scanner s = new Scanner(content, "UTF-8").useDelimiter("\\A");
+    //    String result = s.hasNext() ? s.next() : "";
+    //
+    //    s.close();
+    //
+    //    return result;
+    //}
 
     public static InputStream toStream(String content) {
         if (content == null) {
