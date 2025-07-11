@@ -84,7 +84,7 @@ project.ext {
     xwalkSharedLibraryVersion = '23.53.589.4'
     xwalkCoreLibraryVersion = '23.53.589.4'
     commonsIOVersion = '2.8.0'
-    crashlyticsVersion = '2.10.1@aar'
+    //crashlyticsVersion = '2.10.1@aar'
     assertJVersion = '3.11.1'
     espressoCoreVersion = '2.2.2'
     previewSeekBarDevVersion = '5e04501dfce1fe9de61f519fef2278aa751fe8ab'
@@ -93,7 +93,7 @@ project.ext {
     nanoHttpdVersion = '2.3.1'
     voiceOverlayVersion = '1.0.0-beta02' // https://github.com/algolia/voice-overlay-android
     apacheCommonsLangVersion = '3.10'
-    firebaseCrashlyticsVersion = '17.2.1'
+    firebaseCrashlyticsVersion = '17.2.2'
     
     //duktapeVersion = '1.4.0' // js interpreter
     duktapeVersion = '1.1.0' // old one contains more *.so binaries and has smaller size than 1.2.0
@@ -109,7 +109,7 @@ project.ext {
     mockitoVersion = '3.7.7'
     // End My commons-io deps (Android 4.3 fix)
     
-    workVersion = '2.8.1' // https://mvnrepository.com/artifact/androidx.work/work-runtime
+    workVersion = '2.9.1' // https://mvnrepository.com/artifact/androidx.work/work-runtime
     guavaVersion = '31.1-android' // Work library deps
     liveDataVersion = '2.1.0'
     browserXVersion = '1.3.0'
