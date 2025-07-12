@@ -3,6 +3,7 @@ package com.liskovsoft.sharedutils.misc;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -65,5 +66,17 @@ public class WeakHashSet<T> {
 
     private void cleanup() {
         Helpers.removeIf(mWeakReferences, item -> item.get() == null);
+    }
+
+    public List<T> asList() {
+        List<T> result = new ArrayList<>();
+
+        for (WeakReference<T> reference : mWeakReferences) {
+            if (reference.get() != null) {
+                result.add(reference.get());
+            }
+        }
+
+        return result;
     }
 }
