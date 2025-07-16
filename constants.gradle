@@ -11,17 +11,17 @@ project.ext {
     // NOTE: api 26 orientation error fix: https://stackoverflow.com/a/52426009/1279056
     // NOTE: set api to 26 to fix text scroll speed and crashes on samsung
     targetSdkVersion = 26 // set target api = 26 to fix Android 8.0 error: "Only fullscreen opaque activities can request orientation"
-    compileSdkVersion = 34
-    buildToolsVersion = '33.0.3'
-    gradleVersion = '7.3.3' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
-    androidGradleVersion = '7.2.2+' // 4.0.0+ last version compatible with IntellJ 2020.3
+    compileSdkVersion = 33
+    buildToolsVersion = '30.0.3'
+    gradleVersion = '6.9.1' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
+    androidGradleVersion = '4.0.0+' // last version compatible with IntellJ 2020.3
     
     testSupportLibraryVersion = '0.5'
     testXSupportLibraryVersion = '1.1.0'
-    kotlinVersion = '1.8.22' // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk7
+    kotlinVersion = '1.8.10' // latest for android-gradle 4.0.0 https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk7
     kotlinxVersion = '1.7.3' // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-android
     // NOTE: Kotlin core 1.7.0 has 'resource android:attr/lStar not found' error (dialog black background bug)
-    kotlinCoreXVersion = '1.9.0' // https://mvnrepository.com/artifact/androidx.core/core-ktx
+    kotlinCoreXVersion = '1.12.0' // latest for sdk 17. https://mvnrepository.com/artifact/androidx.core/core-ktx
     coreXLibraryVersion = '1.9.0' // the latest compatible with kotlin core and cronet 119
     appCompatXLibraryVersion = '1.2.0' // old: 1.0.0
     leanbackXLibraryVersion = '1.0.0'
@@ -109,7 +109,7 @@ project.ext {
     mockitoVersion = '3.7.7'
     // End My commons-io deps (Android 4.3 fix)
     
-    workVersion = '2.9.1' // https://mvnrepository.com/artifact/androidx.work/work-runtime
+    workVersion = '2.9.1' // latest with kotlin 1.6.0 support. https://mvnrepository.com/artifact/androidx.work/work-runtime
     guavaVersion = '31.1-android' // Work library deps
     liveDataVersion = '2.1.0'
     browserXVersion = '1.3.0'
