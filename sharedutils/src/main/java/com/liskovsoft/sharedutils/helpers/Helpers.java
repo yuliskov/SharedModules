@@ -729,7 +729,8 @@ public final class Helpers {
         first = normalize(first);
         second = normalize(second);
 
-        return first.contains(second) || second.contains(first);
+        //return first.contains(second) || second.contains(first);
+        return first.contains(second);
     }
 
     public static boolean startsWith(String word, String prefix) {
@@ -1821,6 +1822,10 @@ public final class Helpers {
     }
 
     public static <T> List<T> filter(Collection<T> collection, Filter<T> filter) {
+        return filter(collection, filter, -1);
+    }
+
+    public static <T> List<T> filter(Collection<T> collection, Filter<T> filter, int limit) {
         if (collection == null || filter == null) {
             return null;
         }
@@ -1832,6 +1837,10 @@ public final class Helpers {
                     result = new ArrayList<>();
                 }
                 result.add(next);
+            }
+            limit--;
+            if (limit == 0) {
+                break;
             }
         }
 
