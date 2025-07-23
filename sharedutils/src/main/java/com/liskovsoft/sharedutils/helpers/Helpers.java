@@ -856,7 +856,8 @@ public final class Helpers {
 
         try {
             context.getApplicationContext().startActivity(intent);
-        } catch (ActivityNotFoundException e) {
+        } catch (ActivityNotFoundException | NullPointerException e) {
+            // NullPointerException: Attempt to get length of null array
             e.printStackTrace();
         }
     }
