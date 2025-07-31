@@ -148,7 +148,7 @@ public class RxHelper {
         return Completable.fromRunnable(callback)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe();
+                .subscribe(() -> {}, error -> Log.e(TAG, error.getMessage()));
     }
 
     public static Disposable runAsync(Runnable callback, long delayMs) {
@@ -156,7 +156,7 @@ public class RxHelper {
                 .delaySubscription(delayMs, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe();
+                .subscribe(() -> {}, error -> Log.e(TAG, error.getMessage()));
     }
 
     public static Disposable runAsyncUser(Runnable callback) {
