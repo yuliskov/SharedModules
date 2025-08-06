@@ -5,28 +5,26 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
+
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager;
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager.MyRequest;
+import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import edu.mit.mobile.android.utils.StreamUtils;
-import okhttp3.internal.http2.StreamResetException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.net.ssl.SSLException;
 import java.io.InputStream;
-import java.net.ProtocolException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
+import edu.mit.mobile.android.utils.StreamUtils;
 
 /**
  * A fairly simple non-Market app update checker. Give it a URL pointing to a JSON file
@@ -138,8 +136,8 @@ public class AppVersionChecker {
 
         final Uri[] downloadUrls;
 
-        if (mVersionInfo.has("downloadUrlList_" + Build.CPU_ABI)) {
-            JSONArray urls = mVersionInfo.getJSONArray("downloadUrlList_" + Build.CPU_ABI);
+        if (mVersionInfo.has("downloadUrlList_" + DeviceHelpers.getPrimaryAbi())) {
+            JSONArray urls = mVersionInfo.getJSONArray("downloadUrlList_" + DeviceHelpers.getPrimaryAbi());
             downloadUrls = parse(urls);
         } else if (mVersionInfo.has("downloadUrlList")) {
             JSONArray urls = mVersionInfo.getJSONArray("downloadUrlList");

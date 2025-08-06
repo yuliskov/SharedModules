@@ -187,4 +187,22 @@ public final class DeviceHelpers {
     public static boolean isTCL() {
         return Build.MANUFACTURER.toLowerCase().contains("tcl") || Build.BRAND.toLowerCase().contains("tcl");
     }
+
+    public static String getPrimaryAbi() {
+        String primaryAbi;
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            // For modern devices, use the preferred SUPPORTED_ABIS
+            String[] abis = Build.SUPPORTED_ABIS;
+            if (abis != null && abis.length > 0) {
+                primaryAbi = abis[0];
+            } else {
+                primaryAbi = Build.CPU_ABI;
+            }
+        } else {
+            primaryAbi = Build.CPU_ABI;
+        }
+
+        return primaryAbi;
+    }
 }
