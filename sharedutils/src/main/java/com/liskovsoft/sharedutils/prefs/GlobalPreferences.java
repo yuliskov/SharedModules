@@ -59,83 +59,83 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         return sInstance != null && sInstance.getContext() != null;
     }
 
-    public void setRecommendedPlaylistType(String type) {
-        putString(RECOMMENDED_PLAYLIST_TYPE, type);
-    }
-
     public String getRecommendedPlaylistType() {
         return getString(RECOMMENDED_PLAYLIST_TYPE, PLAYLIST_TYPE_RECOMMENDATIONS);
     }
 
-    public void setMediaServiceAccountData(String data) {
-        putString(MEDIA_SERVICE_ACCOUNT_DATA, data);
+    public void setRecommendedPlaylistType(String type) {
+        putString(RECOMMENDED_PLAYLIST_TYPE, type);
     }
 
     public String getMediaServiceAccountData() {
         return getString(MEDIA_SERVICE_ACCOUNT_DATA, null);
     }
 
-    public void setOAuth2AccountData(String data) {
-        putString(OAUTH2_ACCOUNT_DATA, data);
+    public void setMediaServiceAccountData(String data) {
+        putString(MEDIA_SERVICE_ACCOUNT_DATA, data);
     }
 
     public String getOAuth2AccountData() {
         return getString(OAUTH2_ACCOUNT_DATA, null);
     }
 
-    public void setMediaServiceData(String data) {
-        putString(MEDIA_SERVICE_DATA, data);
+    public void setOAuth2AccountData(String data) {
+        putString(OAUTH2_ACCOUNT_DATA, data);
     }
 
     public String getMediaServiceData() {
         return getString(MEDIA_SERVICE_DATA, null);
     }
 
-    public void setPreferredLanguage(String langData) {
-        putString(PREFERRED_LANGUAGE_DATA, langData);
+    public void setMediaServiceData(String data) {
+        putString(MEDIA_SERVICE_DATA, data);
     }
 
     public String getPreferredLanguage() {
         return getString(PREFERRED_LANGUAGE_DATA, null);
     }
 
-    public void setPreferredCountry(String countryData) {
-        putString(PREFERRED_COUNTRY_DATA, countryData);
+    public void setPreferredLanguage(String langData) {
+        putString(PREFERRED_LANGUAGE_DATA, langData);
     }
 
     public String getPreferredCountry() {
         return getString(PREFERRED_COUNTRY_DATA, null);
     }
 
-    public void enableChannelsService(boolean enable) {
-        putBoolean(ENABLE_CHANNELS_SERVICE, enable);
+    public void setPreferredCountry(String countryData) {
+        putString(PREFERRED_COUNTRY_DATA, countryData);
     }
 
     public boolean isChannelsServiceEnabled() {
         return getBoolean(ENABLE_CHANNELS_SERVICE, true);
     }
 
-    public void preferIPv4Dns(boolean enable) {
-        putBoolean(PREFER_IPV_4_DNS, enable);
+    public void setChannelsServiceEnabled(boolean enable) {
+        putBoolean(ENABLE_CHANNELS_SERVICE, enable);
     }
 
     public boolean isIPv4DnsPreferred() {
         return getBoolean(PREFER_IPV_4_DNS, false);
     }
 
-    public void enableContentBlockAltServer(boolean enable) {
-        putBoolean(CONTENT_BLOCK_ALT_SERVER, enable);
+    public void setIPv4DnsPreferred(boolean enable) {
+        putBoolean(PREFER_IPV_4_DNS, enable);
     }
 
     public boolean isContentBlockAltServerEnabled() {
         return getBoolean(CONTENT_BLOCK_ALT_SERVER, false);
     }
 
+    public void setContentBlockAltServerEnabled(boolean enable) {
+        putBoolean(CONTENT_BLOCK_ALT_SERVER, enable);
+    }
+
     public boolean is24HourLocaleEnabled() {
         return getBoolean(IS_24_HOUR_LOCALE_ENABLED, DateHelper.is24HourLocale());
     }
 
-    public void enable24HourLocale(boolean enable) {
+    public void set24HourLocaleEnabled(boolean enable) {
         putBoolean(IS_24_HOUR_LOCALE_ENABLED, enable);
     }
 }
