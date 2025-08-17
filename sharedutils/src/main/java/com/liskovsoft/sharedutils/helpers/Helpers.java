@@ -1363,7 +1363,7 @@ public final class Helpers {
         List<T> result = new ArrayList<>();
 
         if (data != null) {
-            String[] listArr = split(delim, data);
+            String[] listArr = split(data, delim);
 
             for (String item : listArr) {
                 T parsed = itemParser.parse(item);
@@ -1392,7 +1392,7 @@ public final class Helpers {
 
             for (String item : listArr) {
                 //String[] keyValPair = item.split("\\|");
-                String[] keyValPair = split(PAIR_DELIM, item);
+                String[] keyValPair = split(item, PAIR_DELIM);
 
                 if (keyValPair.length != 2) {
                     continue;
@@ -1423,7 +1423,7 @@ public final class Helpers {
     }
 
     public static String[] splitArray(String arr) {
-        return split(ARRAY_DELIM, arr);
+        return split(arr, ARRAY_DELIM);
     }
 
     public static String mergeArray(Object... items) {
@@ -1449,7 +1449,7 @@ public final class Helpers {
     }
 
     public static String[] splitData(String data) {
-        return split(DATA_DELIM, data);
+        return split(data, DATA_DELIM);
     }
 
     public static String mergeData(Object... items) {
@@ -1458,29 +1458,29 @@ public final class Helpers {
 
     public static String[] splitArrayLegacy(String arr) {
         if (arr != null && (arr.contains(ARRAY_DELIM) || arr.contains(DATA_DELIM))) {
-            return split(ARRAY_DELIM, arr);
+            return split(arr, ARRAY_DELIM);
         }
 
-        return split(LEGACY_ARRAY_DELIM, arr);
+        return split(arr, LEGACY_ARRAY_DELIM);
     }
 
     public static String[] splitDataLegacy(String data) {
         if (data != null && (data.contains(DATA_DELIM) || data.contains(ARRAY_DELIM))) {
-            return split(DATA_DELIM, data);
+            return split(data, DATA_DELIM);
         }
 
-        return split(LEGACY_DATA_DELIM, data);
+        return split(data, LEGACY_DATA_DELIM);
     }
 
     public static String[] splitObj(String obj) {
-        return split(OBJ_DELIM, obj);
+        return split(obj, OBJ_DELIM);
     }
 
     public static String mergeObj(Object... items) {
         return merge(OBJ_DELIM, items);
     }
 
-    public static String[] split(String delim, String data) {
+    public static String[] split(String data, String delim) {
         if (data == null) {
             return null;
         }
@@ -2324,5 +2324,16 @@ public final class Helpers {
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(appProcessInfo);
         return appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+    }
+
+    public static List<String> findAll(String data, Pattern pattern) {
+        List<String> result = new ArrayList<>();
+        Matcher matcher = pattern.matcher(data);
+
+        while (matcher.find()) {
+            result.add(matcher.group());
+        }
+
+        return result;
     }
 }
