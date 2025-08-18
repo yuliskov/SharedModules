@@ -2327,10 +2327,18 @@ public final class Helpers {
     }
 
     public static List<String> findAll(String data, Pattern pattern) {
-        List<String> result = new ArrayList<>();
+        if (data == null) {
+            return null;
+        }
+
+        List<String> result = null;
         Matcher matcher = pattern.matcher(data);
 
         while (matcher.find()) {
+            if (result == null) {
+                result = new ArrayList<>();
+            }
+
             result.add(matcher.group());
         }
 
