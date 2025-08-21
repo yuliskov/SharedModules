@@ -178,13 +178,17 @@ public final class DeviceHelpers {
     public static boolean isWebViewSupported() {
         try {
             CookieManager.getInstance();
-            return true;
+            return !isWebViewBroken();
         } catch (final Throwable ignored) {
             return false;
         }
     }
 
-    public static boolean isTCL() {
+    private static boolean isWebViewBroken() {
+        return Build.VERSION.SDK_INT == 19 && isTCL(); // "TCL TV - Harman"
+    }
+
+    private static boolean isTCL() {
         return Build.MANUFACTURER.toLowerCase().contains("tcl") || Build.BRAND.toLowerCase().contains("tcl");
     }
 
