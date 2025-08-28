@@ -28,8 +28,15 @@ public class LocaleUpdater {
         LocaleUpdaterHelper.forceLocale(mContext, locale);
     }
 
-    public String getUpdatedLocale() {
-        return createLocale();
+    private String getUpdatedLocale() {
+        try {
+            return createLocale();
+        } catch (NullPointerException e) {
+            // NullPointerException: com.liskovsoft.sharedutils.locale.LocaleUtility.getCurrentLocale (LocaleUtility.java:772)
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**

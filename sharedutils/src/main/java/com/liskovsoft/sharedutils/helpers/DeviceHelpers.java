@@ -192,6 +192,7 @@ public final class DeviceHelpers {
         return Build.MANUFACTURER.toLowerCase().contains("tcl") || Build.BRAND.toLowerCase().contains("tcl");
     }
 
+    @SuppressWarnings("deprecation")
     public static String getPrimaryAbi() {
         String primaryAbi;
 
