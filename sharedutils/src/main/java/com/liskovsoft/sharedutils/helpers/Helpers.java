@@ -1233,30 +1233,36 @@ public final class Helpers {
     }
 
     public static int parseInt(String numString) {
+        return parseInt(numString, -1);
+    }
+
+    public static int parseInt(String numString, int defaultValue) {
         if (!isInteger(numString)) {
-            return -1;
+            return defaultValue;
         }
 
-        try {
-            return Integer.parseInt(numString);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        return Integer.parseInt(numString);
     }
 
     public static long parseLong(String numString) {
+        return parseLong(numString, -1);
+    }
+
+    public static long parseLong(String numString, long defaultValue) {
         if (!isInteger(numString)) {
-            return -1;
+            return defaultValue;
         }
 
         return Long.parseLong(numString);
     }
 
     public static float parseFloat(String numString) {
+        return parseFloat(numString, -1);
+    }
+
+    public static float parseFloat(String numString, float defaultValue) {
         if (!isNumeric(numString)) {
-            return -1;
+            return defaultValue;
         }
 
         return Float.parseFloat(numString);
@@ -1283,8 +1289,7 @@ public final class Helpers {
             return defaultValue;
         }
 
-        int result = parseInt(arr[index]);
-        return result != -1 ? result : defaultValue;
+        return parseInt(arr[index], defaultValue);
     }
 
     public static long parseLong(String[] arr, int index) {
@@ -1296,8 +1301,7 @@ public final class Helpers {
             return defaultValue;
         }
 
-        long result = parseLong(arr[index]);
-        return result != -1 ? result : defaultValue;
+        return parseLong(arr[index], defaultValue);
     }
 
     @Nullable
@@ -1335,8 +1339,7 @@ public final class Helpers {
             return defaultValue;
         }
 
-        float result = parseFloat(arr[index]);
-        return !floatEquals(result, -1) ? result : defaultValue;
+        return parseFloat(arr[index], defaultValue);
     }
 
     public static List<Integer> parseIntList(String[] arr, int index) {
