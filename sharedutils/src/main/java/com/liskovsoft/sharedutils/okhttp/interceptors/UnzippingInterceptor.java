@@ -1,5 +1,7 @@
 package com.liskovsoft.sharedutils.okhttp.interceptors;
 
+import androidx.annotation.NonNull;
+
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -17,8 +19,9 @@ import java.io.IOException;
 import java.util.zip.Inflater;
 
 public class UnzippingInterceptor implements Interceptor {
+    @NonNull
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Response response;
 
         try {
@@ -41,26 +44,38 @@ public class UnzippingInterceptor implements Interceptor {
 
         //this is used to decompress gzipped responses
         if (contentEncoding != null && contentEncoding.equals("gzip")) {
-            Long contentLength = response.body().contentLength();
+            long contentLength = -1;
             GzipSource responseBody = new GzipSource(response.body().source());
-            Headers strippedHeaders = response.headers().newBuilder().build();
-            return response.newBuilder().headers(strippedHeaders).body(new RealResponseBody(response.body().contentType().toString(), contentLength
+            Headers strippedHeaders = stripHeaders(response.headers());
+            return response.newBuilder().headers(strippedHeaders).body(new RealResponseBody(toString(response.body().contentType()), contentLength
                     , Okio.buffer(responseBody))).build();
         } else if (contentEncoding != null && contentEncoding.equals("deflate")) {
-            Long contentLength = response.body().contentLength();
-            InflaterSource responseBody = new InflaterSource(response.body().source(), new Inflater());
-            Headers strippedHeaders = response.headers().newBuilder().build();
-            return response.newBuilder().headers(strippedHeaders).body(new RealResponseBody(response.body().contentType().toString(), contentLength
+            long contentLength = -1;
+            InflaterSource responseBody = new InflaterSource(response.body().source(), new Inflater(true));
+            Headers strippedHeaders = stripHeaders(response.headers());
+            return response.newBuilder().headers(strippedHeaders).body(new RealResponseBody(toString(response.body().contentType()), contentLength
                     , Okio.buffer(responseBody))).build();
         } else if (contentEncoding != null && contentEncoding.equals("br")) {
-            Long contentLength = response.body().contentLength();
-            Source responseBody = Okio.source(new BrotliInputStream(response.body().source().inputStream()));
-            Headers strippedHeaders = response.headers().newBuilder().build();
-            return response.newBuilder().headers(strippedHeaders).body(new RealResponseBody(response.body().contentType().toString(), contentLength
+            long contentLength = -1;
+            Source responseBody = Okio.source(new BrotliInputStream(response.body().byteStream()));
+            Headers strippedHeaders = stripHeaders(response.headers());
+            return response.newBuilder().headers(strippedHeaders).body(new RealResponseBody(toString(response.body().contentType()), contentLength
                     , Okio.buffer(responseBody))).build();
         } else {
             return response;
         }
+    }
+    
+    private static String toString(MediaType mediaType) {
+        return mediaType != null ? mediaType.toString() : null;
+    }
+
+    @NonNull
+    private static Headers stripHeaders(Headers headers) {
+        return headers.newBuilder()
+                .removeAll("Content-Encoding")
+                .removeAll("Content-Length")
+                .build();
     }
 
     private Response createEmptyResponse(Chain chain) {
