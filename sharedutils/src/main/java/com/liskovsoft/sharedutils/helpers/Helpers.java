@@ -728,8 +728,7 @@ public final class Helpers {
 
         first = normalize(first);
         second = normalize(second);
-
-        //return first.contains(second) || second.contains(first);
+        
         return first.contains(second);
     }
 
