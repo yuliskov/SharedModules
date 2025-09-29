@@ -21,7 +21,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -135,10 +134,13 @@ public final class MyDownloadManager {
             }
         };
 
-        Builder builder = new OkHttpClient.Builder()
-                .addNetworkInterceptor(intercept);
+        //Builder builder = new OkHttpClient.Builder()
+        //        .addNetworkInterceptor(intercept);
+        //
+        //OkHttpCommons.setupBuilder(builder);
 
-        OkHttpCommons.setupBuilder(builder);
+        Builder builder = OkHttpManager.instance().getClient().newBuilder()
+                .addNetworkInterceptor(intercept);
 
         return builder.build();
     }

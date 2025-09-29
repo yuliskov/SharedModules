@@ -99,7 +99,8 @@ project.ext {
     duktapeVersion = '1.1.0' // old one contains more *.so binaries and has smaller size than 1.2.0
     quickjsVersion = '0.9.0' // duktape fork?
     rhinoVersion = '1.7.13' // latest for Android 4,5,6
-    j2v8Version = '6.2.0' // latest for Android 4
+    j2v8Version = '6.2.1'
+    //j2v8Version = '6.2.0' // latest for Android 4
     
     // My commons-io deps (Android 4.3 fix)
     commonsLangVersion = '3.11'
