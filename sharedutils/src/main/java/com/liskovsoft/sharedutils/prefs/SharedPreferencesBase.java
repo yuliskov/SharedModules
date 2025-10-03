@@ -2,17 +2,20 @@ package com.liskovsoft.sharedutils.prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 public class SharedPreferencesBase {
     private static final String TAG = SharedPreferencesBase.class.getSimpleName();
     private static final long PREF_MAX_SIZE_MB = 5;
     private final SharedPreferences mPrefs;
-    protected Context mContext;
+    protected WeakReference<Context> mContext = new WeakReference<>(null);
 
     public SharedPreferencesBase(Context context, String prefName) {
         this(context, prefName, -1, false);
@@ -39,7 +42,7 @@ public class SharedPreferencesBase {
             limitMaxSize(context, prefName);
         }
 
-        mContext = context;
+        setContext(context);
 
         if (prefName != null) {
             mPrefs = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
@@ -69,13 +72,14 @@ public class SharedPreferencesBase {
         }
     }
 
+    @Nullable
     public Context getContext() {
-        return mContext;
+        return mContext.get();
     }
 
-    public void setContext(Context context) {
+    private void setContext(Context context) {
         if (context != null) {
-            mContext = context.getApplicationContext();
+            mContext = new WeakReference<>(context);
         }
     }
 
