@@ -1,2 +1,3 @@
+// https://stackoverflow.com/questions/60878599/error-building-android-library-direct-local-aar-file-dependencies-are-not-supp
 configurations.maybeCreate("default")
 artifacts.add("default", file('j2v8-6.2.1-fixed.aar'))
