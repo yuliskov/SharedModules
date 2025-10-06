@@ -1,3 +1,47 @@
-// https://stackoverflow.com/questions/60878599/error-building-android-library-direct-local-aar-file-dependencies-are-not-supp
-configurations.maybeCreate("default")
-artifacts.add("default", file('j2v8-6.2.1-fixed.aar'))
+apply from: '../constants.gradle'
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+        versionCode 11
+        versionName "6.2.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        androidTest {
+            java.srcDirs = ['src/test']
+        }
+
+        // androidTest.setRoot('src/test')
+    }
+}
+
+dependencies {
+    testImplementation project(':j2v8')
+    testImplementation 'junit:junit:' + junitVersion
+    testImplementation 'org.mockito:mockito-core:' + mockitoVersion
+    testImplementation 'org.robolectric:robolectric:' + robolectricVersion
+
+    androidTestImplementation 'junit:junit:' + junitVersion
+    androidTestImplementation 'org.mockito:mockito-android:' + mockitoVersion // https://jeroenmols.com/blog/2017/01/17/mockitoandroid/
+    androidTestImplementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
+    androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+    //androidTestImplementation "androidx.test.espresso:espresso-core:" + espressoCoreVersion
+}
