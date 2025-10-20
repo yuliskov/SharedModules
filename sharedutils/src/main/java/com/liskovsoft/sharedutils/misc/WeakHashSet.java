@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WeakHashSet<T> {
+    private final List<WeakReference<T>> mWeakReferences = new CopyOnWriteArrayList<>(); // ConcurrentModificationException fix
+    private boolean mIsBlocked;
+    private boolean mIsStopped;
+
     public interface OnItem<T> {
         void onItem(T item);
     }
-
-    private final List<WeakReference<T>> mWeakReferences = new CopyOnWriteArrayList<>(); // ConcurrentModificationException fix
 
     public boolean add(T item) {
         if (item != null && !contains(item)) {
@@ -45,10 +47,22 @@ public class WeakHashSet<T> {
     }
 
     public void forEach(OnItem<T> onItem) {
-        for (WeakReference<T> reference : mWeakReferences) {
-            if (reference.get() != null) {
-                onItem.onItem(reference.get());
+        if (mIsBlocked)
+            return;
+
+        mIsBlocked = true;
+        mIsStopped = false;
+        try {
+            for (WeakReference<T> reference : mWeakReferences) {
+                if (mIsStopped)
+                    break;
+
+                if (reference.get() != null) {
+                    onItem.onItem(reference.get());
+                }
             }
+        } finally {
+            mIsBlocked = false;
         }
     }
 
@@ -78,5 +92,9 @@ public class WeakHashSet<T> {
         }
 
         return result;
+    }
+
+    public void stopForEach() {
+        mIsStopped = true;
     }
 }
