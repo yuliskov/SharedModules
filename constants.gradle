@@ -13,8 +13,8 @@ project.ext {
     targetSdkVersion = 26 // set target api = 26 to fix Android 8.0 error: "Only fullscreen opaque activities can request orientation"
     compileSdkVersion = 33
     buildToolsVersion = '30.0.3'
-    gradleVersion = '6.9.1' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
-    androidGradleVersion = '4.0.0+' // last version compatible with IntellJ 2020.3
+    //gradleVersion = '6.9.1' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
+    //androidGradleVersion = '4.0.0+' // last version compatible with IntellJ 2020.3
     
     testSupportLibraryVersion = '0.5'
     testXSupportLibraryVersion = '1.1.0'

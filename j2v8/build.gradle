@@ -20,6 +20,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled = true
+
+        //ndkVersion "21.0.6113669"
     }
 
     buildTypes {
