@@ -255,14 +255,27 @@ public class V8 extends V8Object {
 
     private static void checkNativeLibraryLoaded() {
         if (!nativeLibraryLoaded) {
-            String vendorName = LibraryLoader.computeLibraryShortName(true);
-            String baseName = LibraryLoader.computeLibraryShortName(false);
-            String message = "J2V8 native library not loaded (" + baseName + "/" + vendorName + ")";
+            // MOD: show the real errors
+
+            //String vendorName = LibraryLoader.computeLibraryShortName(true);
+            //String baseName = LibraryLoader.computeLibraryShortName(false);
+            //String message = "J2V8 native library not loaded (" + baseName + "/" + vendorName + ")";
+            //
+            //if (nativeLoadError != null) {
+            //    throw new IllegalStateException(message, nativeLoadError);
+            //} else if (nativeLoadException != null) {
+            //    throw new IllegalStateException(message, nativeLoadException);
+            //} else {
+            //    throw new IllegalStateException(message);
+            //}
+
+            String libraryName = LibraryLoader.computeLibraryShortName(true);
+            String message = "J2V8 native library not loaded (" + libraryName + ")";
 
             if (nativeLoadError != null) {
-                throw new IllegalStateException(message, nativeLoadError);
+                throw new IllegalStateException(message + ": " + nativeLoadError.getMessage(), nativeLoadError);
             } else if (nativeLoadException != null) {
-                throw new IllegalStateException(message, nativeLoadException);
+                throw new IllegalStateException(message + ": " + nativeLoadException.getMessage(), nativeLoadException);
             } else {
                 throw new IllegalStateException(message);
             }

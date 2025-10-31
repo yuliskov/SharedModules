@@ -1458,22 +1458,6 @@ public final class Helpers {
         return merge(DATA_DELIM, items);
     }
 
-    public static String[] splitArrayLegacy(String arr) {
-        if (arr != null && (arr.contains(ARRAY_DELIM) || arr.contains(DATA_DELIM))) {
-            return split(arr, ARRAY_DELIM);
-        }
-
-        return split(arr, LEGACY_ARRAY_DELIM);
-    }
-
-    public static String[] splitDataLegacy(String data) {
-        if (data != null && (data.contains(DATA_DELIM) || data.contains(ARRAY_DELIM))) {
-            return split(data, DATA_DELIM);
-        }
-
-        return split(data, LEGACY_DATA_DELIM);
-    }
-
     public static String[] splitObj(String obj) {
         return split(obj, OBJ_DELIM);
     }

@@ -52,7 +52,12 @@ public class SharedPreferencesBase {
         }
 
         if (defValResId != -1) {
-            PreferenceManager.setDefaultValues(context, prefName, Context.MODE_PRIVATE, defValResId, true);
+            try {
+                PreferenceManager.setDefaultValues(context, prefName, Context.MODE_PRIVATE, defValResId, true);
+            } catch (NoSuchMethodError e) {
+                // NoSuchMethodError: No interface method putBoolean in class SharedPreferences$Editor (Android 7.0)
+                e.printStackTrace();
+            }
         }
     }
 
