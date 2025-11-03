@@ -163,6 +163,10 @@ public class RxHelper {
         return runAsyncUser(callback, null, null);
     }
 
+    public static Disposable runAsyncUser(Runnable callback, Runnable onFinish) {
+        return runAsyncUser(callback, null, onFinish);
+    }
+
     public static Disposable runUser(Runnable callback) {
         return runAsyncUser(() -> {}, null, callback);
     }
