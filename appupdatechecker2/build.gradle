@@ -43,13 +43,8 @@ android {
     productFlavors {
         stbeta {}
         ststable {}
-        storig {}
-        strtarmenia {}
-        stbolshoetv {}
-        stredboxtv {}
-        stsibsetru {}
-        stamazon {}
-        staptoide {}
+        stmarket {}
+        stlegacy {}
     }
 }
 

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Disable update check -->
-    <EditTextPreference android:key="min_interval_ms" android:defaultValue="-1"/>
-</PreferenceScreen>
