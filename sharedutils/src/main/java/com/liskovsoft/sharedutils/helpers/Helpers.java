@@ -2196,7 +2196,7 @@ public final class Helpers {
         return false;
     }
 
-    public static <T> T getNextValue(T currentValue, T[] valueList) {
+    public static <T> T getNextValue(T[] valueList, T currentValue) {
         T nextState = valueList[0];
         boolean found = false;
 
