@@ -1,17 +1,18 @@
 package com.liskovsoft.sharedutils.helpers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
+import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +26,6 @@ import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 public class FileHelpers {
@@ -35,13 +35,23 @@ public class FileHelpers {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
     }
 
+    //public static File getCacheDir(Context context) {
+    //    // Android 6.0 fix (providers not supported)
+    //    File cacheDir = getExternalCacheDir(context);
+    //
+    //    if (cacheDir == null) {
+    //        // Android 7.0 and above (supports install from internal dirs)
+    //        cacheDir = getInternalCacheDir(context);
+    //    }
+    //
+    //    return cacheDir;
+    //}
+
     public static File getCacheDir(Context context) {
-        // Android 6.0 fix (providers not supported)
-        File cacheDir = getExternalCacheDir(context);
+        File cacheDir = getInternalCacheDir(context);
 
         if (cacheDir == null) {
-            // Android 7.0 and above (supports install from internal dirs)
-            cacheDir = getInternalCacheDir(context);
+            cacheDir = getExternalCacheDir(context);
         }
 
         return cacheDir;
@@ -64,11 +74,7 @@ public class FileHelpers {
 
         if (cacheDir == null || !cacheDir.canWrite()) {
             // No storage, try to use internal one
-            cacheDir = Environment.getExternalStorageDirectory();
-
-            if (cacheDir == null || !cacheDir.canWrite()) {
-                cacheDir = null;
-            }
+            cacheDir = getExternalStorageDirectory("cache");
         }
 
         return cacheDir;
@@ -83,14 +89,30 @@ public class FileHelpers {
 
         if (filesDir == null || !filesDir.canWrite()) {
             // No storage, try to use internal one
-            filesDir = Environment.getExternalStorageDirectory();
-
-            if (filesDir == null || !filesDir.canWrite()) {
-                filesDir = null;
-            }
+            filesDir = getExternalStorageDirectory("files");
         }
 
         return filesDir;
+    }
+
+    private static File getExternalStorageDirectory(String subdir) {
+        if (TextUtils.isEmpty(subdir)) {
+            return null;
+        }
+
+        File rootDir = Environment.getExternalStorageDirectory();
+
+        if (rootDir == null || !rootDir.canWrite()) {
+            return null;
+        }
+
+        File storagePath = new File(rootDir, subdir);
+
+        if (!storagePath.exists()) {
+            storagePath.mkdirs();
+        }
+
+        return storagePath;
     }
 
     /**
@@ -446,8 +468,16 @@ public class FileHelpers {
                 return null;
             }
         } else {
-            return Uri.fromFile(new File(filePath));
+            return Uri.fromFile(setReadable(new File(filePath)));
         }
+    }
+
+    @SuppressLint("SetWorldReadable")
+    private static File setReadable(File file) {
+        // Fix for Android 4 if install from the internal storage
+        // E.g. file:///data/data/<your.app>/cache/update.apk
+        file.setReadable(true, false);
+        return file;
     }
 
     public static Uri getFileUri(Context context, File filePath) {
