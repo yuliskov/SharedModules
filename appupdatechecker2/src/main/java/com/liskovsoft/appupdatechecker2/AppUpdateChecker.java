@@ -1,6 +1,7 @@
 package com.liskovsoft.appupdatechecker2;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import com.liskovsoft.appupdatechecker2.core.AppDownloader;
 import com.liskovsoft.appupdatechecker2.core.AppDownloaderListener;
@@ -192,8 +193,15 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
         return mSettingsManager.getPreferredHost();
     }
 
+    /**
+     * Checks the package is not broken
+     */
+    @SuppressWarnings("deprecation")
     private boolean checkApk(String path) {
-        // package is not broken
-        return FileHelpers.isFreshFile(path, FRESH_TIME_MS) && mContext.getPackageManager().getPackageArchiveInfo(path, 0) != null;
+        if (!FileHelpers.isFreshFile(path, FRESH_TIME_MS)) {
+            return false;
+        }
+        PackageInfo archInfo = mContext.getPackageManager().getPackageArchiveInfo(path, 0);
+        return archInfo != null && mContext.getPackageName().equals(archInfo.packageName);
     }
 }
