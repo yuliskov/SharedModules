@@ -211,6 +211,34 @@ public final class DeviceHelpers {
         return primaryAbi;
     }
 
+    public enum ArchType {
+        ARM_V7, ARM_64, X86, X86_64, MIPS, UNKNOWN
+    }
+
+    public static ArchType getArchType() {
+        String abi = getPrimaryAbi();
+
+        if (abi == null) {
+            return ArchType.UNKNOWN;
+        }
+
+        abi = abi.toLowerCase();
+
+        if (abi.startsWith("armeabi-v7") || abi.startsWith("armeabi")) {
+            return ArchType.ARM_V7;
+        } else if (abi.startsWith("arm64")) {
+            return ArchType.ARM_64;
+        } else if (abi.startsWith("x86_64")) {
+            return ArchType.X86_64;
+        } else if (abi.startsWith("x86")) {
+            return ArchType.X86;
+        } else if (abi.startsWith("mips")) {
+            return ArchType.MIPS;
+        } else {
+            return ArchType.UNKNOWN;
+        }
+    }
+
     public static int getMaxHeapMemoryMB() {
         if (sMaxHeapMemoryMB == -1) {
             long maxMemory = Runtime.getRuntime().maxMemory();
