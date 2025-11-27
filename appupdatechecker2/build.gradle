@@ -43,8 +43,6 @@ android {
     productFlavors {
         stbeta {}
         ststable {}
-        stmarket {}
-        stlegacy {}
     }
 }
 

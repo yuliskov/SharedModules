@@ -11,7 +11,9 @@ project.ext {
     // NOTE: target sdk >= 30 needed to support manifest queries tag
     // NOTE: api 26 orientation error fix: https://stackoverflow.com/a/52426009/1279056
     // NOTE: set api to 26 to fix text scroll speed and crashes on samsung
-    targetSdkVersion = 26 // set target api = 26 to fix Android 8.0 error: "Only fullscreen opaque activities can request orientation"
+    // NOTE: api 26 triggers PlayProtect warning (dangerous)
+    //targetSdkVersion = 26 // set target api = 26 to fix Android 8.0 error: "Only fullscreen opaque activities can request orientation"
+    targetSdkVersion = 33
     compileSdkVersion = 33
     buildToolsVersion = '30.0.3'
     //gradleVersion = '6.9.1' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
