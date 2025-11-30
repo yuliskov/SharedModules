@@ -4,5 +4,6 @@
     <!-- Commented out to fix? IllegalArgumentException: Failed to resolve canonical path for /storage/emulated/0/. -->
     <!--<external-path name="external_files" path="."/>-->
     <external-cache-path name="external_cache_files" path="."/>
+    <external-media-path name="media" path="." />
     <cache-path name="cache_files" path="."/>
 </paths>
