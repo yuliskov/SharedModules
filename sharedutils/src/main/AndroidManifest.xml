@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.liskovsoft.sharedutils">
     <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <!-- Android 11+: fix access package info -->
+    <queries>
+        <package android:name="com.amazon.tv.leanbacklauncher" />
+        <package android:name="com.google.android.leanbacklauncher" />
+        <package android:name="com.google.android.tvlauncher" />
+        <package android:name="com.google.android.apps.tv.launcherx" />
+    </queries>
 </manifest>
