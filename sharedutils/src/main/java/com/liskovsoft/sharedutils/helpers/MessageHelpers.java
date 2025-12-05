@@ -7,6 +7,9 @@ import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.sharedutils.R;
 
 import java.util.ArrayList;
@@ -158,7 +161,10 @@ public class MessageHelpers {
         }
 
         TextView messageTextView = extractMessageView(toast);
-        messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+
+        if (messageTextView != null) {
+            messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+        }
     }
 
     private static void addAndCancelPrevIfNeeded(Toast newToast, boolean isLong) {
@@ -167,7 +173,7 @@ public class MessageHelpers {
         Helpers.removeIf(sToasts, toast -> {
             // Smart cancel only toasts that have different message
             // So remains possibility to long message to be displayed
-            boolean doRemove = !isLong || !extractText(toast).equals(originText);
+            boolean doRemove = !isLong || !Helpers.equals(extractText(toast), originText);
             if (doRemove) {
                 toast.cancel();
             }
@@ -177,13 +183,22 @@ public class MessageHelpers {
         sToasts.add(newToast);
     }
 
-    private static CharSequence extractText(Toast toast) {
+    private static @Nullable CharSequence extractText(Toast toast) {
         TextView messageTextView = extractMessageView(toast);
+        if (messageTextView == null) {
+            return null;
+        }
+
         return messageTextView.getText();
     }
 
-    private static TextView extractMessageView(Toast toast) {
+    private static @Nullable TextView extractMessageView(Toast toast) {
         ViewGroup group = (ViewGroup) toast.getView();
+
+        if (group == null) {
+            return null;
+        }
+
         return (TextView) group.getChildAt(0);
     }
 
