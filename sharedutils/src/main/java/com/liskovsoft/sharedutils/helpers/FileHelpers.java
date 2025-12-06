@@ -239,12 +239,22 @@ public class FileHelpers {
         }
     }
 
+    public interface CopyFiler {
+        boolean filter(File fileName);
+    }
+
     public static void copy(File sourceLocation, File targetLocation) {
+        copy(sourceLocation, targetLocation, null);
+    }
+
+    public static void copy(File sourceLocation, File targetLocation, CopyFiler copyFiler) {
         if (sourceLocation.isDirectory()) {
-            copyDirectory(sourceLocation, targetLocation);
+            copyDirectory(sourceLocation, targetLocation, copyFiler);
         } else {
             try {
-                copyFile(sourceLocation, targetLocation);
+                if (copyFiler == null || copyFiler.filter(sourceLocation)) {
+                    copyFile(sourceLocation, targetLocation);
+                }
             } catch (IOException e) {
                 Log.e(TAG, "Unable to copy: " + e.getMessage());
                 e.printStackTrace();
@@ -264,7 +274,7 @@ public class FileHelpers {
         }
     }
 
-    private static void copyDirectory(File source, File target) {
+    private static void copyDirectory(File source, File target, CopyFiler copyFiler) {
         if (!target.exists()) {
             target.mkdirs();
         }
@@ -277,7 +287,7 @@ public class FileHelpers {
         }
 
         for (String f : list) {
-            copy(new File(source, f), new File(target, f));
+            copy(new File(source, f), new File(target, f), copyFiler);
         }
     }
 
