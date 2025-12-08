@@ -167,4 +167,8 @@ public class AppInfoHelpers {
 
         return intent != null && intent.getComponent() != null ? intent.getComponent().getClassName() : null;
     }
+
+    public static int getTargetSdkVersion(Context context) {
+        return context.getApplicationInfo().targetSdkVersion;
+    }
 }

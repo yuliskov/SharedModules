@@ -1,8 +1,14 @@
 package com.liskovsoft.sharedutils.helpers;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.media.MediaCodecInfo;
+import android.media.MediaCodecInfo.CodecCapabilities;
+import android.media.MediaCodecList;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.provider.Settings;
+import android.util.Range;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.webkit.CookieManager;
@@ -13,9 +19,16 @@ import androidx.annotation.NonNull;
 public final class DeviceHelpers {
     private static final String AMAZON_FEATURE_FIRE_TV = "amazon.hardware.fire_tv";
     private static final boolean SAMSUNG = Build.MANUFACTURER.equals("samsung");
+    private static final String MIME_VP9 = "video/x-vnd.on2.vp9";
+    private static final String MIME_AV1 = "video/av01";
     private static Boolean isTV = null;
     private static Boolean isFireTV = null;
     private static int sMaxHeapMemoryMB = -1;
+    private static Boolean sIsVP9Supported;
+    private static Boolean sIsAV1Supported;
+    private static int sVP9MaxHeight;
+    private static int sAV1MaxHeight;
+    private static long sCachedRamSize = -1;
 
     /**
      * <p>The app version code that corresponds to the last update
@@ -255,5 +268,143 @@ public final class DeviceHelpers {
 
     public static boolean isMemoryCritical() {
         return getAllocatedHeapMemoryMB() > getMaxHeapMemoryMB() * 0.5;
+    }
+
+    public static boolean isVP9Supported() {
+        if (sIsVP9Supported == null) {
+            sIsVP9Supported = getCodecMaxHeight(MIME_VP9) != -1;
+        }
+        return sIsVP9Supported;
+    }
+
+    public static boolean isAV1Supported() {
+        if (sIsAV1Supported == null) {
+            // Not tested yet!!!
+            sIsAV1Supported = getCodecMaxHeight(MIME_AV1) != -1;
+        }
+        return sIsAV1Supported;
+    }
+
+    public static boolean isVP9ResolutionSupported(int height) {
+        if (height <= 0) {
+            return false;
+        }
+
+        if (sVP9MaxHeight == 0) { // not initialized
+            // TV capabilities sometimes are limited to the screen resolution not real decoder support
+            switch (Build.MODEL) {
+                // FHD devices with fake 2K support
+                case "AFTSSS": // fire tv stick 3th gen
+                case "Chromecast HD":
+                    sVP9MaxHeight = 1080;
+                    break;
+                // FHD tvs capable 4K
+                case "MiTV-AXSO0":
+                case "VIDAA_TV":
+                case "PATH_7XPRO":
+                    sVP9MaxHeight = 2160;
+                    break;
+                default:
+                    sVP9MaxHeight = getCodecMaxHeight(MIME_VP9);
+                    break;
+            }
+        }
+
+        return height <= sVP9MaxHeight;
+    }
+
+    public static boolean isAV1ResolutionSupported(int height) {
+        if (height <= 0) {
+            return false;
+        }
+
+        if (sAV1MaxHeight == 0) { // not initialized
+            sAV1MaxHeight = getCodecMaxHeight(MIME_AV1);
+
+            // On Rockchip (and some others) av1 codec info is bugged.
+            // Reported max resolution is 360p.
+            if (sAV1MaxHeight > 0 && sAV1MaxHeight < 1080) {
+                sAV1MaxHeight = 2160;
+            }
+        }
+
+        return height <= sAV1MaxHeight;
+    }
+
+    /**
+     * <a href="https://developer.android.com/reference/android/media/MediaCodec">More info</a>
+     */
+    private static int getCodecMaxHeight(String mimeType) {
+        if (VERSION.SDK_INT < 21) {
+            return -1;
+        }
+
+        try {
+            MediaCodecInfo[] codecInfos = new MediaCodecList(MediaCodecList.ALL_CODECS).getCodecInfos();
+
+            for (MediaCodecInfo codecInfo : codecInfos) {
+                if (codecInfo.isEncoder() || !isHardwareAccelerated(codecInfo.getName())) {
+                    continue;
+                }
+
+                String[] types = codecInfo.getSupportedTypes();
+
+                for (String type : types) {
+                    if (type.equalsIgnoreCase(mimeType)) {
+                        CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(type);
+                        Range<Integer> heights = capabilities.getVideoCapabilities().getSupportedHeights();
+                        return heights.getUpper();
+                    }
+                }
+            }
+        } catch (RuntimeException e) {
+            // cannot get MediaCodecList
+        }
+
+        return -1;
+    }
+
+    /**
+     * <a href="https://github.com/google/ExoPlayer/issues/4757">More info</a>
+     * @param videoCodecName name from CodecInfo
+     * @return is accelerated
+     */
+    public static boolean isHardwareAccelerated(String videoCodecName) {
+        if (videoCodecName == null) {
+            return false;
+        }
+
+        for (String name : new String[]{"omx.google.", "c2.android."}) {
+            if (videoCodecName.toLowerCase().startsWith(name)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static long getDeviceRam(Context context) {
+        if (sCachedRamSize != -1) {
+            return sCachedRamSize;
+        }
+
+        if (context == null) {
+            return -1;
+        }
+
+        long result;
+
+        ActivityManager actManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+        if (actManager != null) {
+            actManager.getMemoryInfo(memInfo);
+            result = memInfo.totalMem;
+        } else {
+            result = 500_000_000; // safe value for devices with 1gb or more...
+        }
+
+        sCachedRamSize = result;
+
+        return result;
     }
 }
