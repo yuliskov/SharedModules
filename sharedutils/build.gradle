@@ -78,4 +78,6 @@ dependencies {
     // Add kotlin support libs
     implementation 'androidx.core:core-ktx:' + kotlinCoreXVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
+
+    //implementation 'org.conscrypt:conscrypt-android:2.5.2'
 }

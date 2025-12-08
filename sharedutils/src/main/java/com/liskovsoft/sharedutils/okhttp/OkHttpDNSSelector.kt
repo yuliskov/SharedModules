@@ -41,6 +41,15 @@ class OkHttpDNSSelector(private val mode: IPvMode) : Dns {
             IPvMode.SYSTEM -> addresses
         }
 
+        // More robust on Android TV (preserve ordering)?
+        //addresses = when (mode) {
+        //    IPvMode.IPV6_FIRST -> addresses.filterIsInstance<Inet6Address>() + addresses.filterIsInstance<Inet4Address>()
+        //    IPvMode.IPV4_FIRST -> addresses.filterIsInstance<Inet4Address>() + addresses.filterIsInstance<Inet6Address>()
+        //    IPvMode.IPV6_ONLY -> addresses.filterIsInstance<Inet6Address>()
+        //    IPvMode.IPV4_ONLY -> addresses.filterIsInstance<Inet4Address>()
+        //    IPvMode.SYSTEM -> addresses
+        //}
+
         //logger.fine("DJMOKHTTP ($hostname): " + addresses.joinToString(", ") { it.toString() })
 
         return addresses

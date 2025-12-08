@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.okhttp.interceptors.RateLimitInterceptor;
 import com.liskovsoft.sharedutils.okhttp.interceptors.UnzippingInterceptor;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
+
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
@@ -261,6 +262,11 @@ final class OkHttpCommons {
     }
     
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder okBuilder) {
+        //if (VERSION.SDK_INT > 26) {
+        //    // Fix User code loading? (Onn 4K Android 14 etc)
+        //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        //}
+
         if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
             // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
             forceIPv4Dns(okBuilder);
