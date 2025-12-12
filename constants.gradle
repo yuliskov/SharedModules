@@ -18,6 +18,7 @@ project.ext {
     // - Card's title scrolling speed
     // - No popup notifications
     // - Backup/restore can access to the external directory
+    // - Disabled auto start of the background service (e.g. remote control service)
     targetSdkVersion = 26
     compileSdkVersion = 33
     buildToolsVersion = '30.0.3'
