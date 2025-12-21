@@ -89,7 +89,7 @@ project.ext {
     rxJavaVersion = '2.2.21'
     diskLruCacheVersion = '2.0.2'
     diskLruCacheDevVersion = '3e016356cfc7e5f9644a7a732fe0223e9742e024' // com.github.JakeWharton:DiskLruCache:
-    dnsjavaVersion = '2.1.8'
+    dnsjavaVersion = '2.1.9' // the latest with api 17 support
     xwalkSharedLibraryVersion = '23.53.589.4'
     xwalkCoreLibraryVersion = '23.53.589.4'
     commonsIOVersion = '2.8.0'

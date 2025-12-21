@@ -262,15 +262,18 @@ final class OkHttpCommons {
     }
     
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder okBuilder) {
-        //if (VERSION.SDK_INT > 26) {
-        //    // Fix User code loading? (Onn 4K Android 14 etc)
+        //if (VERSION.SDK_INT <= 19) { // add TLS 1.2 on old devices
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
 
+        // May help with 'java.net.ProtocolException: Too many follow-up requests: 21'
+        forceGoogleDns(okBuilder);
+
+        // NOTE: replaces the DNS above
         if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
             // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
-            forceIPv4Dns(okBuilder);
-            //preferIPv4Dns(okBuilder); // alt method
+            //forceIPv4Dns(okBuilder); // useful only on api <= 19
+            //preferIPv4Dns(okBuilder); // alt method (useful only on api <= 19)
         }
         //setupProxy(okBuilder); // proxy configured in system props
         setupConnectionFix(okBuilder);
@@ -341,6 +344,10 @@ final class OkHttpCommons {
             return filter != null ? filter : lookup;
         });
     }
+
+        private static void forceGoogleDns(OkHttpClient.Builder okBuilder) {
+            okBuilder.dns(new GoogleDnsResolver());
+        }
 
     /**
      * Usage: `OkHttpClient newClient = wrapDns(client)`<br></br>
