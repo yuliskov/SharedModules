@@ -346,7 +346,7 @@ final class OkHttpCommons {
     }
 
         private static void forceGoogleDns(OkHttpClient.Builder okBuilder) {
-            okBuilder.dns(new GoogleDnsResolver());
+            okBuilder.dns(PublicDnsResolver.google());
         }
 
     /**

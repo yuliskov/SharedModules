@@ -10,19 +10,22 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoogleDnsResolver implements Dns {
+/**
+ * Queries AAAA first, then A — avoids redirect loops on some CDNs
+ */
+public class PublicDnsResolver implements Dns {
     private final Resolver primaryResolver;
     private final Resolver fallbackResolver;
 
-    public GoogleDnsResolver() {
+    private PublicDnsResolver(String primaryDns, String fallbackDns, int timeoutSec) {
         try {
-            primaryResolver = new SimpleResolver("8.8.8.8"); // Google DNS
-            primaryResolver.setTimeout(5);
+            primaryResolver = new SimpleResolver(primaryDns);
+            primaryResolver.setTimeout(timeoutSec);
 
-            fallbackResolver = new SimpleResolver("8.8.4.4"); // fallback Google DNS
-            fallbackResolver.setTimeout(5);
+            fallbackResolver = new SimpleResolver(fallbackDns);
+            fallbackResolver.setTimeout(timeoutSec);
         } catch (UnknownHostException e) {
-            throw new RuntimeException("Cannot create Google DNS resolvers", e);
+            throw new RuntimeException("Cannot create DNS resolvers", e);
         }
     }
 
@@ -31,15 +34,10 @@ public class GoogleDnsResolver implements Dns {
     public List<InetAddress> lookup(@NonNull String hostname) throws UnknownHostException {
         List<InetAddress> result = new ArrayList<>();
 
-        // IPv4
-        result.addAll(queryDns(hostname, Type.A, primaryResolver));
-        if (result.isEmpty()) result.addAll(queryDns(hostname, Type.A, fallbackResolver));
+        result.addAll(queryWithFallback(hostname, Type.AAAA)); // IPv6 first (essential part to work everywhere)
+        result.addAll(queryWithFallback(hostname, Type.A));    // IPv4
 
-        // IPv6
-        result.addAll(queryDns(hostname, Type.AAAA, primaryResolver));
-        if (result.isEmpty()) result.addAll(queryDns(hostname, Type.AAAA, fallbackResolver));
-
-        // fallback to the system DNS, if nothing found
+        // Fallback to system DNS only if nothing was resolved
         if (result.isEmpty()) {
             return Dns.SYSTEM.lookup(hostname);
         }
@@ -47,12 +45,22 @@ public class GoogleDnsResolver implements Dns {
         return result;
     }
 
-    private List<InetAddress> queryDns(String hostname, int type, Resolver resolver) {
+    private List<InetAddress> queryWithFallback(String hostname, int type) {
+        List<InetAddress> addresses = query(hostname, type, primaryResolver);
+        if (addresses.isEmpty()) {
+            addresses = query(hostname, type, fallbackResolver);
+        }
+        return addresses;
+    }
+
+    private List<InetAddress> query(String hostname, int type, Resolver resolver) {
         try {
             Lookup lookup = new Lookup(hostname, type);
             lookup.setResolver(resolver);
+
             Record[] records = lookup.run();
             List<InetAddress> addresses = new ArrayList<>();
+
             if (records != null) {
                 for (Record record : records) {
                     if (record instanceof ARecord && type == Type.A) {
@@ -62,10 +70,19 @@ public class GoogleDnsResolver implements Dns {
                     }
                 }
             }
+
             return addresses;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return new ArrayList<>();
         }
+    }
+
+    public static Dns google() {
+        return new PublicDnsResolver("8.8.8.8", "8.8.4.4", 5);
+    }
+
+    public static Dns cloudflare() {
+        return new PublicDnsResolver("1.1.1.1", "1.0.0.1", 5);
     }
 }
 
