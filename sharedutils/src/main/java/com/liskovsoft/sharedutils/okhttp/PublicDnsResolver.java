@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import okhttp3.Dns;
 import org.xbill.DNS.*;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -34,8 +35,17 @@ public class PublicDnsResolver implements Dns {
     public List<InetAddress> lookup(@NonNull String hostname) throws UnknownHostException {
         List<InetAddress> result = new ArrayList<>();
 
-        result.addAll(queryWithFallback(hostname, Type.AAAA)); // IPv6 first (essential part to work everywhere)
-        result.addAll(queryWithFallback(hostname, Type.A));    // IPv4
+        List<InetAddress> ipv6Addresses = queryWithFallback(hostname, Type.AAAA);
+        List<InetAddress> ipv4Addresses = queryWithFallback(hostname, Type.A);
+
+        // IPv6 first (an essential part)
+        if (isReachable(ipv6Addresses)) {
+            result.addAll(ipv6Addresses);
+            result.addAll(ipv4Addresses);
+        } else {
+            result.addAll(ipv4Addresses);
+            result.addAll(ipv6Addresses);
+        }
 
         // Fallback to system DNS only if nothing was resolved
         if (result.isEmpty()) {
@@ -43,6 +53,31 @@ public class PublicDnsResolver implements Dns {
         }
 
         return result;
+    }
+
+    private boolean isReachable(List<InetAddress> addresses) {
+        for (InetAddress address : addresses) {
+            try {
+                if (address.isReachable(500)) {
+                    return true;
+                }
+            } catch (IOException ignored) {}
+            break;
+        }
+
+        return false;
+    }
+
+    private List<InetAddress> getReachable(List<InetAddress> addresses) {
+        List<InetAddress> reachable = new ArrayList<>();
+        for (InetAddress address : addresses) {
+            try {
+                if (address.isReachable(500)) {
+                    reachable.add(address);
+                }
+            } catch (IOException ignored) {}
+        }
+        return reachable;
     }
 
     private List<InetAddress> queryWithFallback(String hostname, int type) {

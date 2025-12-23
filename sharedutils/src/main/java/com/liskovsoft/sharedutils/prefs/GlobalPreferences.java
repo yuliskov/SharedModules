@@ -3,6 +3,8 @@ package com.liskovsoft.sharedutils.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 
 import java.util.List;
@@ -57,6 +59,11 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public static boolean isInitialized() {
         return sInstance != null && sInstance.getContext() != null;
+    }
+
+    @Nullable
+    public static Context context() {
+        return sInstance != null ? sInstance.getContext() : null;
     }
 
     public String getRecommendedPlaylistType() {

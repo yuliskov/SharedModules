@@ -46,7 +46,7 @@ final class OkHttpCommons {
     public static boolean enableProfiler = true;
 
     private OkHttpCommons() {
-        
+
     }
 
     // This is nearly equal to the cipher suites supported in Chrome 51, current as of 2016-05-25.
@@ -260,7 +260,7 @@ final class OkHttpCommons {
     private static void fixStreamResetError(Builder okBuilder) {
         okBuilder.protocols(Collections.singletonList(Protocol.HTTP_1_1));
     }
-    
+
     public static OkHttpClient.Builder setupBuilder(OkHttpClient.Builder okBuilder) {
         //if (VERSION.SDK_INT <= 19) { // add TLS 1.2 on old devices
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
@@ -345,9 +345,9 @@ final class OkHttpCommons {
         });
     }
 
-        private static void forceGoogleDns(OkHttpClient.Builder okBuilder) {
-            okBuilder.dns(PublicDnsResolver.google());
-        }
+    private static void forceGoogleDns(OkHttpClient.Builder okBuilder) {
+        okBuilder.dns(PublicDnsResolver.google());
+    }
 
     /**
      * Usage: `OkHttpClient newClient = wrapDns(client)`<br></br>
