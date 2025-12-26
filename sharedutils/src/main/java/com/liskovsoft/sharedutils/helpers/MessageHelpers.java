@@ -61,7 +61,7 @@ public class MessageHelpers {
         Runnable toast = () -> {
             try {
                 String finalMsg = Helpers.ellipsize(msg, MAX_LEN);
-                Toast currentToast = Toast.makeText(context, finalMsg, Toast.LENGTH_LONG);
+                Toast currentToast = Toast.makeText(context, finalMsg, Toast.LENGTH_SHORT);
                 fixTextSize(currentToast, context);
                 addAndCancelPrevIfNeeded(new Pair<>(currentToast, finalMsg), isLong);
                 currentToast.show();
