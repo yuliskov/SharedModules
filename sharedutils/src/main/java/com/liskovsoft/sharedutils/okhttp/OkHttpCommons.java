@@ -266,14 +266,22 @@ final class OkHttpCommons {
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
 
-        // May help with 'java.net.ProtocolException: Too many follow-up requests: 21'
-        forceGoogleDns(okBuilder);
-
         // NOTE: replaces the DNS above
-        if (GlobalPreferences.sInstance != null && GlobalPreferences.sInstance.isIPv4DnsPreferred()) {
-            // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
-            //forceIPv4Dns(okBuilder); // useful only on api <= 19
-            //preferIPv4Dns(okBuilder); // alt method (useful only on api <= 19)
+        if (GlobalPreferences.sInstance != null) {
+            int dnsType = GlobalPreferences.sInstance.getPreferredDnsType();
+
+            switch (dnsType) {
+                case GlobalPreferences.DNS_TYPE_IPV4:
+                    // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
+                    // NOTE: useful only on api <= 19
+                    forceIPv4Dns(okBuilder);
+                    //preferIPv4Dns(okBuilder); // alt method
+                    break;
+                case GlobalPreferences.DNS_TYPE_GOOGLE:
+                    // May help with 'java.net.ProtocolException: Too many follow-up requests: 21'
+                    forceGoogleDns(okBuilder);
+                    break;
+            }
         }
         //setupProxy(okBuilder); // proxy configured in system props
         setupConnectionFix(okBuilder);

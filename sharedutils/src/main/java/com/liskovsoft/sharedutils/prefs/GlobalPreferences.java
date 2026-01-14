@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 final public class GlobalPreferences extends SharedPreferencesBase {
+    public static final int DNS_TYPE_SYSTEM = 0;
+    public static final int DNS_TYPE_IPV4 = 1;
+    public static final int DNS_TYPE_GOOGLE = 2;
     public static final String PLAYLIST_TYPE_RECOMMENDATIONS = "playlist_type_recommendations";
     public static final String PLAYLIST_TYPE_SUBSCRIPTIONS = "playlist_type_subscriptions";
     public static final String PLAYLIST_TYPE_HISTORY = "playlist_type_history";
@@ -24,7 +27,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String PREFERRED_COUNTRY_DATA = "preferred_country_data";
     private static final String ENABLE_CHANNELS_SERVICE = "enable_channels_service";
-    private static final String PREFER_IPV_4_DNS = "prefer_ipv4_dns";
+    private static final String PREFERRED_DNS_TYPE = "preferred_dns_type";
     private static final String CONTENT_BLOCK_ALT_SERVER = "content_block_alt_server";
     private static final String IS_24_HOUR_LOCALE_ENABLED = "is_24_hour_locale_enabled";
     private static final List<Runnable> sCallbacks = new CopyOnWriteArrayList<>(); // fix ConcurrentModificationException
@@ -122,12 +125,12 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         putBoolean(ENABLE_CHANNELS_SERVICE, enable);
     }
 
-    public boolean isIPv4DnsPreferred() {
-        return getBoolean(PREFER_IPV_4_DNS, false);
+    public int getPreferredDnsType() {
+        return getInt(PREFERRED_DNS_TYPE, DNS_TYPE_SYSTEM);
     }
 
-    public void setIPv4DnsPreferred(boolean enable) {
-        putBoolean(PREFER_IPV_4_DNS, enable);
+    public void setPreferredDnsType(int dnsType) {
+        putInt(PREFERRED_DNS_TYPE, dnsType);
     }
 
     public boolean isContentBlockAltServerEnabled() {
