@@ -3,7 +3,13 @@ package com.liskovsoft.sharedutils.okhttp;
 import androidx.annotation.NonNull;
 
 import okhttp3.Dns;
-import org.xbill.DNS.*;
+import org.xbill.DNS.ARecord;
+import org.xbill.DNS.AAAARecord;
+import org.xbill.DNS.Lookup;
+import org.xbill.DNS.Record;
+import org.xbill.DNS.Resolver;
+import org.xbill.DNS.SimpleResolver;
+import org.xbill.DNS.Type;
 
 import java.io.IOException;
 import java.net.InetAddress;
