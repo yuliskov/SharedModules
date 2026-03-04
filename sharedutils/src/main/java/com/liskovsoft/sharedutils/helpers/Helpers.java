@@ -1995,6 +1995,32 @@ public final class Helpers {
         return builder.toString();
     }
 
+    public interface Transform<T> {
+        T run(T input);
+    }
+
+    public static <T> String join(CharSequence delim, List<T> elements, Transform<T> transform) {
+        if (delim == null || elements == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        for (T element : elements) {
+            if (element == null) {
+                continue;
+            }
+
+            if (builder.length() > 0) {
+                builder.append(delim);
+            }
+
+            builder.append(transform.run(element));
+        }
+
+        return builder.toString();
+    }
+
     /**
      * https://developer.amazon.com/docs/fire-tv/implement-voiceview-accessibility-features-fire-os.html
      */
