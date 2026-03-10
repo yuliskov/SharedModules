@@ -182,11 +182,17 @@ public class FileHelpers {
     public static Collection<File> listFileTree(File dir) {
         Set<File> fileTree = new HashSet<>();
 
-        if (dir == null || dir.listFiles() == null) {
+        if (dir == null) {
             return fileTree;
         }
 
-        for (File entry : dir.listFiles()) {
+        File[] files = dir.listFiles();
+
+        if (files == null) {
+            return fileTree;
+        }
+
+        for (File entry : files) {
             if (entry.isFile()) {
                 fileTree.add(entry);
             } else {
