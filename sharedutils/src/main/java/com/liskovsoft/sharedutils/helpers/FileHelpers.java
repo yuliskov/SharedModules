@@ -95,6 +95,30 @@ public class FileHelpers {
         return filesDir;
     }
 
+    public static File getExternalMediaDirectory(Context context) {
+        File result = null;
+
+        if (VERSION.SDK_INT >= 21) {
+            File[] dirs = context.getExternalMediaDirs();
+            if (dirs != null && dirs.length > 0) {
+                result = dirs[0];
+            }
+        }
+
+        if (result == null) {
+            result = new File(
+                    Environment.getExternalStorageDirectory(),
+                    "Android/media/" + context.getPackageName()
+            );
+        }
+
+        if (!result.exists()) {
+            result.mkdirs();
+        }
+
+        return result;
+    }
+
     private static File getExternalStorageDirectory(String subdir) {
         if (TextUtils.isEmpty(subdir)) {
             return null;
