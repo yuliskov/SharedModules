@@ -10,11 +10,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ProviderInfo;
 import android.content.res.Resources.NotFoundException;
-import androidx.core.content.pm.PackageInfoCompat;
+import android.os.Build.VERSION;
+
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class AppInfoHelpers {
     private static final String TAG = AppInfoHelpers.class.getSimpleName();
+    private static int sRealSdkVersion = -1;
 
     public static String getAppVersion(Context context) {
         return formatAppVersion(getAppVersionName(context), getActivityLabel(context));
@@ -168,7 +170,15 @@ public class AppInfoHelpers {
         return intent != null && intent.getComponent() != null ? intent.getComponent().getClassName() : null;
     }
 
-    public static int getTargetSdkVersion(Context context) {
+    private static int getTargetSdkVersion(Context context) {
         return context.getApplicationInfo().targetSdkVersion;
+    }
+
+    public static int getRealSdkVersion(Context context) {
+        if (sRealSdkVersion == -1) {
+            sRealSdkVersion = Math.min(getTargetSdkVersion(context), VERSION.SDK_INT);
+        }
+
+        return sRealSdkVersion;
     }
 }

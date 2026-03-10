@@ -173,7 +173,7 @@ public class FileHelpers {
      * NOTE: App should have permission to access device storage
      */
     public static boolean isEmpty(File dir) {
-        return dir == null || listFileTree(dir).size() == 0;
+        return dir == null || listFileTree(dir).isEmpty();
     }
 
     /**
@@ -182,7 +182,7 @@ public class FileHelpers {
     public static Collection<File> listFileTree(File dir) {
         Set<File> fileTree = new HashSet<>();
 
-        if (dir == null || dir.listFiles() == null){
+        if (dir == null || dir.listFiles() == null) {
             return fileTree;
         }
 
