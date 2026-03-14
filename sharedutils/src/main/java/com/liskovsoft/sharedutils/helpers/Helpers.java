@@ -155,30 +155,25 @@ public final class Helpers {
     /**
      * Source: https://stackoverflow.com/questions/16704597/how-do-you-get-the-user-defined-device-name-in-android
      */
-    @SuppressLint("MissingPermission")
     public static String getUserDeviceName(Context context) {
         // 1) No need special permissions
-        String bluetoothName = Settings.System.getString(context.getContentResolver(), "bluetooth_name");
+        String bluetoothName = getSystemString(context, "bluetooth_name");
 
         if (bluetoothName == null) {
             // 2) No need special permissions
-            bluetoothName = Settings.Secure.getString(context.getContentResolver(), "bluetooth_name");
+            bluetoothName = getSecureString(context, "bluetooth_name");
 
             if (bluetoothName == null) {
                 // 3) Require permission
-                BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
-
-                if (myDevice != null) {
-                    bluetoothName = myDevice.getName();
-                }
+                bluetoothName = getBluetoothAdapterName();
 
                 if (bluetoothName == null) {
                     // 4)
-                    bluetoothName = Settings.System.getString(context.getContentResolver(), "device_name");
+                    bluetoothName = getSystemString(context, "device_name");
 
                     if (bluetoothName == null) {
                         // 5)
-                        bluetoothName = Settings.Secure.getString(context.getContentResolver(), "lock_screen_owner_info");
+                        bluetoothName = getSecureString(context, "lock_screen_owner_info");
                     }
                 }
             }
@@ -186,6 +181,43 @@ public final class Helpers {
 
         // Revert to device name if needed
         return bluetoothName != null ? bluetoothName : Build.MODEL;
+    }
+
+    private static String getSystemString(Context context, String keyName) {
+        String result = null;
+
+        try {
+            result = Settings.System.getString(context.getContentResolver(), keyName);
+        } catch (SecurityException ignored) {}
+
+        return result;
+    }
+
+    private static String getSecureString(Context context, String keyName) {
+        String result = null;
+
+        try {
+            result = Settings.Secure.getString(context.getContentResolver(), keyName);
+        } catch (SecurityException ignored) {}
+
+        return result;
+    }
+
+    @SuppressLint("MissingPermission")
+    private static String getBluetoothAdapterName() {
+        BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+
+        if (myDevice == null) {
+            return null;
+        }
+
+        String result = null;
+
+        try {
+            result = myDevice.getName();
+        } catch (SecurityException ignored) {}
+
+        return result;
     }
 
     public static String getAndroidVersion() {
