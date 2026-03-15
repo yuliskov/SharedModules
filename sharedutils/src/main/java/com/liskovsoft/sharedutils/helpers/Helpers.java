@@ -1869,6 +1869,41 @@ public final class Helpers {
         return result;
     }
 
+    public static <T> int indexOfFirst(Collection<T> collection, Filter<T> filter) {
+        if (collection == null || filter == null) {
+            return -1;
+        }
+
+        int idx = -1;
+
+        for (T next : collection) {
+            idx++;
+            if (filter.test(next)) {
+                return idx;
+            }
+        }
+
+        return -1;
+    }
+
+    public static <T> int indexOfLast(Collection<T> collection, Filter<T> filter) {
+        if (collection == null || filter == null) {
+            return -1;
+        }
+
+        int idx = -1;
+        int lastIdx = -1;
+
+        for (T next : collection) {
+            idx++;
+            if (filter.test(next)) {
+                lastIdx = idx;
+            }
+        }
+
+        return lastIdx;
+    }
+
     /**
      * Fix duplicated items inside ATV channels etc.
      */
