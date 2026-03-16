@@ -714,10 +714,6 @@ public final class Helpers {
     }
 
     public static boolean equals(Object first, Object second) {
-        if (first == null && second == null) {
-            return true;
-        }
-
         if (first == null || second == null) {
             return false;
         }
@@ -740,10 +736,6 @@ public final class Helpers {
     }
 
     public static boolean contains(String first, String second) {
-        if (first == null && second == null) {
-            return true;
-        }
-
         if (first == null || second == null) {
             return false;
         }
@@ -755,10 +747,6 @@ public final class Helpers {
     }
 
     public static boolean startsWith(String word, String prefix) {
-        if (word == null && prefix == null) {
-            return true;
-        }
-
         if (word == null || prefix == null) {
             return false;
         }
@@ -2285,6 +2273,14 @@ public final class Helpers {
             result.add(matcher.group());
         }
 
+        return result;
+    }
+
+    @SafeVarargs
+    public static <T> T[] concat(T first, T... rest) {
+        T[] result = Arrays.copyOf(rest, rest.length + 1);
+        System.arraycopy(result, 0, result, 1, rest.length);
+        result[0] = first;
         return result;
     }
 }
