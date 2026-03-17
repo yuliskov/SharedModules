@@ -686,12 +686,12 @@ public final class Helpers {
     }
 
     public static boolean equalsAny(Object orig, Object... arr) {
-        if (orig == null || arr == null) {
+        if (arr == null) {
             return false;
         }
 
         for (Object item : arr) {
-            if (orig.equals(item)) {
+            if (equals(orig, item)) {
                 return true;
             }
         }
@@ -714,6 +714,10 @@ public final class Helpers {
     }
 
     public static boolean equals(Object first, Object second) {
+        if (first == null && second == null) {
+            return true;
+        }
+
         if (first == null || second == null) {
             return false;
         }
@@ -736,6 +740,10 @@ public final class Helpers {
     }
 
     public static boolean contains(String first, String second) {
+        if (first == null && second == null) {
+            return true;
+        }
+
         if (first == null || second == null) {
             return false;
         }
@@ -747,6 +755,10 @@ public final class Helpers {
     }
 
     public static boolean startsWith(String word, String prefix) {
+        if (word == null && prefix == null) {
+            return true;
+        }
+
         if (word == null || prefix == null) {
             return false;
         }
