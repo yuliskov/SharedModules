@@ -33,7 +33,8 @@ android {
 
     lintOptions {
         abortOnError true
-        lintConfig rootProject.file('lint.xml')
+        disable 'MissingTranslation'
+        //lintConfig rootProject.file('lint.xml')
     }
 
     // gradle 4.6 migration: disable dimensions mechanism

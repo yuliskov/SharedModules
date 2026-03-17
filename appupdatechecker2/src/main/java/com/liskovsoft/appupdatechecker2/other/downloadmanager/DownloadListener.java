@@ -72,10 +72,15 @@ public class DownloadListener {
             Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null);
             try {
                 if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    int columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (columnIndex != -1) {
+                        result = cursor.getString(columnIndex);
+                    }
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
         if (result == null) {
@@ -92,7 +97,7 @@ public class DownloadListener {
         void onTaskCompleted(String result);
     }
 
-    class GetFileInfo extends AsyncTask<String, Integer, String>
+    static class GetFileInfo extends AsyncTask<String, Integer, String>
     {
 
         private final GetFileInfoListener mListener;
