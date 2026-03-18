@@ -3,7 +3,6 @@ package com.liskovsoft.sharedutils.helpers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Pair;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,17 +12,12 @@ import androidx.annotation.Nullable;
 
 import com.liskovsoft.sharedutils.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MessageHelpers {
     private static final int MAX_LEN = 300;
-    private static final int LONG_MSG_TIMEOUT_MS = 5_000;
-    private static final int CLEANUP_TIMEOUT_MS = 10_000;
-    private static final List<Pair<Toast, String>> sToasts = new ArrayList<>();
-    private static final Runnable sCleanupContext = sToasts::clear;
+    private static final int CLEANUP_TIMEOUT_MS = 5_000;
+    private static @Nullable Toast sLastToast;
+    private static final Runnable sCleanupContext = MessageHelpers::cancelToasts;
     private static final Handler sHandler = new Handler(Looper.getMainLooper());
-    private static long sExitMsgTimeMS;
     private static float sTextSize;
 
     public static void showMessage(final Context ctx, final String TAG, final Throwable ex) {
@@ -32,19 +26,6 @@ public class MessageHelpers {
 
     public static void showMessage(final Context ctx, final String template, Object... params) {
         showMessage(ctx, String.format(template, params));
-    }
-
-    public static void showMessageThrottled(final Context ctx, final String msg) {
-        // throttle msg calls
-        if (System.currentTimeMillis() - sExitMsgTimeMS < LONG_MSG_TIMEOUT_MS) {
-            return;
-        }
-        sExitMsgTimeMS = System.currentTimeMillis();
-        showMessage(ctx, msg);
-    }
-
-    public static void showMessageThrottled(final Context ctx, final int msgResId) {
-        showMessageThrottled(ctx, ctx.getString(msgResId));
     }
 
     public static void showMessage(final Context ctx, final String msg) {
@@ -61,9 +42,9 @@ public class MessageHelpers {
         Runnable toast = () -> {
             try {
                 String finalMsg = Helpers.ellipsize(msg, MAX_LEN);
-                Toast currentToast = Toast.makeText(context, finalMsg, Toast.LENGTH_SHORT);
+                Toast currentToast = Toast.makeText(context, finalMsg, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
                 fixTextSize(currentToast, context);
-                addAndCancelPrevIfNeeded(new Pair<>(currentToast, finalMsg), isLong);
+                addAndCancelPrev(currentToast);
                 currentToast.show();
 
                 setupCleanup();
@@ -117,25 +98,13 @@ public class MessageHelpers {
     }
 
     public static void showLongMessage(Context ctx, String msg) {
-        // Fix infinite msg displaying
-        for (Pair<Toast, String> toast : sToasts) {
-            toast.first.cancel();
-        }
-        sToasts.clear();
-
-        for (int i = 0; i < 3; i++) {
+        if (ctx != null) {
             showMessage(ctx, msg, true);
         }
     }
 
     public static void showLongMessage(Context ctx, String template, Object... params) {
-        // Fix infinite msg displaying
-        for (Pair<Toast, String> toast : sToasts) {
-            toast.first.cancel();
-        }
-        sToasts.clear();
-
-        for (int i = 0; i < 3; i++) {
+        if (ctx != null) {
             showMessage(ctx, String.format(template, params), true);
         }
     }
@@ -151,8 +120,9 @@ public class MessageHelpers {
     }
 
     public static void cancelToasts() {
-        for (Pair<Toast, String> toast : sToasts) {
-            toast.first.cancel();
+        if (sLastToast != null) {
+            sLastToast.cancel();
+            sLastToast = null;
         }
     }
 
@@ -169,20 +139,10 @@ public class MessageHelpers {
         }
     }
 
-    private static void addAndCancelPrevIfNeeded(Pair<Toast, String> newToast, boolean isLong) {
-        CharSequence originText = newToast.second;
+    private static void addAndCancelPrev(Toast newToast) {
+        cancelToasts();
 
-        Helpers.removeIf(sToasts, toast -> {
-            // Smart cancel only toasts that have different message
-            // So remains possibility to long message to be displayed
-            boolean doRemove = !isLong || !Helpers.equals(toast.second, originText);
-            if (doRemove) {
-                toast.first.cancel();
-            }
-            return doRemove;
-        });
-
-        sToasts.add(newToast);
+        sLastToast = newToast;
     }
 
     private static @Nullable TextView extractMessageView(Toast toast) {
