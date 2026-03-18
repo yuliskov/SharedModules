@@ -203,12 +203,13 @@ final class OkHttpCommons {
     }
 
     /**
-     * Fix github updates on Android 4<br/>
-     * Setting testMode configuration. If set as testMode, the connection will skip certification check
+     * Fix github updates on Android 4-7<br/>
+     * Setting testMode configuration. If set as testMode, the connection will skip certification check<br/>
+     * The error: CertPathValidatorException: Trust anchor for certification path not found
      */
     @SuppressWarnings("deprecation")
     private static void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
-        if (VERSION.SDK_INT > 19) {
+        if (VERSION.SDK_INT > 24) { // up to Android 7.0 (NOTE: 7.1 works fine)
             return;
         }
 
