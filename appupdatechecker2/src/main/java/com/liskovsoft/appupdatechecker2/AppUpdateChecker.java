@@ -177,20 +177,20 @@ public class AppUpdateChecker implements AppVersionCheckerListener, AppDownloade
         Helpers.installPackage(mContext, mSettingsManager.getApkPath());
     }
 
-    public void enableUpdateCheck(boolean enable) {
-        mSettingsManager.setMinIntervalMs(enable ? SettingsManager.CHECK_INTERVAL_DEFAULT_MS : -1);
-    }
-
     public boolean isUpdateCheckEnabled() {
         return mSettingsManager.getMinIntervalMs() > 0;
     }
 
-    public void setPreferredHost(String host) {
-        mSettingsManager.setPreferredHost(host);
+    public void setUpdateCheckEnabled(boolean enable) {
+        mSettingsManager.setMinIntervalMs(enable ? SettingsManager.CHECK_INTERVAL_DEFAULT_MS : -1);
     }
 
     public String getPreferredHost() {
         return mSettingsManager.getPreferredHost();
+    }
+
+    public void setPreferredHost(String host) {
+        mSettingsManager.setPreferredHost(host);
     }
 
     /**
