@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -14,6 +15,17 @@ public class LocaleUpdater {
     private static Locale sCachedLocale;
     private final GlobalPreferences mPrefs;
     private final Context mContext;
+    private static final String[] LANG_COUNTRY_CODES = {
+            "zh_TW", // Traditional Chinese - Taiwan
+            "zh_HK", // Traditional Chinese - Hong Kong
+            "pt_BR", // Brazilian Portuguese
+            "es_MX", // Mexican Spanish
+            "es_AR", // Argentine Spanish
+            "fr_CA", // Canadian French
+            "en_US", // American English
+            "en_GB", // British English
+            "de_CH"  // Swiss German
+    };
 
     public LocaleUpdater(Context context) {
         mContext = context;
@@ -87,6 +99,12 @@ public class LocaleUpdater {
 
         boolean isLangCodeEmpty = langCode == null || langCode.isEmpty();
         boolean isCountryCodeEmpty = countryCode == null || countryCode.isEmpty();
+
+        if (!isLangCodeEmpty) {
+            if (Arrays.asList(LANG_COUNTRY_CODES).contains(langCode)) {
+                return langCode; // e.g. zh_TW (Traditional Chinese)
+            }
+        }
 
         if (isLangCodeEmpty && isCountryCodeEmpty) {
             return null;
