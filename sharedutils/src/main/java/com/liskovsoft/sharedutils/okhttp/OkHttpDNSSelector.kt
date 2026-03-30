@@ -33,11 +33,12 @@ class OkHttpDNSSelector(private val mode: IPvMode) : Dns {
     override fun lookup(hostname: String): List<InetAddress> {
         var addresses = Dns.SYSTEM.lookup(hostname)
 
+        // More memory efficient
         addresses = when (mode) {
-            IPvMode.IPV6_FIRST -> addresses.sortedBy { Inet4Address::class.java.isInstance(it) }
-            IPvMode.IPV4_FIRST -> addresses.sortedBy { Inet6Address::class.java.isInstance(it) }
-            IPvMode.IPV6_ONLY -> addresses.filter { Inet6Address::class.java.isInstance(it) }
-            IPvMode.IPV4_ONLY -> addresses.filter { Inet4Address::class.java.isInstance(it) }
+            IPvMode.IPV6_FIRST -> addresses.sortedBy { it is Inet4Address }
+            IPvMode.IPV4_FIRST -> addresses.sortedBy { it is Inet6Address }
+            IPvMode.IPV6_ONLY -> addresses.filter { it is Inet6Address }
+            IPvMode.IPV4_ONLY -> addresses.filter { it is Inet4Address }
             IPvMode.SYSTEM -> addresses
         }
 
@@ -50,8 +51,19 @@ class OkHttpDNSSelector(private val mode: IPvMode) : Dns {
         //    IPvMode.SYSTEM -> addresses
         //}
 
+        // Fastest, preserve ordering
+        //addresses = when (mode) {
+        //    IPvMode.IPV6_FIRST -> partition(addresses).let { it.second + it.first }
+        //    IPvMode.IPV4_FIRST -> partition(addresses).let { it.first + it.second }
+        //    IPvMode.IPV6_ONLY -> partition(addresses).second
+        //    IPvMode.IPV4_ONLY -> partition(addresses).first
+        //    IPvMode.SYSTEM -> addresses
+        //}
+
         //logger.fine("DJMOKHTTP ($hostname): " + addresses.joinToString(", ") { it.toString() })
 
         return addresses
     }
+
+    private fun partition(addresses: List<InetAddress>) = addresses.partition { it is Inet4Address }
 }

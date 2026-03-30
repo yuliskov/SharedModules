@@ -126,7 +126,7 @@ final public class GlobalPreferences extends SharedPreferencesBase {
     }
 
     public int getPreferredDnsType() {
-        return getInt(PREFERRED_DNS_TYPE, DNS_TYPE_SYSTEM);
+        return getInt(PREFERRED_DNS_TYPE, DNS_TYPE_IPV4);
     }
 
     public void setPreferredDnsType(int dnsType) {

@@ -275,8 +275,8 @@ final class OkHttpCommons {
                 case GlobalPreferences.DNS_TYPE_IPV4:
                     // Cause hangs and crashes (especially on Android 8 devices or Dune HD)
                     // NOTE: useful only on api <= 19
-                    forceIPv4Dns(okBuilder);
-                    //preferIPv4Dns(okBuilder); // alt method
+                    //forceIPv4Dns(okBuilder);
+                    preferIPv4Dns(okBuilder); // alt method
                     break;
                 case GlobalPreferences.DNS_TYPE_GOOGLE:
                     // May help with 'java.net.ProtocolException: Too many follow-up requests: 21'
