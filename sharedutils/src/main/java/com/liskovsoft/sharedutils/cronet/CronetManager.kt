@@ -2,6 +2,7 @@ package com.liskovsoft.sharedutils.cronet
 
 import android.content.Context
 import com.liskovsoft.sharedutils.mylogger.Log
+import java.io.File
 import org.chromium.net.CronetEngine
 import org.chromium.net.ExperimentalCronetEngine
 import org.chromium.net.impl.NativeCronetProvider
@@ -23,12 +24,17 @@ object CronetManager {
             //    .build()
 
             try {
+                val cacheDir = File(context.cacheDir, "StCronet")
+                cacheDir.mkdirs()
+
                 val builder = NativeCronetProvider(context).createBuilder()
 
                 builder
                     .enableQuic(true)
                     .enableHttp2(true)
                     .enableBrotli(true)
+                    .setStoragePath(cacheDir.absolutePath)
+                    .enableHttpCache(CronetEngine.Builder.HTTP_CACHE_DISK_NO_HTTP, 2 * 1024 * 1024)
                     //.addQuicHint("youtube.com", 80, 80)
 
                 // Do these tweaks have negative side effects?
