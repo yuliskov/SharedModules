@@ -2295,4 +2295,14 @@ public final class Helpers {
         result[0] = first;
         return result;
     }
+
+    public static <K, V> K getKey(Map<K, V> map, V value) {
+        for (Entry<K, V> entry : map.entrySet()) {
+            if (equals(entry.getValue(), value)) {
+                return entry.getKey();
+            }
+        }
+
+        return null;
+    }
 }
