@@ -22,8 +22,8 @@ public class LocaleUpdater {
             "es_MX", // Mexican Spanish
             "es_AR", // Argentine Spanish
             "fr_CA", // Canadian French
-            "en_US", // American English
-            "en_GB", // British English
+            //"en_US", // American English
+            //"en_GB", // British English
             "de_CH"  // Swiss German
     };
 

@@ -19,7 +19,7 @@ project.ext {
     // - No popup notifications
     // - Backup/restore can access to the external directory
     // - Disabled auto start of the background service (e.g. remote control service)
-    targetSdkVersion = 29 // 29 latest with lecacy storage access
+    targetSdkVersion = 27 // 29 latest with lecacy storage access, 27 - latest with mouse dpad emulaton
     compileSdkVersion = 34
     buildToolsVersion = '30.0.3'
     //gradleVersion = '6.9.1' // https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
