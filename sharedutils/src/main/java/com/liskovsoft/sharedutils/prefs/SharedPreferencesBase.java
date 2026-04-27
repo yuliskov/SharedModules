@@ -50,14 +50,15 @@ public class SharedPreferencesBase {
             mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         }
 
-        if (defValResId != -1) {
-            try {
-                PreferenceManager.setDefaultValues(context, prefName, Context.MODE_PRIVATE, defValResId, true);
-            } catch (NoSuchMethodError e) {
-                // NoSuchMethodError: No interface method putBoolean in class SharedPreferences$Editor (Android 7.0)
-                e.printStackTrace();
-            }
-        }
+        // XML preference defaults are not supported for custom-named SharedPreferences. Use explicit code-based initialization instead.
+        //if (defValResId != -1) {
+        //    try {
+        //        PreferenceManager.setDefaultValues(context, prefName, Context.MODE_PRIVATE, defValResId, true);
+        //    } catch (NoSuchMethodError e) {
+        //        // NoSuchMethodError: No interface method putBoolean in class SharedPreferences$Editor (Android 7.0)
+        //        e.printStackTrace();
+        //    }
+        //}
     }
 
     /**

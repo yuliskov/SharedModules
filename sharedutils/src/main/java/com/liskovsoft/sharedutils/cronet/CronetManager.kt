@@ -26,9 +26,10 @@ object CronetManager {
             try {
                 // Cache dir for QUIC cache support.
                 // NOTE: the caching is mainly intended to fix the bot guard check errors (e.g. auto-translated subtitles).
+                // NOTE: Cronet QUIC/HTTP cache is not suitable here. Use ExoPlayer CacheDataSource for media/subtitle caching instead.
                 // More info: https://github.com/yuliskov/SharedModules/pull/11
-                val cacheDir = File(context.cacheDir, "StCronet")
-                cacheDir.mkdirs()
+                //val cacheDir = File(context.cacheDir, "StCronet")
+                //cacheDir.mkdirs()
 
                 val builder = NativeCronetProvider(context).createBuilder()
 
@@ -36,8 +37,8 @@ object CronetManager {
                     .enableQuic(true)
                     .enableHttp2(true)
                     .enableBrotli(true)
-                    .setStoragePath(cacheDir.absolutePath) // cache dir
-                    .enableHttpCache(CronetEngine.Builder.HTTP_CACHE_DISK_NO_HTTP, 2 * 1024 * 1024) // cache size
+                    //.setStoragePath(cacheDir.absolutePath) // cache dir
+                    //.enableHttpCache(CronetEngine.Builder.HTTP_CACHE_DISK_NO_HTTP, 2 * 1024 * 1024) // cache size
                     //.addQuicHint("youtube.com", 80, 80)
 
                 // Do these tweaks have negative side effects?
