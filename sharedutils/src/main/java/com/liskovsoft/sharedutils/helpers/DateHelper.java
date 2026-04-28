@@ -121,4 +121,11 @@ public class DateHelper {
     private static boolean is24HourLocale(Locale locale) {
         return !Helpers.equalsAny(locale.getLanguage(), "en", "es", "pt", "fr", "hi", "tl", "ar", "sw", "bn", "ur");
     }
+
+    /**
+     * Example output: 20260428-015416
+     */
+    public static String createTimestamp() {
+        return new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(new Date());
+    }
 }
