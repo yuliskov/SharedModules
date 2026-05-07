@@ -2305,4 +2305,22 @@ public final class Helpers {
 
         return null;
     }
+
+    public interface Mapper<F, T> {
+        @Nullable T map(F from);
+    }
+
+    public static <F, T> List<T> map(List<F> input, Mapper<F, T> mapper) {
+        if (input == null) {
+            return null;
+        }
+
+        List<T> result = new ArrayList<T>(input.size());
+
+        for (F item : input) {
+            result.add(mapper.map(item));
+        }
+
+        return result;
+    }
 }
