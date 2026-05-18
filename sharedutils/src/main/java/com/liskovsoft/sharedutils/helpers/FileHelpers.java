@@ -621,7 +621,7 @@ public class FileHelpers {
     }
 
     public static String getFileContents(File source) {
-        if (source == null) {
+        if (source == null || !source.exists()) {
             return null;
         }
 
