@@ -6,15 +6,19 @@ import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SharedPreferencesBase {
     private static final String TAG = SharedPreferencesBase.class.getSimpleName();
     private static final long PREF_MAX_SIZE_MB = 5;
     private final SharedPreferences mPrefs;
     private Context mContext;
+    private Map<String, Integer> mDataHashes;
 
     public SharedPreferencesBase(Context context, String prefName) {
         this(context, prefName, -1, false);
@@ -132,5 +136,66 @@ public class SharedPreferencesBase {
         mPrefs.edit()
                 .clear()
                 .apply();
+    }
+
+    @Nullable
+    protected String getPrefsDir() {
+        return null;
+    }
+
+    final public String getData(String key) {
+        // Don't sync hash here. Hashes won't match.
+        File source = getStorageFile(key);
+        String data = FileHelpers.getFileContents(source);
+
+        // Migrate to plain files
+        if (data == null) {
+            data = getString(key, null);
+            putString(key, null);
+            setData(key, data);
+        }
+
+        return data;
+    }
+
+    final public void setData(String key, String data) {
+        if (checkData(key, data)) {
+            File destination = getStorageFile(key);
+            FileHelpers.stringToFile(data, destination);
+        }
+    }
+
+    private File getStorageFile(String key) {
+        String prefsDir = getPrefsDir();
+
+        if (prefsDir == null) {
+            throw new IllegalStateException(TAG + ": getPrefsDir() cannot be null. Probably, you forgot to override it.");
+        }
+
+        if (key == null) {
+            return null;
+        }
+
+        return new File(FileHelpers.getFilesDir(getContext()), prefsDir + "/" + key);
+    }
+
+    /**
+     * Check that the data has been modified.
+     */
+    private boolean checkData(String key, String data) {
+        if (mDataHashes == null) {
+            mDataHashes = new HashMap<>();
+        }
+
+        Integer oldHashCode = mDataHashes.get(key);
+        int newHashCode = data != null ? data.hashCode() : -1;
+
+        if (oldHashCode != null && oldHashCode == newHashCode) {
+            return false;
+        }
+
+        mDataHashes.put(key, newHashCode);
+
+        return true;
     }
 }

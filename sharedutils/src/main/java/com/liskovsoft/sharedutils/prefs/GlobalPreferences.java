@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 final public class GlobalPreferences extends SharedPreferencesBase {
+    private static final String PREFS_DIR = "global_prefs";
     public static final int DNS_TYPE_SYSTEM = 0;
     public static final int DNS_TYPE_IPV4 = 1;
     public static final int DNS_TYPE_GOOGLE = 2;
@@ -77,28 +78,52 @@ final public class GlobalPreferences extends SharedPreferencesBase {
         putString(RECOMMENDED_PLAYLIST_TYPE, type);
     }
 
+    //public String getMediaServiceAccountData() {
+    //    return getString(MEDIA_SERVICE_ACCOUNT_DATA, null);
+    //}
+    //
+    //public void setMediaServiceAccountData(String data) {
+    //    putString(MEDIA_SERVICE_ACCOUNT_DATA, data);
+    //}
+
     public String getMediaServiceAccountData() {
-        return getString(MEDIA_SERVICE_ACCOUNT_DATA, null);
+        return getData(MEDIA_SERVICE_ACCOUNT_DATA);
     }
 
     public void setMediaServiceAccountData(String data) {
-        putString(MEDIA_SERVICE_ACCOUNT_DATA, data);
+        setData(MEDIA_SERVICE_ACCOUNT_DATA, data);
     }
 
+    //public String getOAuth2AccountData() {
+    //    return getString(OAUTH2_ACCOUNT_DATA, null);
+    //}
+    //
+    //public void setOAuth2AccountData(String data) {
+    //    putString(OAUTH2_ACCOUNT_DATA, data);
+    //}
+
     public String getOAuth2AccountData() {
-        return getString(OAUTH2_ACCOUNT_DATA, null);
+        return getData(OAUTH2_ACCOUNT_DATA);
     }
 
     public void setOAuth2AccountData(String data) {
-        putString(OAUTH2_ACCOUNT_DATA, data);
+        setData(OAUTH2_ACCOUNT_DATA, data);
     }
 
+    //public String getMediaServiceData() {
+    //    return getString(MEDIA_SERVICE_DATA, null);
+    //}
+    //
+    //public void setMediaServiceData(String data) {
+    //    putString(MEDIA_SERVICE_DATA, data);
+    //}
+
     public String getMediaServiceData() {
-        return getString(MEDIA_SERVICE_DATA, null);
+        return getData(MEDIA_SERVICE_DATA);
     }
 
     public void setMediaServiceData(String data) {
-        putString(MEDIA_SERVICE_DATA, data);
+        setData(MEDIA_SERVICE_DATA, data);
     }
 
     public String getPreferredLanguage() {
@@ -147,5 +172,10 @@ final public class GlobalPreferences extends SharedPreferencesBase {
 
     public void set24HourLocaleEnabled(boolean enable) {
         putBoolean(IS_24_HOUR_LOCALE_ENABLED, enable);
+    }
+    
+    @Override
+    protected String getPrefsDir() {
+        return PREFS_DIR;
     }
 }

@@ -48,16 +48,6 @@ public class FileHelpers {
     //}
 
     public static File getCacheDir(Context context) {
-        File cacheDir = getInternalCacheDir(context);
-
-        if (cacheDir == null) {
-            cacheDir = getExternalCacheDir(context);
-        }
-
-        return cacheDir;
-    }
-
-    public static File getInternalCacheDir(Context context) {
         if (context == null) {
             return null;
         }
@@ -78,6 +68,14 @@ public class FileHelpers {
         }
 
         return cacheDir;
+    }
+
+    public static File getFilesDir(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        return context.getFilesDir();
     }
 
     public static File getExternalFilesDir(Context context) {
@@ -207,7 +205,7 @@ public class FileHelpers {
      * Deletes cache of the app
      */
     public static void deleteCache(Context context) {
-        deleteContent(getInternalCacheDir(context));
+        deleteContent(getCacheDir(context));
         deleteContent(getExternalCacheDir(context));
     }
 
@@ -274,15 +272,27 @@ public class FileHelpers {
     }
 
     public static void copy(File sourceLocation, File targetLocation) {
-        copy(sourceLocation, targetLocation, null);
+        copy(sourceLocation, targetLocation, null, null);
     }
 
-    public static void copy(File sourceLocation, File targetLocation, CopyFiler copyFiler) {
+    public static void copy(File sourceLocation, File targetLocation, CopyFiler fileFiler, CopyFiler dirFiler) {
+        copyInt(sourceLocation, targetLocation, fileFiler, dirFiler, sourceLocation);
+    }
+
+    private static void copyInt(File sourceLocation, File targetLocation, CopyFiler fileFiler, CopyFiler dirFiler, File rootLocation) {
+        boolean isRoot = false;
+
+        if (rootLocation.isDirectory()) {
+            isRoot = Helpers.equals(sourceLocation.isDirectory() ? sourceLocation : sourceLocation.getParentFile(), rootLocation);
+        }
+
         if (sourceLocation.isDirectory()) {
-            copyDirectory(sourceLocation, targetLocation, copyFiler);
+            if (isRoot || dirFiler == null || dirFiler.filter(sourceLocation)) {
+                copyDirectory(sourceLocation, targetLocation, fileFiler, dirFiler, rootLocation);
+            }
         } else {
             try {
-                if (copyFiler == null || copyFiler.filter(sourceLocation)) {
+                if ((dirFiler == null || !isRoot) && (fileFiler == null || fileFiler.filter(sourceLocation))) {
                     copyFile(sourceLocation, targetLocation);
                 }
             } catch (IOException e) {
@@ -304,7 +314,7 @@ public class FileHelpers {
         }
     }
 
-    private static void copyDirectory(File source, File target, CopyFiler copyFiler) {
+    private static void copyDirectory(File source, File target, CopyFiler fileFiler, CopyFiler dirFiler, File rootLocation) {
         if (!target.exists()) {
             target.mkdirs();
         }
@@ -317,7 +327,7 @@ public class FileHelpers {
         }
 
         for (String f : list) {
-            copy(new File(source, f), new File(target, f), copyFiler);
+            copyInt(new File(source, f), new File(target, f), fileFiler, dirFiler, rootLocation);
         }
     }
 
@@ -620,6 +630,7 @@ public class FileHelpers {
         return System.currentTimeMillis() - file.lastModified() < freshTimeMS;
     }
 
+    @Nullable
     public static String getFileContents(File source) {
         if (source == null || !source.exists()) {
             return null;
