@@ -239,11 +239,19 @@ public class FileHelpers {
                     }
                 }
             }
-            return deleteRoot ? sourceLocation.delete() : true;
+            return !deleteRoot || deleteSafe(sourceLocation);
         } else if (sourceLocation != null && sourceLocation.isFile()) {
-            return sourceLocation.delete();
+            return deleteSafe(sourceLocation);
         } else {
             return false;
+        }
+    }
+
+    private static boolean deleteSafe(File file) {
+        try {
+            return file.delete();
+        } catch (Exception ex) {
+            return true;
         }
     }
 
@@ -276,10 +284,10 @@ public class FileHelpers {
     }
 
     public static void copy(File sourceLocation, File targetLocation, CopyFiler fileFiler, CopyFiler dirFiler) {
-        copyInt(sourceLocation, targetLocation, fileFiler, dirFiler, sourceLocation);
+        copyRecursive(sourceLocation, targetLocation, fileFiler, dirFiler, sourceLocation);
     }
 
-    private static void copyInt(File sourceLocation, File targetLocation, CopyFiler fileFiler, CopyFiler dirFiler, File rootLocation) {
+    private static void copyRecursive(File sourceLocation, File targetLocation, CopyFiler fileFiler, CopyFiler dirFiler, File rootLocation) {
         boolean isRoot = false;
 
         if (rootLocation.isDirectory()) {
@@ -327,7 +335,7 @@ public class FileHelpers {
         }
 
         for (String f : list) {
-            copyInt(new File(source, f), new File(target, f), fileFiler, dirFiler, rootLocation);
+            copyRecursive(new File(source, f), new File(target, f), fileFiler, dirFiler, rootLocation);
         }
     }
 

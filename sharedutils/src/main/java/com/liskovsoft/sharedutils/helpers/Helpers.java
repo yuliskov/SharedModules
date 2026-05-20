@@ -482,6 +482,10 @@ public final class Helpers {
             return false;
         }
 
+        if (nameArr == null) {
+            return true;
+        }
+
         for (String name : nameArr) {
             if (name == null) {
                 continue;
