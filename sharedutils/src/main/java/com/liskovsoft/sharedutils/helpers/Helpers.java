@@ -153,6 +153,15 @@ public final class Helpers {
     }
 
     /**
+     * Crashlytics shows manufacturer first and then model.<br/>
+     * E.g. Cvte/Smart, Google/Aosp TV On X86<br/>
+     * NOTE: the result format is reversed. E.g. Smart (Cvte), Aosp TV On X86 (Google)
+     */
+    public static String getCrashlyticsDeviceName() {
+        return String.format("%s (%s)", Build.MODEL, Build.MANUFACTURER);
+    }
+
+    /**
      * Source: https://stackoverflow.com/questions/16704597/how-do-you-get-the-user-defined-device-name-in-android
      */
     public static String getUserDeviceName(Context context) {
