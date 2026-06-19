@@ -113,7 +113,8 @@ public class PublicDnsResolver implements Dns {
             }
 
             return addresses;
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
+            // ExceptionInInitializerError
             return new ArrayList<>();
         }
     }

@@ -155,7 +155,7 @@ public final class Helpers {
     /**
      * Crashlytics shows manufacturer first and then model.<br/>
      * E.g. Cvte/Smart, Google/Aosp TV On X86<br/>
-     * NOTE: the result format is reversed. E.g. Smart (Cvte), Aosp TV On X86 (Google)
+     * NOTE: the result format is reversed. E.g. Smart (Cvte), Aosp TV On X86 (Google), 4S806_Z51S1 (Panasonic)
      */
     public static String getCrashlyticsDeviceName() {
         return String.format("%s (%s)", Build.MODEL, Build.MANUFACTURER);
