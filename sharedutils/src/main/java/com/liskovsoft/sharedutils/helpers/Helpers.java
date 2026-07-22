@@ -527,7 +527,8 @@ public final class Helpers {
         return  isPackageExists(context, "com.amazon.tv.leanbacklauncher") || // port of the official Android TV launcher (https://github.com/tsynik/LeanbackLauncher)
                 isPackageExists(context, "com.google.android.leanbacklauncher") ||
                 isPackageExists(context, "com.google.android.tvlauncher") || // Android TV 10
-                isPackageExists(context, "com.google.android.apps.tv.launcherx"); // Google TV Home
+                isPackageExists(context, "com.google.android.apps.tv.launcherx") || // Google TV Home
+                isPackageExists(context, "com.spocky.projengmenu"); // Projectivity launcher
     }
 
     public static boolean isGoogleTVLauncher(Context context) {
@@ -2335,5 +2336,25 @@ public final class Helpers {
         }
 
         return result;
+    }
+
+    public static <T> void move(T[] array, int from, int to) {
+        if (from < 0 || to < 0) {
+            return;
+        }
+
+        if (from == to) {
+            return;
+        }
+
+        T item = array[from];
+
+        if (from < to) {
+            System.arraycopy(array, from + 1, array, from, to - from);
+        } else {
+            System.arraycopy(array, to, array, to + 1, from - to);
+        }
+
+        array[to] = item;
     }
 }
