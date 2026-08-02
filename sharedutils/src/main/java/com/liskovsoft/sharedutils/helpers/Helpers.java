@@ -1251,7 +1251,11 @@ public final class Helpers {
             return defaultValue;
         }
 
-        return Integer.parseInt(numString);
+        try {
+            return Integer.parseInt(numString);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 
     public static long parseLong(String numString) {
