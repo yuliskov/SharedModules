@@ -44,6 +44,14 @@ public class OkHttpManager {
         return doRequest(url, getClient());
     }
 
+    public Response doRequest(String url, Map<String, String> headers, @Nullable String postBody, @Nullable String contentType) {
+        return postBody == null ? doGetRequest(url, headers) : doPostRequest(url, headers, postBody, contentType);
+    }
+
+    public Response doGetRequest(String url) {
+        return doGetRequest(url, getClient());
+    }
+
     public Response doGetRequest(String url, Map<String, String> headers) {
         if (headers == null) {
             Log.d(TAG, "Headers are null... doing regular request...");
@@ -55,10 +63,6 @@ public class OkHttpManager {
 
     public Response doPostRequest(String url, Map<String, String> headers, String postBody, @Nullable String contentType) {
         return doPostRequest(url, getClient(), headers, postBody, contentType);
-    }
-
-    public Response doGetRequest(String url) {
-        return doGetRequest(url, getClient());
     }
 
     public Response doHeadRequest(String url) {
