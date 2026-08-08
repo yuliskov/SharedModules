@@ -635,7 +635,7 @@ public final class Helpers {
      * More advance approach. Including automobile systems support.
      */
     public static void makeActivityFullscreen2(Activity activity) {
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (VERSION.SDK_INT >= 30) {
             activity.getWindow().setDecorFitsSystemWindows(false);
             WindowInsetsController controller = activity.getWindow().getInsetsController();
             // https://developer.android.com/codelabs/gesture-navigation
@@ -650,7 +650,7 @@ public final class Helpers {
             // Keep navigation bar in gesture mode to support gestures???
             //int hideNavigation = isEdgeToEdgeEnabled(activity) != 2 ? (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) : 0;
             int hideNavigation = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-            int sticky = Build.VERSION.SDK_INT >= 19 ? View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY : 0;
+            int sticky = VERSION.SDK_INT >= 19 ? View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY : 0;
             activity.getWindow().getDecorView().setSystemUiVisibility(hideNavigation | sticky | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
 
@@ -661,6 +661,28 @@ public final class Helpers {
             activity.getWindow().setFlags(LayoutParams.FLAG_TRANSLUCENT_STATUS, LayoutParams.FLAG_TRANSLUCENT_STATUS);
             activity.getWindow().setFlags(LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+
+        if (hasNotch(activity)) {
+            // Use space of phone's display cutout/notch area
+            activity.getWindow().getAttributes().layoutInDisplayCutoutMode = LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        }
+    }
+
+    private static boolean hasNotch(Context context) {
+        return VERSION.SDK_INT >= 30
+                && context.getDisplay() != null
+                && context.getDisplay().getCutout() != null;
+    }
+
+    /**
+     * Take into the account screen cutout/notch area<br/>
+     * NOTE: the notch available since api 28 but the detection of since 30 (see hasNotch)<br/>
+     * So, we change cutout detection from 28 to 30
+     */
+    public static boolean isCutoutMode(Context context) {
+        return VERSION.SDK_INT >= 30 && context instanceof Activity
+                && ((Activity) context).getWindow().getAttributes().layoutInDisplayCutoutMode
+                == LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
     }
 
     public static void addFullscreenListener(Activity activity) {
