@@ -23,6 +23,8 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -34,7 +36,19 @@ public class RxHelper {
 
     private static Scheduler getCachedScheduler() {
         if (sCachedScheduler == null) {
-            sCachedScheduler = Schedulers.from(Executors.newCachedThreadPool());
+            int cores = Runtime.getRuntime().availableProcessors();
+            int corePoolSize = Math.max(2, Math.min(4, cores));
+            int maxPoolSize = Math.max(4, Math.min(8, cores * 2));
+            ThreadPoolExecutor executor = new ThreadPoolExecutor(
+                    corePoolSize,
+                    maxPoolSize,
+                    60L,
+                    TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<>(),
+                    new ThreadPoolExecutor.CallerRunsPolicy()
+            );
+            executor.allowCoreThreadTimeOut(true);
+            sCachedScheduler = Schedulers.from(executor);
         }
 
         return sCachedScheduler;
