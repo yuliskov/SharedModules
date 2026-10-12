@@ -95,6 +95,9 @@ public final class Helpers {
     private static final String OBJ_DELIM = "&vi;";
     private static final Pattern URL_PREFIX = Pattern.compile("^[a-z.]+://.+$");
     private static Random sRandom;
+    private static Boolean sIsAndroidTVLauncher;
+    private static Boolean sIsAmazonFireTVDevice;
+    private static Boolean sIsAndroidAuto;
     // https://unicode-table.com/en/
     // https://www.compart.com/en/unicode/
     public static final String THUMB_UP = "\uD83D\uDC4D";
@@ -524,12 +527,19 @@ public final class Helpers {
     }
 
     public static boolean isAndroidTVLauncher(Context context) {
-        return  isPackageExists(context, "com.amazon.tv.leanbacklauncher") // port of the official Android TV launcher (https://github.com/tsynik/LeanbackLauncher)
+        if (sIsAndroidTVLauncher != null) {
+            return sIsAndroidTVLauncher;
+        }
+
+        sIsAndroidTVLauncher =
+                isPackageExists(context, "com.amazon.tv.leanbacklauncher") // port of the official Android TV launcher (https://github.com/tsynik/LeanbackLauncher)
             ||  isPackageExists(context, "com.google.android.leanbacklauncher")
             ||  isPackageExists(context, "com.google.android.tvlauncher") // Android TV 10
             ||  isPackageExists(context, "com.google.android.apps.tv.launcherx") // Google TV Home
             ||  isPackageExists(context, "com.spocky.projengmenu") // Projectivity launcher
             ||  isPackageExists(context, "com.tv.leanback.launcher"); // custom vendor tv launcher
+
+        return sIsAndroidTVLauncher;
     }
 
     public static boolean isGoogleTVLauncher(Context context) {
@@ -577,6 +587,16 @@ public final class Helpers {
 
         return (pm.hasSystemFeature(PackageManager.FEATURE_TELEVISION)
                 || pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK));
+    }
+
+    public static boolean isAndroidAuto() {
+        if (sIsAndroidAuto != null) {
+            return sIsAndroidAuto;
+        }
+
+        sIsAndroidAuto = Helpers.equalsAny(Helpers.getDeviceName(), "rkpx3 (rkpx3)");
+
+        return sIsAndroidAuto;
     }
 
     public static String findFirst(String input, Pattern pattern) {
@@ -1025,10 +1045,16 @@ public final class Helpers {
      * @return {@code true} true if device is Amazon Fire TV device.
      */
     public static boolean isAmazonFireTVDevice() {
+        if (sIsAmazonFireTVDevice != null) {
+            return sIsAmazonFireTVDevice;
+        }
+
         String deviceName = Build.MODEL;
         String manufacturerName = Build.MANUFACTURER;
-        return (deviceName.startsWith("AFT")
+        sIsAmazonFireTVDevice = (deviceName.startsWith("AFT")
                 && "Amazon".equalsIgnoreCase(manufacturerName));
+
+        return sIsAmazonFireTVDevice;
     }
 
     public static boolean isActivityExists(Intent intent, Context context) {
