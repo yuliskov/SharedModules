@@ -2423,4 +2423,22 @@ public final class Helpers {
         }
         return name1.compareToIgnoreCase(name2);
     }
+
+    public static boolean isNullOrEmpty(Collection<?> collection) {
+        return collection == null || collection.isEmpty();
+    }
+
+    public static boolean containsIgnoreCase(@NonNull Collection<String> collection, String value) {
+        if (value == null) {
+            return false;
+        }
+
+        for (String item : collection) {
+            if (value.equalsIgnoreCase(item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
