@@ -33,29 +33,54 @@ public class LocaleContextWrapper extends ContextWrapper {
             return context;
         }
 
-        Configuration configuration = res.getConfiguration();
+        if (VERSION.SDK_INT >= 17) {
+            Configuration override = createOverride(res.getConfiguration(), newLocale, customMetrics);
 
-        if (customMetrics != null) {
-            configuration.densityDpi = (int) (customMetrics.density * 160); // 160 is the baseline DPI
-        }
+            if (VERSION.SDK_INT >= 24) {
+                LocaleList.setDefault(new LocaleList(newLocale));
+            }
 
-        if (VERSION.SDK_INT >= 24) {
-            configuration.setLocale(newLocale);
-
-            LocaleList localeList = new LocaleList(newLocale);
-            LocaleList.setDefault(localeList);
-            configuration.setLocales(localeList);
-
-            context = context.createConfigurationContext(configuration);
-        } else if (VERSION.SDK_INT >= 17) {
-            configuration.setLocale(newLocale);
-            context = context.createConfigurationContext(configuration);
+            context = context.createConfigurationContext(override);
         } else {
+            Configuration configuration = res.getConfiguration();
+
+            if (customMetrics != null) {
+                configuration.densityDpi = (int) (customMetrics.density * 160); // 160 is the baseline DPI
+            }
+
             configuration.locale = newLocale;
             res.updateConfiguration(configuration, res.getDisplayMetrics());
         }
 
         return new ContextWrapper(context);
+    }
+
+    /**
+     * Override for {@link Context#createConfigurationContext}: only the fields that should differ
+     * from the base context go in.<br/>
+     * The platform treats every field set in an override Configuration as explicit and re-applies
+     * it on top of each new activity configuration. Passing a copy of the whole current
+     * Configuration (as this class used to) therefore pinned the orientation, screen size and
+     * window bounds to their values at creation time: after a rotation
+     * {@code getResources().getConfiguration().orientation} kept the old value, {@code -land}
+     * resources never loaded and {@code WindowManager.getCurrentWindowMetrics()} reported stale
+     * bounds. Everything not set here keeps following the window.
+     */
+    static Configuration createOverride(Configuration base, Locale newLocale, DisplayMetrics customMetrics) {
+        Configuration override = new Configuration();
+        // new Configuration() defaults fontScale to 1, which would replace the user's font size.
+        override.fontScale = base.fontScale;
+        // A parent context may have forced the night mode; nested overrides don't stack, so keep it.
+        override.uiMode = base.uiMode;
+        // Keep the size/long bits; setLocale() below only rewrites the layout direction.
+        override.screenLayout = base.screenLayout;
+        override.setLocale(newLocale);
+
+        if (customMetrics != null) {
+            override.densityDpi = (int) (customMetrics.density * 160); // 160 is the baseline DPI
+        }
+
+        return override;
     }
 
     public static void applySavedLocale(Context context, Locale newLocale, DisplayMetrics customMetrics) {
