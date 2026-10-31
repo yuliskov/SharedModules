@@ -36,6 +36,11 @@ public class Tls12SocketFactory extends SSLSocketFactory {
     }
 
     @Override
+    public Socket createSocket() throws IOException {
+        return patch(delegate.createSocket());
+    }
+
+    @Override
     public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
         return patch(delegate.createSocket(s, host, port, autoClose));
     }
