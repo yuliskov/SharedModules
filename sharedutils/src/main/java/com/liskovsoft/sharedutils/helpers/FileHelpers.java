@@ -352,26 +352,35 @@ public class FileHelpers {
         }
     }
 
+    /**
+     * Atomic write: the data goes to a temp file first, which then replaces the destination.<br/>
+     * The destination is never left empty or partially written (e.g. power loss or process kill in the middle of the write).
+     */
     public static void streamToFile(InputStream is, File destination) {
         if (is == null || destination == null) {
             return;
         }
 
         FileOutputStream fos = null;
+        File tempFile = new File(destination.getPath() + ".tmp");
+        boolean written = false;
 
         try {
             if (destination.getParentFile() != null) {
                 destination.getParentFile().mkdirs(); // create dirs tree
             }
-            destination.createNewFile(); // create empty file
 
-            fos = new FileOutputStream(destination);
+            fos = new FileOutputStream(tempFile);
 
             byte[] buffer = new byte[1024];
             int len1;
             while ((len1 = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, len1);
             }
+
+            fos.flush();
+            fos.getFD().sync(); // the data should be on the disk before the rename
+            written = true;
         } catch (FileNotFoundException ex) {
             Log.e(TAG, "Open file failed: Seemed EACCES (Permission denied): %s", ex.getMessage());
         } catch (IOException ex) {
@@ -380,6 +389,22 @@ public class FileHelpers {
         } finally {
             closeStream(fos);
             closeStream(is);
+        }
+
+        if (!written) {
+            tempFile.delete(); // keep the old content of the destination
+            return;
+        }
+
+        // On Android (POSIX) the rename atomically replaces the existing destination
+        if (!tempFile.renameTo(destination)) {
+            // Fallback for file systems that don't replace on rename
+            destination.delete();
+
+            if (!tempFile.renameTo(destination)) {
+                Log.e(TAG, "Unable to rename %s to %s", tempFile.getName(), destination.getName());
+                tempFile.delete();
+            }
         }
     }
 
