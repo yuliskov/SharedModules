@@ -358,19 +358,33 @@ public class FileHelpers {
         }
 
         FileOutputStream fos = null;
+        // Write to a temp file and rename it over the destination. Opening the destination directly truncates it,
+        // so a power loss or crash mid-write left an empty/partial file (e.g. the stored accounts were wiped).
+        File tmp = new File(destination.getPath() + ".tmp");
+        boolean success = false;
 
         try {
             if (destination.getParentFile() != null) {
                 destination.getParentFile().mkdirs(); // create dirs tree
             }
-            destination.createNewFile(); // create empty file
 
-            fos = new FileOutputStream(destination);
+            fos = new FileOutputStream(tmp);
 
             byte[] buffer = new byte[1024];
             int len1;
             while ((len1 = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, len1);
+            }
+
+            fos.flush();
+            fos.getFD().sync(); // make sure the data is on disk before the rename
+            closeStream(fos);
+            fos = null;
+
+            success = tmp.renameTo(destination); // atomic replace on the same filesystem
+
+            if (!success) {
+                Log.e(TAG, "Can't rename %s to %s", tmp, destination);
             }
         } catch (FileNotFoundException ex) {
             Log.e(TAG, "Open file failed: Seemed EACCES (Permission denied): %s", ex.getMessage());
@@ -380,6 +394,10 @@ public class FileHelpers {
         } finally {
             closeStream(fos);
             closeStream(is);
+
+            if (!success) {
+                tmp.delete();
+            }
         }
     }
 

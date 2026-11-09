@@ -392,8 +392,10 @@ final class OkHttpCommons {
             });
         }
 
+        // createUnresolved(): new InetSocketAddress(host, port) does a DNS lookup right away, and the client is often
+        // built on the main thread (NetworkOnMainThreadException on startup). The proxy host is resolved on connect.
         try {
-            builder.proxy(new Proxy(proxyType, new InetSocketAddress(host, Helpers.parseInt(port))));
+            builder.proxy(new Proxy(proxyType, InetSocketAddress.createUnresolved(host, Helpers.parseInt(port))));
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Proxy init failed with message: " + e.getMessage());
         }
