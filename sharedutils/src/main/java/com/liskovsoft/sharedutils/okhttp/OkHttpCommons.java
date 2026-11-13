@@ -392,6 +392,10 @@ final class OkHttpCommons {
             });
         }
 
-        builder.proxy(new Proxy(proxyType, new InetSocketAddress(host, Helpers.parseInt(port))));
+        try {
+            builder.proxy(new Proxy(proxyType, new InetSocketAddress(host, Helpers.parseInt(port))));
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Proxy init failed with message: " + e.getMessage());
+        }
     }
 }
