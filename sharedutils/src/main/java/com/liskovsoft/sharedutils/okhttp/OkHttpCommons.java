@@ -30,8 +30,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -202,53 +202,30 @@ final class OkHttpCommons {
         return builder;
     }
 
-    /**
-     * Fix github updates on Android 4-7<br/>
-     * Setting testMode configuration. If set as testMode, the connection will skip certification check<br/>
-     * The error: CertPathValidatorException: Trust anchor for certification path not found
-     */
-    @SuppressWarnings("deprecation")
-    private static void configureToIgnoreCertificate(OkHttpClient.Builder builder) {
-        if (VERSION.SDK_INT > 24) { // up to Android 7.0 (NOTE: 7.1 works fine)
+    private static void configureLegacyTls(OkHttpClient.Builder builder) {
+        if (VERSION.SDK_INT >= 21) {
             return;
         }
 
-        Log.w(TAG, "Ignore Ssl Certificate");
         try {
-
-            // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustAllCerts = new TrustManager[] {
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                                throws CertificateException {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                                throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return new java.security.cert.X509Certificate[]{};
-                        }
-                    }
-            };
-
-            // Install the all-trusting trust manager
-            //final SSLContext sslContext = SSLContext.getInstance("SSL");
-            final SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = new Tls12SocketFactory(sslContext.getSocketFactory());
-
-            //builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-            builder.sslSocketFactory(sslSocketFactory);
-            //builder.hostnameVerifier((hostname, session) -> true);
-        } catch (Exception e) {
-            Log.w(TAG, "Exception while configuring IgnoreSslCertificate: " + e, e);
+            X509TrustManager trustManager = systemTrustManager();
+            SSLContext context = SSLContext.getInstance("TLSv1.2");
+            context.init(null, new TrustManager[] {trustManager}, null);
+            // Older Android sockets need TLS 1.2 enabled explicitly, with certificate validation intact.
+            builder.sslSocketFactory(new Tls12SocketFactory(context.getSocketFactory()), trustManager);
+        } catch (GeneralSecurityException e) {
+            Log.w(TAG, "Unable to enable TLS 1.2 with system certificate validation: " + e);
         }
+    }
+
+    static X509TrustManager systemTrustManager() throws GeneralSecurityException {
+        TrustManagerFactory factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        factory.init((KeyStore) null);
+        TrustManager[] managers = factory.getTrustManagers();
+        if (managers.length != 1 || !(managers[0] instanceof X509TrustManager)) {
+            throw new GeneralSecurityException("System X509 trust manager is unavailable");
+        }
+        return (X509TrustManager) managers[0];
     }
 
     /**
@@ -287,7 +264,7 @@ final class OkHttpCommons {
         setupProxy(okBuilder); // proxy configured in system props
         setupConnectionFix(okBuilder);
         setupConnectionParams(okBuilder);
-        configureToIgnoreCertificate(okBuilder);
+        configureLegacyTls(okBuilder);
         fixStreamResetError(okBuilder); // Should I move the line to Retrofit utils?
         enableDecompression(okBuilder);
         //enableRateLimiter(okBuilder)
