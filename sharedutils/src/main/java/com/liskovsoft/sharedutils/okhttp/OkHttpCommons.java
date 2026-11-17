@@ -12,6 +12,7 @@ import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
+import okhttp3.Credentials;
 import okhttp3.Dns;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
@@ -390,6 +391,19 @@ final class OkHttpCommons {
                     return new PasswordAuthentication(user, password.toCharArray());
                 }
             });
+
+            // OkHttp doesn't use java.net.Authenticator for HTTP proxies: answer the 407 challenge itself
+            if (proxyType == Proxy.Type.HTTP) {
+                String credential = Credentials.basic(user, password);
+                builder.proxyAuthenticator((route, response) -> {
+                    if (credential.equals(response.request().header("Proxy-Authorization"))) {
+                        return null; // already tried, wrong credentials
+                    }
+                    return response.request().newBuilder()
+                            .header("Proxy-Authorization", credential)
+                            .build();
+                });
+            }
         }
 
         // createUnresolved(): new InetSocketAddress(host, port) does a DNS lookup right away, and the client is often
