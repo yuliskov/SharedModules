@@ -6,6 +6,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager;
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManager.MyRequest;
 import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
@@ -27,7 +29,7 @@ import java.util.TreeMap;
 import com.liskovsoft.appupdatechecker2.utils.StreamUtils;
 
 /**
- * A fairly simple non-Market app update checker. Give it a URL pointing to a JSON file
+ * A fairly simple non-Market app update checker. Give it a URL pointing to a JSON file,
  * and it will compare its version (from the manifest file) to the versions listed in the JSON.
  * If there are newer version(s), it will provide the changelog between the installed version
  * and the latest version. The updater checks against the versionCode, but displays the versionName.
@@ -59,6 +61,7 @@ import com.liskovsoft.appupdatechecker2.utils.StreamUtils;
 public class AppVersionChecker {
     private final static String TAG = AppVersionChecker.class.getSimpleName();
     private int mCurrentAppVersion;
+    @Nullable
     private JSONObject mVersionInfo;
     private final Context mContext;
     private boolean mInProgress;
@@ -131,6 +134,11 @@ public class AppVersionChecker {
             final int versionCode = versionInfo.getInt("versionCode");
             versionMap.put(versionCode, versionInfo);
         }
+
+        if (mVersionInfo == null) {
+            return;
+        }
+
         final int latestVersionNumber = versionMap.firstKey();
         final String latestVersionName = versionMap.get(latestVersionNumber).getString("versionName");
 
