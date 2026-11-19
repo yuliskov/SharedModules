@@ -1,5 +1,6 @@
 package com.liskovsoft.sharedutils.helpers;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.media.MediaCodecInfo;
@@ -24,10 +25,12 @@ public final class DeviceHelpers {
     private static Boolean isTV = null;
     private static Boolean isFireTV = null;
     private static int sMaxHeapMemoryMB = -1;
-    private static Boolean sIsVP9Supported;
-    private static Boolean sIsAV1Supported;
-    private static int sVP9MaxHeight;
-    private static int sAV1MaxHeight;
+    private static volatile Boolean sIsVP9Supported;
+    private static volatile Boolean sIsAV1Supported;
+    // volatile: may be filled by prefetchCodecCapabilities() on a background thread
+    private static volatile int sVP9MaxHeight;
+    private static volatile int sAV1MaxHeight;
+    private static MediaCodecInfo[] sCodecInfos;
     private static long sCachedRamSize = -1;
 
     /**
@@ -332,6 +335,29 @@ public final class DeviceHelpers {
     }
 
     /**
+     * Building the codec list parses every codec's capabilities (~0.4s on a TV box),
+     * so do it once per process instead of once per checked mime type.
+     */
+    @TargetApi(21)
+    private static synchronized MediaCodecInfo[] getCodecInfos() {
+        if (sCodecInfos == null) {
+            sCodecInfos = new MediaCodecList(MediaCodecList.ALL_CODECS).getCodecInfos();
+        }
+        return sCodecInfos;
+    }
+
+    /**
+     * Fill the codec capability caches off the main thread (call from a background thread at startup).<br/>
+     * Otherwise the first video pays for it on the main thread while it opens.
+     */
+    public static void prefetchCodecCapabilities() {
+        isVP9Supported();
+        isVP9ResolutionSupported(1);
+        isAV1Supported();
+        isAV1ResolutionSupported(1);
+    }
+
+    /**
      * <a href="https://developer.android.com/reference/android/media/MediaCodec">More info</a>
      */
     private static int getCodecMaxHeight(String mimeType) {
@@ -340,7 +366,7 @@ public final class DeviceHelpers {
         }
 
         try {
-            MediaCodecInfo[] codecInfos = new MediaCodecList(MediaCodecList.ALL_CODECS).getCodecInfos();
+            MediaCodecInfo[] codecInfos = getCodecInfos();
 
             for (MediaCodecInfo codecInfo : codecInfos) {
                 if (codecInfo.isEncoder() || !isHardwareAccelerated(codecInfo.getName())) {

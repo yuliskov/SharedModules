@@ -16,6 +16,7 @@ public class LocaleUpdater {
     private final GlobalPreferences mPrefs;
     private final Context mContext;
     private static final String[] LANG_COUNTRY_CODES = {
+            "zh_CN", // Simplified Chinese (zh + any other country resolves to Traditional on some devices)
             "zh_TW", // Traditional Chinese - Taiwan
             "zh_HK", // Traditional Chinese - Hong Kong
             "pt_BR", // Brazilian Portuguese
