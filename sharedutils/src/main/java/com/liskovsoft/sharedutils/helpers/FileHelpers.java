@@ -142,6 +142,12 @@ public class FileHelpers {
      * @param context only Activity context is supported
      */
     public static void checkCachePermissions(Context context) {
+        // Only acts on SDK <= 23. Skipping avoids storage I/O that can block for a minute after boot on slow boxes
+        // (AppUpdateChecker calls this on the main thread).
+        if (VERSION.SDK_INT > 23) {
+            return;
+        }
+
         File cacheDir = null;
 
         try {
@@ -155,10 +161,8 @@ public class FileHelpers {
             cacheDir = Environment.getExternalStorageDirectory();
 
             if (cacheDir == null || !cacheDir.canWrite()) {
-                if (VERSION.SDK_INT <= 23) {
-                    // On Android 6.0 we can't use file providers so we need to ask a permissions
-                    PermissionHelpers.verifyStoragePermissions(context); // should be an Activity context
-                }
+                // On Android 6.0 we can't use file providers so we need to ask a permissions
+                PermissionHelpers.verifyStoragePermissions(context); // should be an Activity context
             }
         }
     }
